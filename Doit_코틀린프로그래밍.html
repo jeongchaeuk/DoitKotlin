@@ -571,7 +571,8 @@ val exp2 = 3.14e2  // 314
 </pre>
   <h4>부동 소수점 제대로 이해하기<small>(IEEE 754 표준)</small></h4>
   <p><span class="material-icons red" style="float:left">info</span>지수부에 저장되는 값은 <strong>(지수 bias + 실제 지수 값)</strong> 이다.<br>
-  <sub>값이 2의 보수로 저장 되는데 이 때 음수값의 비교를 쉽게 하기위해 지수 bias를 적용해 양수값으로 저장되게 한다.</sub></p>
+    <sub>값이 2의 보수로 저장 되는데 이 때 음수값의 비교를 쉽게 하기위해 지수 bias를 적용해 양수값으로 저장되게 한다.</sub>
+  </p>
   <table class="center number">
     <caption>32 bits Float (지수 bias : 2<sup>7</sup>-1 = 127)</caption>
     <tr>
@@ -592,8 +593,8 @@ val exp2 = 3.14e2  // 314
       <td style="text-align: left;">
         <ul>
           <li>0 : 비정규화값 <sub>denormalized number</sub><br>가장 작은 일반 숫자보다 더 작은 0이 아닌 값.</li>
-          <li>0b00000001 ~ 0b11111110 : 실제 지수값 범위: -126 ~ 127</li>
-          <li>0b11111111 : 무한대값</li>
+          <li>0b0000_0001 ~ 0b1111_1110 : 실제 지수값 범위: -126 ~ 127</li>
+          <li>0b1111_1111 : 무한대값</li>
         </ul>
       <td></td>
     </tr>
@@ -618,8 +619,8 @@ val exp2 = 3.14e2  // 314
       <td style="text-align: left;">
         <ul>
           <li>0 : 비정규화값 <sub>denormalized number</sub><br>가장 작은 일반 숫자보다 더 작은 0이 아닌 값.</li>
-          <li>0b00000000001 ~ 0b11111111110 : 실제 지수값 범위: -1022 ~ 1023</li>
-          <li>0b11111111111 : 무한대값</li>
+          <li>0b000_0000_0001 ~ 0b111_1111_1110 : 실제 지수값 범위: -1022 ~ 1023</li>
+          <li>0b111_1111_1111 : 무한대값</li>
         </ul>
       <td></td>
     </tr>
@@ -696,22 +697,31 @@ val exp2 = 3.14e2  // 314
 <div style="font-size: 1.5rem;">
 <span style="background:#a11; padding:.3rem">1</span><span style="background:#191; padding:.3rem">10000010</span><span style="background:#77f; padding:.3rem">10001100000000000000000</span>
 </div>
-</pre>
+</pre><br>
+  부동소수점을 사용할 때는 오차에 주의해야 한다.
+  <pre>
+fun main() {
+  var num = 0.0
+  for (i in 1..10)
+      num += 0.1
+
+  println(num) // 0.9999999999999999 <span class="material-icons red">warning</span>1.0이 아니다!
+}</pre>
   <h4>정수 자료형과 실수 자료형의 최솟값과 최댓값 알아보기</h4>
-  각 자료형에 <span class="title">MIN_VALUE, MAX_VALUE</span> 상수가 정의되어 있다.
+  각 자료형에 <strong><code>MIN_VALUE, MAX_VALUE</code></strong> 상수가 정의되어 있다.
   <h4>2의 보수</h4>
-  <table>
+  <table class="number">
     <caption>음수는 2의 보수로 표현한다.</caption>
     <tr>
-      <td>0b0000_0001</td>
+      <th>0b0000_0001</th>
       <td>+1</td>
     </tr>
     <tr>
-      <td>0b1111_1110</td>
-      <td>1의 보수는 각 비트를 반대로 하면 된다.</td>
+      <th>0b1111_1110</th>
+      <td>1의 보수는 각 bit를 반대로 하면 된다.</td>
     </tr>
     <tr>
-      <td>0b1111_1111</td>
+      <th>0b1111_1111</th>
       <td>1의 보수에 +1를 하면 2의 보수가 된다. -1</td>
     </tr>
   </table>
@@ -721,26 +731,26 @@ val exp2 = 3.14e2  // 314
     <tr>
       <th>형식</th>
       <th>자료형</th>
-      <th>크기<br><small>(Bits)</small></th>
+      <th>크기<small>(Bits)</small></th>
       <th>값</th>
     </tr>
     <tr>
       <td>논리 자료형</td>
       <td>Boolean</td>
-      <td>8</td>
+      <td>1<sub>Java에서</sub></td>
       <td>true, false</td>
     </tr>
   </table>
   <pre>
-val isOpen = true
-val isUploaded: Boolean</pre>
+val isOpen = true       // Boolean으로 추론
+val isUploaded: Boolean // 선언만 한 경우 자료형을 반드시 명시</pre>
   <h4>문자 자료형</h4>
-  문자를 ' '로 감싸 표현한다.
+  문자를 작은따옴표(')로 감싸 표현한다.
   <table class="center">
     <tr>
       <th>형식</th>
       <th>자료형</th>
-      <th>크기<br><small>(Bits)</small></th>
+      <th>크기<small>(Bits)</small></th>
       <th>값</th>
     </tr>
     <tr>
@@ -750,17 +760,24 @@ val isUploaded: Boolean</pre>
       <td>0 ~ 2<sup>15</sup>-1 (\u0000 ~ \uffff)</td>
     </tr>
   </table>
-  <pre>    val ch = 'c'
-    val ch: Char</pre>
+  <pre>
+val ch = 'A'
+val ch1: Char
 
+println(ch + 1) // 'B'
 
+val ch2: Char = 65 // error!
 
+val code: Int = 65
+val ch3 = code.<strong>toChar()</strong> // 'A'
 
-
-
-
-
-
+val ch4 = '<strong>\u</strong>D55C' // unicode '한'
+</pre>
+<h3 class="title">문자열 자료형 알아보기</h3>
+<h4>문자열 자료형 선언과 저장 방식 이해하기</h4>
+<h4>표현식과 $ 기호 사용하여 문자열 출력하기</h4>
+<h4>형식화된 다중 문자열 사용하기</h4>
+<h4>자료형에 별명 붙이기</h4>
   <h2 class="title"><span class="titleNumber">02-3</span>자료형 검사하고 변환하기</h2>
   <h2 class="title"><span class="titleNumber">02-4</span>코틀린 연산자</h2>
   <h1><span class="titleNumber">03</span>함수와 함수형 프로그래밍</h1>
