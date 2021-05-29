@@ -146,9 +146,20 @@
       font-family: D2Coding;
     }
 
-    h3,
     h4 {
-      margin-bottom: 0.25rem;
+      margin-bottom: .5rem;
+    }
+
+    .no-border {
+      border: none;
+    }
+
+    table.no-border td {
+      border: none;
+    }
+
+    code {
+      font-size: .9rem;
     }
   </style>
   <title>Kotlin programming</title>
@@ -935,7 +946,7 @@ val result = 1L + 3 // Long형 + Int형 -> result는 Long형
     <li>toChar: Char</li>
   </ul>
   <h4>기본형과 참조형 자료형의 비교 원리</h4>
-  <ul style="margin-top:0">
+  <ul>
     <li>구조적 동등성(Structural equality). equals()를 이용한 비교
       <ul>
         <li>==, !=</li>
@@ -956,12 +967,283 @@ val result = 1L + 3 // Long형 + Int형 -> result는 Long형
       </ul>
     </li>
   </ul>
-  <h4>Smart cast 알아보기</h4>
-  <h4>자료형 검사하기</h4>
-  <h4>as에 의한 smart cast</h4>
-  <h4>묵시적 변환</h4>
-  <h2 class="title"><span class="titleNumber">02-4</span>코틀린 연산자</h2>
+  <span class="material-icons red" style="float:left">info</span>저장되는 값이 -128~127 사이의 값이면 cache에 저장되어 참조된다.<br>
+  이 경우 기본형이 stack에 값으로 저장되지 않고 값이 저장된 cache의 주소를 참조하게 된다.
+  <h4>Smart Cast 알아보기</h4>
+  <ul>
+    <li>Compiler가 자동으로 형 변환을 해주는 것이다.</li>
+    <li><strong>Number</strong> 자료형에 적용된다.
+      <pre>
+fun main() {
+  val a: <strong>Number</strong> = 3.14
 
+  println(a is Number) // true
+  println(a is Double) // true
+  println(a is Float)  // false
+}</pre>
+    </li>
+  </ul>
+  <h4>자료형 검사하기 <strong>is, !is</strong></h4>
+  is는 변수의 자료형을 검사한 다음 그 변수를 해당 자료형으로 변환하는 기능도 있다.
+  <pre>
+fun main() {
+  val x: <strong>Any</strong> // 임의의 자료형
+  x = "Hello"
+
+  if (x <strong>is</strong> String) {
+      println(x.length) // x는 String으로 smart cast 된다.
+  }
+}</pre>
+  <h4><strong>as</strong>에 의한 Smart Cast</h4>
+  as는 형 변환이 불가능하면 예외를 발생시킨다.
+  <pre>
+// y가 null 이거나 String으로 형 변환이 불가능하면 예외 발생.
+val x: String = y as String 
+
+// y가 null 이거나 String으로 형 변환이 불가능하면 null을 return.
+val x: String<strong>?</strong> = y <strong>as?</strong> String</pre>
+  <h4>묵시적 변환</h4>
+  <ul>
+    <li><strong>open class Any</strong>는 최상위 class 이다.</li>
+    <li>Any형은 자료형이 특별히 정해지지 않은 경우에 사용한다.</li>
+    <li>Any형은 무엇이든 될 수 있기 때문에 언제든 필요한 자료형으로 자동 변환할 수 있다.(묵시적 변환)</li>
+    <li></li>
+  </ul>
+  <pre>
+fun main() {
+  var a: Any = 1 // Int형
+  a = 20L        // Long 형
+
+  println("a is $a, type is ${a.<strong>javaClass</strong>}") // .javaClass: Java 기본형을 출력
+}
+<hr>>> a is 20, type is class java.lang.Long</pre>
+  <h2 class="title"><span class="titleNumber">02-4</span>코틀린 연산자</h2>
+  <h3 class="title">기본 연산자</h3>
+  <h4>수식의 구조</h4>
+  <code>
+  <table style="text-align: center;" class="no-border">
+    <tr>    
+      <td colspan="3"></td>
+      <td colspan="3">표현식</td>
+    </tr>
+    <tr>
+      <td colspan="3"></td>
+      <td style="background-color: lightgray;">항</td>
+      <td style="background-color: lightgray;"></td>
+      <td style="background-color: lightgray;">항</td>
+    </tr>
+    <tr style="font-size: 1.3rem;">
+      <td colspan="2">val result</td>
+      <td>=</td>
+      <td style="background-color: lightgray;border:1px solid red">num1</td>
+      <td style="background-color: lightgray;">+</td>
+      <td style="background-color: lightgray;border:1px solid red">num2</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><sub>대입<br>이항 연산자</sub></td>
+      <td></td>
+      <td><sub>덧셈<br>이항 연산자</sub></td>
+      <td></td>
+    </tr>
+  </table></code>
+  <h4>산술 연산자</h4>
+  <table style="text-align: center;">
+    <tr>
+      <th scope="col">연산자</th>
+      <th scope="col">의미</th>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>덧셈</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>뺄셈</td>
+    </tr>
+    <tr>
+      <td>*</td>
+      <td>곱셈</td>
+    </tr>
+    <tr>
+      <td>/</td>
+      <td>나눗셈</td>
+    </tr>
+    <tr>
+      <td>%</td>
+      <td>나머지 <sub>Modulus</sub></td>
+    </tr>
+  </table>
+  <h4>대입 연산자 =</h4>
+  변수에 값을 할당하는 연산자. 이항 연산자 중 우선순위가 가장 낮다.
+  <table style="text-align: center;">
+    <tr>
+      <th scope="col">연산자</th>
+      <th scope="col">의미</th>
+    </tr>
+    <tr>
+      <td>=</td>
+      <td>a = b</td>
+    </tr>
+    <tr>
+      <td>+=</td>
+      <td>a += b, a = a + b</td>
+    </tr>
+    <tr>
+      <td>-=</td>
+      <td>a -= b, a = a - b</td>
+    </tr>
+    <tr>
+      <td>*=</td>
+      <td>a *= b, a = a * b</td>
+    </tr>
+    <tr>
+      <td>/=</td>
+      <td>a /= b, a = a / b</td>
+    </tr>
+    <tr>
+      <td>%=</td>
+      <td>a %= b, a = a % b</td>
+    </tr>
+  </table>
+  <h4>증가 연산자와 감소 연산자</h4>
+  단항 연산자
+  <table style="text-align: center;">
+    <tr>
+      <th scope="col">연산자</th>
+      <th scope="col" colspan="2">의미</th>
+    </tr>
+    <tr>
+      <td rowspan="2">++</td>
+      <td>b = a++</td>
+      <td>b = a, a = a + 1</td>
+    </tr>
+    <tr>
+      <td>b = ++a</td>
+      <td>a = a + 1, b = a</td>
+    </tr>
+    <tr>
+      <td rowspan="2">--</td>
+      <td>b = a--</td>
+      <td>b = a, a = a - 1</td>
+    </tr>
+    <tr>
+      <td>b = --a</td>
+      <td>a = a - 1, b = a</td>
+    </tr>
+  </table>
+  <h4>비교 연산자</h4>
+  결과 값은 true 또는 false 이다.
+  <table style="text-align: center;">
+    <tr>
+      <th scope="col">연산자</th>
+    </tr>
+    <tr>
+      <td>>, >=, &lt;, &lt;=</td>
+    </tr>
+    <tr>
+      <td>==, !=</td>
+    </tr>
+    <tr>
+      <td>===, !==</td>
+    </tr>
+  </table>
+  <h4>논리 연산자</h4>
+  <table style="text-align: center;">
+    <tr>
+      <th>연산자</th>
+      <th>의미</th>
+    </tr>
+    <tr>
+      <td>&&</td>
+      <td>AND</td>
+    </tr>
+    <tr>
+      <td>||</td>
+      <td>OR</td>
+    </tr>
+    <tr>
+      <td>!</td>
+      <td>NOT</td>
+    </tr>
+  </table>
+  <span class="material-icons red">info</span>단축평가 <sub>Short Circuit Evaluation</sub>
+  <pre>
+// a 가 true 라면 b는 검사하지 않고 true를 return 한다.    
+val x = a || b 
+
+// a 가 false 라면 b는 검사하지 않고 false를 return 한다.
+val y = a && b </pre>
+  <h3 class="title">Bit 연산자</h3>
+  <h4>Bit와 Bit 연산</h4>
+  <h4>Bit 연산을 위한 Bit Method</h4>
+  <pre>
+val x = 4.shl(1)  // 함수 호출 형식
+val y = 4 shl 1   // 중위 표현식. infix</pre>
+<code>
+  <table>
+    <caption>class Int의 Bit 연산자</caption>
+    <tr>
+      <th scope="col">예시</th>
+      <th scope="col" colspan="2">설명</th>
+    </tr>
+    <tr>
+      <td><code>shl(bits)</code></td>
+      <td>shift left. 왼쪽으로 bits 만큼 이동. 부호 있음</td>
+      <td rowspan="2">사라진 bit는 0으로 채우고 부호 bit는 그대로 둔다.</td>
+    </tr>
+    <tr>
+      <td><code>shr(bits)</code></td>
+      <td>shift right. 오른쪽으로 bits 만큼 이동. 부호 있음</td>
+    </tr>
+    <tr>
+      <td><code>ushr(bits)</code></td>
+      <td>unsigned shift right. 오른쪽으로 bits 만큼 이동. 부호 없음</td>
+      <td>제일 왼쪽 bit에 0을 채운다.</td>
+    </tr>
+    <tr>
+      <td><code>and(bits)</code></td>
+      <td>bits와 논리곱 연산</td>
+      <td>0b1100 and<br>0b1010<hr>0b1000</td>
+    </tr>
+    <tr>
+      <td><code>or(bits)</code></td>
+      <td>bits와 논리합 연산</td>
+      <td>0b1100 or<br>0b1010<hr>0b1110</td>
+    </tr>
+    <tr>
+      <td><code>xor(bits)</code></td>
+      <td>bits와 배타적 연산</td>
+      <td>0b1100 xor<br>0b1010<hr>0b0110</td>
+    </tr>
+    <tr>
+      <td><code>inv()</code></td>
+      <td>모든 bit를 반대로 한다. invert</td>
+      <td>1.inv() == -2</td>
+    </tr>
+  </table></code>
+  <span class="material-icons red">info</span>IntelliJ Debug 관련 단축키
+  <ul style="line-height: 1.5rem;margin-top:0rem;">
+    <li><kbd>Ctrl </kbd>+<kbd>F8</kbd> : Break Point Toggle 설정</li>
+    <li><kbd>Shift</kbd>+<kbd>F9</kbd> : Debugging Run</li>
+    <li><kbd>F8</kbd> : Step Over. 한 줄씩 실행.</li>
+    <li>Debug > Variables 창에 있는 변수를 선택한 후 Pop-up menu에서 <strong>View As > Binary</strong>를 선택하면 2진수로 값을 볼 수 있다.</li>
+  </ul>
+  <span class="material-icons red">info</span>xor 3번으로 두 값 swap 하기
+  <pre>
+fun main() {
+  var a = 12
+  var b = 25
+
+  a = a xor b
+  b = a xor b
+  a = a xor b
+
+  println(a) // 25
+  println(b) // 12
+}</pre>
+  <hr>
   <h1><span class="titleNumber">03</span>함수와 함수형 프로그래밍</h1>
   <h2 class="title"><span class="titleNumber">03-1</span></h2>
   <h2 class="title"><span class="titleNumber">03-2</span></h2>
