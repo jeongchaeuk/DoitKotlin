@@ -142,7 +142,7 @@
 
     kbd {
       border: 1px solid gray;
-      border-radius: 10%;
+      border-radius: .25rem;
       padding: 0.25em;
       background-color: lightgray;
       box-shadow: .05rem .05rem black;
@@ -1576,8 +1576,8 @@ println(multi2(3, 4))</pre>
 }
 
 fun highOrder(<strong>sum: (Int, Int) -> Int</strong>, a: Int, b: Int): Int = sum(a, b)</pre>
-<h4>인자와 반환값이 없는 lambda식</h4>
-<pre>
+  <h4>인자와 반환값이 없는 lambda식</h4>
+  <pre>
 fun main() {
   // val out: () -> Unit = { println("Hello") }
   val out = { println("Hello") }
@@ -1648,7 +1648,7 @@ fun funcParam(a: Int, b: Int, c: <strong>(Int, Int) -> Int</strong>): Int {
   return c(a, b)
 }<hr>>>
 result = 5</pre>
-<pre>
+  <pre>
 fun main() {
   // 인자와 반환값이 있는 함수
   val res1 = funcParam(3, 2, <strong>::sum</strong>)
@@ -1706,7 +1706,7 @@ Hello World! One param
 Hello World! One param
 Hello World! One param</pre>
   <h4>Lambda식의 매개변수가 2개 이상인 경우</h4>
-<pre>
+  <pre>
 fun main() {
   moreParam { <strong>a, b</strong> -> "Hello World! <strong>$a $b</strong>" }
 }
@@ -1715,8 +1715,8 @@ fun moreParam(out: <strong>(String, String) -> String</strong>) {
   println(out("OneParam", "TwoParam"))
 }<hr>>>
 Hello World! OneParam TwoParam</pre><br>
-Lambda식의 특정 매개변수를 사용하고 싶지 않을 때는 이름 대신에 '_' <sub>underscore</sub>로 대체할 수 있다.
-<pre>
+  Lambda식의 특정 매개변수를 사용하고 싶지 않을 때는 이름 대신에 '_' <sub>underscore</sub>로 대체할 수 있다.
+  <pre>
 moreParam { <strong>_</strong>, b -> "Hello World! $b" }
 </pre>
   <h4>일반 매개변수와 Lambda식 매개변수를 같이 사용하기</h4>
@@ -1749,28 +1749,242 @@ Second OneParam
 First OneParam TwoParam
 Second OneParam</pre>
   <h2 class="title"><span class="titleNumber">03-4</span>고차 함수와 Lambda식의 사례 알아보기</h2>
-  <h3 class="title">동기화를 위한 code 구현 구경하기</h3>
-  <h3 class="title">Network 호출 구현 구경하기</h3>
+  <h3 class="title mb-0">동기화를 위한 code 구현 구경하기</h3>
+  <pre>
+import java.util.concurrent.locks.ReentrantLock
+
+var <strong>sharable</strong> = 1 // 보호가 필요한 공유 자원.
+
+fun main() {
+    val reLock = ReentrantLock()
+
+    // 아래 3 표현식은 모두 같다.
+    lock(reLock, { criticalFun() })
+    lock(reLock) { criticalFun() }
+    lock(reLock, ::criticalFun)
+
+    println(sharable)
+}
+
+// 공유 자원을 변경하는 함수
+fun criticalFun() {
+    ++sharable 
+}
+
+// T는 Generic의 형식 매개변수
+fun &lt;T> lock(reLock: ReentrantLock, body: <strong>() -> T</strong>): T {
+    reLock.lock()
+    try {
+        return body()
+    } finally {
+        reLock.unlock()
+    }
+}<hr>>> 4</pre>
+  <p>
+    <span class="material-icons red" style="float:left">info</span><strong>Callback 함수</strong> : 특정 event가 발생하기 전까지 처리되지 않다가 event가 발생하면 즉시 호출되어 처리되는 함수.<br>
+    사용자가 아닌 system이나 event에 따라 호출 시점이 결정된다.
+  </p>
   <h2 class="title"><span class="titleNumber">03-5</span>Kotlin의 다양한 함수 알아보기</h2>
-  <h3 class="title">익명 함수</h3>
-  <h3 class="title">Inline 함수</h3>
-  <h4>역 compile된 내용으로 inline 함수 살펴보기</h4>
-  <h4>Inline 함수 제한하기</h4>
-  <h4>Inline 함수와 비지역 변환</h4>
-  <h3 class="title">확장 함수</h3>
-  <h4>String class에 나만의 확장 함수 추가하기</h4>
-  <h3 class="title">중위 함수</h3>
-  <h3 class="title">꼬리 재귀 함수</h3>
-  <h4>factorial 재귀 함수로 stack overflow 경험하기</h4>
-  <h4>꼬리 재귀로 stack overflow 방지하기</h4>
-  <h4>fibonacci 수열 재귀 함수와 꼬리 재귀 함수</h4>
+  <h3 class="title mb-0">익명 함수 <sub>Anonymous Function</sub></h3>
+  이름이 없는 일반 함수.
+  <pre>
+<strong>fun</strong>(x: Int, y: Int): Int = x + y
+
+// 동일한 표현
+val add: (Int, Int) -> Int = fun(x, y) = x + y
+val add = fun(x: Int, y: Int) = x + y
+
+// 동일한 lambda식 표현
+val add = { x: Int, y: Int -> x + y }</pre>
+  Lambda식에서는 <code>return, break, continue</code> 같은 제어문을 사용하기 어려워서 익명함수를 사용한다.
+  <h3 class="title mb-0">Inline 함수 <sub>Inline Function</sub></h3>
+  함수가 호출되는 곳에 함수 본문의 내용을 모두 복사해 넣어 함수의 분기 없이 처리되기 때문에 성능을 높일 수 있다.
+  <pre>
+fun main() {
+  shortFunc(3) { println("First call: $it") }
+  shortFunc(5) { println("Second call: $it") }
+}
+
+<strong>inline</strong> fun shortFunc(a: Int, out: (Int)->Unit) {
+  println("Before calling out()")
+  out(a)
+  println("After calling out()")
+}</pre>
+  <h4 class="mb-0">역컴파일 <sub>Decompile</sub>된 내용으로 inline 함수 살펴보기</h4>
+  IntelliJ IDEA의 <kbd style="line-height: 1.5rem;">Tools > Kotlin > Show Kotlin Bytecode</kbd> 메뉴를 선택하고 Kotlin Bytecode 창에서 <kbd>Decompile</kbd> button을 누른다.<br>
+  Decompile된 file이 .java인 이유는 현재 Kotlin이 JVM에서 수행되고 있어 내부적으로 Java code와 동일한 실행 문맥을 가지기 때문이다.
+  <h4 class="mb-0">Inline 함수 제한하기 <strong>noinline</strong></h4>
+  Inline 함수의 매개변수로 사용한 lambda식의 code가 너무 길거나 함수의 본문 자체가 너무 길면 compiler에서 성능 경고를 할 수 있다.<br>
+  또 inline 함수가 너무 많이 호출되면 오히려 code 양만 늘어나서 좋지 않을 수 있다.
+  <pre>
+// 매개변수 lambda식들도 그대로 복사가 된다.
+<strong>inline</strong> fun sub(out1: () -> Unit, out2: () -> Unit)
+
+// out1만 복사가 되고, out2는 호출 방식으로 사용된다.
+<strong>inline</strong> fun sub(out1: () -> Unit, <strong>noinline</strong> out2: () -> Unit)</pre>
+  <h4 class="mb-0">Inline 함수와 비지역 반환 <sub>Non-local Return</sub></h4>
+  <ul class="mt-0 mb-0">
+    <li>Kotlin에서는 익명 함수를 종료하기 위해 <code>return</code>을 사용할 수 있다.<br>이때 특정 반환값 없이 <code>return</code>만 사용해야 한다.</li>
+    <li><code>return</code>문은 lambda식 본문에 사용할 수 없다.</li>
+    <li>Inline 함수에서 사용한 lambda식에서는 <code>return</code>을 사용할 수 있다.</li>
+  </ul>
+  <pre>
+fun main() {
+  shortFunc(3) {
+      println("First call: $it")
+      <strong>return</strong> // Non-local Return
+  }
+}
+
+<strong>inline</strong> fun shortFunc(a: Int, out: (Int) -> Unit) {
+  println("Before calling out()")
+  out(a)
+  println("After calling out()") // 실행이 안된다.
+}<hr>>>
+Before calling out()
+First call: 3</pre>
+  Lambda식에서 <code>return</code>문을 만났지만 바깥 함수인 shortFunc()가 반환되었다.<br><br>
+  <pre>
+  fun main() {
+    shortFunc(3) {
+        println("First call: $it")
+        <strong>return@shortFunc</strong>
+    }
+}
+
+inline fun shortFunc(a: Int, out: (Int) -> Unit) {
+    println("Before calling out()")
+    out(a)
+    println("After calling out()")
+}<hr>>>
+Before calling out()
+First call: 3
+After calling out()</pre><br>
+  out()을 직접 호출해 사용하지 않고 또 다른 함수로 전달하면 실행 문맥이 달라져서 <code>return</code>을 사용할 수 없다.<br>
+  이때 비지역 반환을 금지하기 위해 <strong>crossinline</strong>을 사용한다.
+  <pre>
+fun main() {
+  shortFunc(3) {
+      println("First call: $it")
+      return@shortFunc // 그냥 return은 사용불가.
+  }
+}
+
+inline fun shortFunc(a: Int, <strong>crossinline</strong> out: (Int) -> Unit) {
+  println("Before calling out()")
+  <strong>nestedFunc { out(a) }</strong>
+  println("After calling out()")
+}
+
+fun nestedFunc(body: () -> Unit) {
+  body()
+}<hr>>>
+Before calling out()
+First call: 3
+After calling out()</pre>
+  <h3 class="title mb-0">확장 함수 <sub>Extension Function</sub></h3>
+  Class처럼 필요한 대상에 함수를 더 추가할 수 있다.
+  <pre>
+fun 확장대상.함수이름(매개변수, ...): 반환값 {
+  ...
+  return 값
+}</pre>
+  <h4 class="mb-0">String class에 나만의 확장 함수 추가하기</h4>
+  <pre>
+fun main() {
+  println("Hello World!".getLongerString("Kotlin"))
+}
+
+// 더 긴 문자열을 반환하는 함수
+fun <strong>String.</strong><span style="color:#0f0">getLongerString</span>(other: String): String {
+  return when (length > other.length) {
+      true -> this
+      else -> other
+  }
+}<hr>>> Hello World!</pre>
+확장 대상에 확장 함수와 같은 이름의 member method가 있다면 항상 member method가 먼저 호출된다.
+  <h3 class="title mb-0">중위 함수 <sub>Infix Function</sub> : <strong><code>infix</code></strong></h3>
+  중위 표현법 <sub>Infix Notation</sub> 이란 class의 member를 호출할 때 사용하는 '.'을 생략하고 함수 이름 뒤에 ()를 붙이지 않아 직관적인 이름을 사용할 수 있는 표현법이다.<br>
+  일종의 연산자를 구현할 수 있는 함수를 말한다.
+  <ul><b>중위 함수의 조건</b>
+    <li>Member method 또는 확장 함수여야 한다.</li>
+    <li>하나의 매개변수를 가져야 한다.</li>
+    <li><strong>infix</strong> keyword를 사용해서 정의한다.</li>
+  </ul>
+  <pre>
+fun main() {
+  val a = 3.multiply(4) // 12
+  val b = <strong>3 multiply 4</strong> // 12
+}
+
+<strong>infix</strong> fun Int<strong>.multiply</strong>(other: Int): Int {
+  return this * other
+}</pre>
+  <h3 class="title mb-0">꼬리 재귀 함수 <sub>Tail Recursive Function</sub> : <strong><code>tailrec</code></strong></h3>
+<b>재귀 <sub>Recursion</sub></b> : 자기 자신을 다시 참조하는 방법
+<ul><b>재귀 함수의 조건</b>
+  <li>무한 호출에 빠지지 않도록 탈출 조건을 만들어 준다. Stack Overflow 주의!</li>
+  <li>Stack 영역을 이용하므로 호출 횟수를 무리하게 많이 지정해 연산하지 않는다.</li>
+  <li>Code를 복잡하지 않게 한다.</li>
+</ul>
+  <h4 class="mb-0">factorial 재귀 함수로 stack overflow 경험하기</h4>
+  <pre>
+fun main() {
+  val n = 4
+  val result = factorial(n)
+
+  println("$n! = $result")
+}
+
+fun <strong>factorial</strong>(n: Int): Long {
+  return when {
+      n &lt; 2 -> 1L
+      else -> n * <strong>factorial</strong>(n - 1)
+  }
+}<hr>>> 4! = 24</pre>
+  <h4 class="mb-0">꼬리 재귀로 stack overflow 방지하기</h4>
+  <pre>
+<strong>tailrec</strong> fun factorial(n: Int, result: Int = 1): Long {
+  return when {
+      n &lt; 2 -> result.toLong()
+      
+      // 인자 안에서 factorial의 도중 값을 계산하고 호출한다.
+      else -> <strong>factorial(n - 1, result * n)</strong> 
+  }
+}
+
+fun main() {
+  val n = 4
+  val result = <strong>factorial(n)</strong>
+
+  println("$n! = $result")
+}<hr>>> 4! = 24</pre>
+  <h4 class="mb-0">fibonacci 수열 재귀 함수와 꼬리 재귀 함수</h4>
+  <pre>
+import java.math.BigInteger
+
+fun main() {
+    val n = 100
+    val first = BigInteger("0")
+    val second = BigInteger("1")
+    val result = fibonacci(n, first, second)
+    println("Fibonacci($n) = $result")
+
+}
+
+<strong>tailrec</strong> fun fibonacci(n: Int, first: BigInteger, second: BigInteger): BigInteger {
+    return when(n) {
+        0 -> first
+        else -> fibonacci(n - 1, second, first + second)
+    }
+}<hr>>> Fibonacci(100) = 354224848179261915075</pre>
   <h2 class="title"><span class="titleNumber">03-6</span>함수와 변수의 범위</h2>
   <h3 class="title">함수의 범위</h3>
   <h4>최상위 함수와 지역 함수</h4>
   <h4>최상위 및 지역 함수의 사용 범위</h4>
   <h3 class="title">변수의 범위</h3>
   <h4>지역 변수와 전역 변수</h4>
-  
+
 
   <hr>
   <h1><span class="titleNumber">04</span>프로그램의 흐름 제어</h1>
