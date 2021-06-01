@@ -2217,26 +2217,97 @@ Long: 1622544178239
 Unknown: something
 Not a String: MyClass@610455d6</pre>
   <h2 class="title"><span class="titleNumber">04-2</span>반복문</h2>
-  <h3 class="title"><code>for</code>문</h3>
+  <h3 class="title mb-0"><code>for</code>문</h3>
   <pre>
 // Java
 for (int i = 0; i &lt; 5; ++i) { ... }
 
 // Kotlin
 for (i in 0..4) { ... }</pre>
-  <h4>하행, 상행 및 다양한 반복 방법</h4>
-  <h4><code>for</code>문을 활용한 삼각형 출력하기</h4>
-  <h4>1..100까지 홀수의 합 구하기</h4>
-  <h3 class="title"><code>while</code>문</h3>
-  <h4><code>while</code>문 응용하여 factorial 계산하기</h4>
-  <h3 class="title"><code>do-while</code>문</h3>
+  <h4 class="mb-0">값 증감에 따른 다양한 반복 방법</h4>
+  <pre>
+for (i in 1<strong>..</strong>5) print(i) // 12345
 
+for (i in 5 <strong>downTo</strong> 1) print(i) // 54321
 
-
-
-
-
+for (i in 1..5 <strong>step</strong> 2) print(i) // 135</pre>
+  <h3 class="title mb-0"><code>while</code>문</h3>
+  <pre>
+// 조건식이 true인 동안 반복한다.
+// 처음부터 조건이 false면 한번도 실행하지 않는다.
+<strong>while</strong> (조건식) {
+  ...
+}</pre>
+  <h3 class="title mb-0"><code>do-while</code>문</h3>
+  <pre>
+// 최소 한번은 실행한다.
+<strong>do</strong> {
+  ...
+} <strong>while</strong> (조건식)</pre>
   <h2 class="title"><span class="titleNumber">04-3</span>흐름의 중단과 반환</h2>
+  <ul><b>흐름 제어문</b>
+    <li><code>return</code> : 함수에서 결괏값을 반환하거나 지정된 label로 이동한다.</li>
+    <li><code>break</code> : 반복문의 조건식에 상관없이 반복문을 끝낸다.</li>
+    <li><code>continue</code> : 반복문의 나머지 본문을 수행하지 않고 바로 조건식 검사로 넘어간다.</li>
+  </ul>
+  <ul><b>예외 처리문</b>
+    <li><code>try {...} catch {...}</code> : <code>try</code> block을 수행하는 도중 예외가 발생하면 <code>catch</code> block을 실행한다.</li>
+    <li><code>try {...} catch {...} finally {...}</code> : 예외 발생 여부와 상관 없이 <code>finally</code> block는 항상 실행한다.</li>
+  </ul>
+  <h3 class="title mb-0"><code>return</code>문</h3>
+  <h4 class="mb-0 mt-0"><code>return</code>으로 값 반환하기</h4>
+  <pre>
+fun add(a: Int, b: Int): Int {
+  <strong>return</strong> a + b
+
+  println("이 줄은 실행되지 않는다!")
+}</pre>
+  <h4><code>return</code>으로 <code>Unit</code> 반환하기</h4>
+  <pre>
+// 아래 3경우는 모두 같다.
+
+fun hello(name: String)<strong>: Unit</strong> {
+  println(name)
+  <strong>return Unit</strong>
+}
+
+fun hello(name: String)<strong>: Unit</strong> {
+  println(name)
+  <strong>return</strong>
+}
+
+// 둘다 생략
+fun hello(name: String) {
+  println(name)
+}</pre>
+생략할 경우 Kotlin compiler는 <code>Unit</code>을 반환하는 것으로 가정한다.
+<p><span class="material-icons red">info</span>Lambda식에서 <code>return</code>은 label 표기와 함께 사용해야 하고 <code>break</code>와 <code>continue</code>는 아직 지원하지 않는다.</p>
+  <h4>Lambda식에서 <code>return</code> 사용하기</h4>
+  <ul>
+    <li><code>inline</code>으로 선언되지 않는 lambda식에는 <code>return</code>을 그냥 사용할 수 없다.</li>
+    <li><code>return@label</code>과 같이 label 표기와 함께 사용해야 한다.</li>
+    <li><b>Label</b>이란 code에서 특정한 위치를 임의로 표시한 것으로 <strong>@ 기호와 이름</strong>을 붙여서 사용한다.</li>
+    <li>inline으로 선언된 함수에서 lambda식을 매개변수로 사용하면 lambda식에서 <code>return</code>을 사용할 수 있다. <strong>Non-Local Return</strong>
+      <pre>
+fun main() {
+  retFunc()
+}
+
+inline fun 
+      </pre>
+    </li>
+  </ul>
+  <h4>Lambda식에서 label과 함께 <code>return</code> 사용하기</h4>
+  <h4>암묵적 label</h4>
+  <h4>익명 함수를 사용한 반환</h4>
+  <h3 class="title"><code>break</code>문과 <code>continue</code>문</h3>
+  <h4><code>break</code>와 <code>continue</code>에 label 함께 사용하기</h4>
+  <h3 class="title">예외 처리</h3>
+  <h4>특정 예외 처리</h4>
+  <h4>Stack의 추적</h4>
+  <h4>예외 발생시키기</h4>
+  <h4>사용자 정의 예외</h4>
+
 
   <p id="end">END</p>
 </body>
