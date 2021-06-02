@@ -160,7 +160,6 @@
     a {
       text-decoration: none;
       border-bottom: 1px solid lightgray;
-      padding-bottom: .1rem;
       cursor: pointer;
       color: inherit
     }
@@ -220,7 +219,7 @@
   <h3 class="title">소개합니다</h3>
   <p>IntelliJ IDEA라는 통합 개발 환경으로 유명한 JetBrains에서 개발했다.<br>
   <ul>
-    <li><a href="https://kotlinlang.org/" target="_blank">Kotlinlang.org</a></li>
+    <li style="line-height: 1.5rem;"><a href="https://kotlinlang.org/" target="_blank">Kotlinlang.org</a></li>
     <li><a href="https://github.com/JetBrains/kotlin/" target="_blank">Github Kotlin</a></li>
   </ul>
   </p>
@@ -251,8 +250,8 @@
   <h3 class="title">Android 공식 언어로 채택된 Kotlin</h3>
   <h4>JDK 들</h4>
   <ul>
-    <li><a href="https://www.oracle.com/java/technologies/javase-downloads.html" target="_blank">Oracle JDK</a></li>
-    <li><a href="https://openjdk.java.net/" target="_blank">Open JDK</a></li>
+    <li style="line-height: 1.5rem;"><a href="https://www.oracle.com/java/technologies/javase-downloads.html" target="_blank">Oracle JDK</a></li>
+    <li style="line-height: 1.5rem;"><a href="https://openjdk.java.net/" target="_blank">Open JDK</a></li>
     <li><a href="https://www.azul.com/" target="_blank">Zulu</a></li>
   </ul>
   <h3 class="title">IntelliJ IDEA 설치하기</h3>
@@ -2557,8 +2556,8 @@ java.lang.ArithmeticException: / by zero
 finally block은 반드시 실행된다.</pre>
   <span class="material-icons red">info</span><code class="no-bgc">println()</code>은 <code>System.out</code>을 사용하고 오류 출력은 <code>System.err</code>을 사용한다.
   <h4>예외 발생시키기 : <strong>throw</strong></h4>
-<pre><strong>throw</strong> Exception(message: String)</pre>
-<pre>
+  <pre><strong>throw</strong> Exception(message: String)</pre>
+  <pre>
 fun main() {
   val amount = 500
 
@@ -2578,8 +2577,8 @@ fun checkAmount(amount: Int) {
 잔고가 500으로 1000 이하입니다.
 amount = 500</pre>
   <h4 class="mb-0">사용자 정의 예외</h4>
-<pre>class 사용자_예외_class_이름(message: String) : Exception(message)</pre>
-<pre>
+  <pre>class 사용자_예외_class_이름(message: String) : Exception(message)</pre>
+  <pre>
 import java.lang.Exception
 
 class <strong>InvalidNameException</strong>(message: String) : Exception(message)
@@ -2600,14 +2599,315 @@ fun validateName(name: String) {
     }
 }<hr>>>
 InvalidNameException: Your name is peter parker 1962, contains number.  
-</pre><hr>
-<h1 class="madang"><span class="madang_number">둘째 마당</span><br>객체 지향<br>Programming</h1>
-<h1><span class="titleNumber">05</span>Class와 객체</h1>
-<h2 class="title"><span class="titleNumber">01-1</span> 탄생 배경</h2>
-<h3 class="title">소개합니다</h3>
-<hr>
-<h1><span class="titleNumber">06</span>Property와 초기화</h1>
-<h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
+</pre>
+  <hr>
+  <h1 class="madang"><span class="madang_number">둘째 마당</span><br>객체 지향 프로그래밍 <sub>OOP</sub><br><sub>Object Oriented Programming</sub></h1>
+  <h1><span class="titleNumber">05</span>Class와 객체</h1>
+  <h2 class="title"><span class="titleNumber">05-1</span>Class와 객체의 정의</h2>
+  객체 지향 Programming : Program의 구조를 객체 간 상호작용으로서 표현하는 programming 방식이다.<br>
+  <table>
+    <tr>
+      <th>개념</th>
+      <th>설명</th>
+    </tr>
+    <tr>
+      <td>추상화 <sub>Abstraction</sub></td>
+      <td>특정 class를 만들 때 기본 형식을 규정하는 방법</td>
+    </tr>
+    <tr>
+      <td>Instance</td>
+      <td>Class로부터 생성한 객체</td>
+    </tr>
+    <tr>
+      <td>상속 <sub>Inheritance</sub></td>
+      <td>부모 class의 내용을 자식 class가 그대로 물려 받는 것</td>
+    </tr>
+    <tr>
+      <td>다형성 <sub>Polymorphism</sub></td>
+      <td>하나의 이름으로 다양한 처리를 제공</td>
+    </tr>
+    <tr>
+      <td>캡슐화 <sub>Encapsulation</sub></td>
+      <td>내용을 숨기고 필요한 부분만 사용</td>
+    </tr>
+    <tr>
+      <td>메시지 전송 <sub>Message Sending</sub></td>
+      <td>객체 간에 주고받는 message</td>
+    </tr>
+    <tr>
+      <td>연관 <sub>Association</sub></td>
+      <td>Class 간의 관계</td>
+    </tr>
+  </table>
+  <h3 class="title mb-0">객체 지향 Programming과 용어</h3>
+  <table>
+    <tr>
+      <th>Kotlin에서 사용하는 용어</th>
+      <th>다른 언어에서 사용하는 용어</th>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td>분류, 범주</td>
+    </tr>
+    <tr>
+      <td>Property</td>
+      <td>속성 <sub>Attribute</sub>, 변수 <sub>Variable</sub>, Field, Data</td>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td>함수 <sub>Function</sub>, 동작 <sub>Operation</sub>, 행동 <sub>Behavior</sub></td>
+    </tr>
+    <tr>
+      <td>객체 <sub>Object</sub></td>
+      <td>Instance</td>
+    </tr>
+  </table><br>
+  <table>
+    <caption>Class의 member가 될 수 있는 것</caption>
+    <tr>
+      <th scope="row">생성자와 초기화 block</th>
+      <td>객체가 생성될 때 자동 실행되는 method 또는 code block</td>
+    </tr>
+    <tr>
+      <th scope="row">Property</th>
+      <td>변수의 이름과 변수의 접근 함수가 포함된 형태</td>
+    </tr>
+    <tr>
+      <th scope="row">Method</th>
+      <td>일반적은 함수의 형태</td>
+    </tr>
+    <tr>
+      <th scope="row">중첩 <sub>Nested</sub> class와<br>Inner class</th>
+      <td>Class 내부에 구성되는 class</td>
+    </tr>
+    <tr>
+      <th scope="row">객체 선언</th>
+      <td>Class 없이 접근할 수 있는 객체</td>
+    </tr>
+  </table>
+  <h4 class="mb-0">Class Diagram</h4>
+  UML <sub>Unified Modeling Language</sub>은 객체 지향 program 설계를 위한 diagram 표기법이다.
+  <table style="text-align: left;">
+    <tr>
+      <th scope="row">Class Diagram</th>
+      <td>Class의 정의와 관계를 나타낸다.</td>
+    </tr>
+    <tr>
+      <th scope="row">Sequence Diagram</th>
+      <td>시간의 개념을 통해 class에서 생성된 객체의 실행 흐름을 나타낸다.</td>
+    </tr>
+    <tr>
+      <th scope="row">Use Case Diagram</th>
+      <td>사용자 관점에서 사용 방법에 대해 설명한다.</td>
+    </tr>
+    <tr>
+      <th scope="row">State-Machine Diagram</th>
+      <td>System 관점에서 상태가 어떻게 변화하는지 나타낸다.</td>
+    </tr>
+  </table>
+  <h3 class="title mb-0">Class와 추상화</h3>
+  <table class="no-border">
+    <tr>
+      <td style="text-align: center;">새의 추상화</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th class="border">Bird</th>
+      <td><span class="material-icons">arrow_back</span> Class 이름</td>
+    </tr>
+    <tr>
+      <td class="bg-lg border">+ name: String<br>+ wing: Int = 2<br>+ beak: String<br>+ color: String</td>
+      <td><span class="material-icons">arrow_back</span> Property</td>
+    </tr>
+    <tr>
+      <td class="bg-lg border">+ fly(): Unit<br>+ sing(vol: Int): Unit</td>
+      <td><span class="material-icons">arrow_back</span> Method</td>
+    </tr>
+  </table>
+  <span class="material-icons red">info</span> 가시성 <sub>Visibility</sub> + : public, - : private
+  <h3 class="title mb-0">Class 선언하기</h3>
+  <pre>
+class Bird {} // 빈 class 선언
+
+class Bird // {} 생략 가능</pre>
+  <pre>
+<strong>class Bird</strong> {
+  // property (속성)
+  var name: String = "mybird"
+  var wing: Int = 2
+  var beak: String = "short"
+  var color: String = "blue"
+
+  // method (함수)
+  fun fly() = println("Fly wing: $wing")
+  fun sing(vol: Int) = println("Sing vol: $vol")
+}
+
+fun main() {
+  val coco = <strong>Bird()</strong> // 생성자를 통한 객체의 생성
+  coco.color = "blue" // 객체의 propery에 값 할당
+
+  println("coco.color: ${coco.color}") // 객체의 member propery 읽기
+
+  coco.fly() // 객체의 member method 사용
+  coco.sing(3)
+}<hr>>>
+coco.color: blue
+Fly wing: 2
+Sing vol: 3</pre>
+  <h4 class="mb-0">객체와 Instance 정리하기</h4>
+  인스턴스화 <sub>Instantiate</sub> : Class로부터 객체 <sub>Object</sub>를 생성하는 것.
+  <hr>
+  <h2 class="title"><span class="titleNumber">05-2</span>생성자 <sub>Constructor</sub></h2>
+  Class를 통해 객체가 만들어질 때 기본적으로 호출되는 함수.
+  <pre>
+class Class이름 <strong>constructor</strong>(필요한 매개변수..) { // 주<sub>Primary</sub> 생성자의 위치
+  ...
+  constructor(필요한 매개변수..) { // 부<sub>Secondary</sub> 생성자의 위치
+    // property 초기화
+  }
+
+  [constructor(필요한 매개변수..) { ... }] // 추가 부 생성자
+  ...
+}
+</pre>
+  <h3 class="title mb-0">부 생성자 <sub>Secondary Constructor</sub></h3>
+  Class의 본문에 함수처럼 선언한다.
+  <pre>
+class Bird {
+  // property 선언만 한다.
+  var name: String
+  var wing: Int
+  var beak: String
+  var color: String
+
+  // 부 생성자 : 매개변수를 통해 초기화할 property에 지정
+  <strong>constructor</strong>(name: String, wing: Int, beak: String, color: String) {
+    // 매개변수와 property 이름을 다르게 하면 <strong>this.</strong>를 사용할 필요가 없다.
+    <strong style="line-height: 1rem;">this.</strong>name = name 
+    this.wing = wing
+    this.beak = beak
+    this.color = color
+  }
+
+  // method
+  fun fly() = println("Fly wing: $wing")
+  fun sing(vol: Int) = println("Sing vol: $vol")
+}
+
+fun main() {
+  // 생성자의 인자로 객체 생성과 동시에 초기화
+  val coco = <strong>Bird("mybird", 2, "short", "blue")</strong>
+  coco.color = "yellow"
+
+  println("coco.color: ${coco.color}")
+
+  coco.fly()
+  coco.sing(3)
+}</pre>
+  <h4 class="mb-0">부 생성자를 여러 개 포함한 class 사용하기</h4>
+  Kotlin에서는 class에 부 생성자를 하나 이상 포함할 수 있다. 이때는 매개변수를 다르게 정의해야 한다.
+  <pre>
+class Class이름 {
+  constructor(매개변수[, 매개변수...]) { // code }
+  constructor(매개변수[, 매개변수...]) { // code }
+}</pre>
+<pre>
+class Bird {
+  var name: String
+  var wing: Int
+  var beak: String
+  var color: String
+
+  <strong>constructor</strong>(_name: String, _wing: Int, _beak: String, _color: String) {
+    name = _name 
+    wing = _wing
+    beak = _beak
+    color = _color
+  }
+
+  <strong>constructor</strong>(_name: String, _beak: String) {
+    name = _name 
+    wing = 2
+    beak = _beak
+    color = "grey"
+  }
+
+  ...
+}
+
+val bird1 = Bird("myBird", 2, "short", "blue")
+val bird2 = Bird("myBird", "long")</pre>
+  <h3 class="title mb-0">주 생성자 <sub>Primary Constructor</sub></h3>
+  Class 이름과 함께 생성자 정의를 이용할 수 있는 기법이다. 주 생성자는 class 이름과 block 시작 부분 사이에 선언한다.
+  <pre>
+class Bird <strong>constructor</strong>(_name: String, _wing: Int, _beak: String, _color: String) {
+  var name: String = _name
+  var wing: Int = _wing
+  var beak: String = _beak
+  var color: String = _color
+  ...
+}
+
+// constructor을 <strong>생략</strong>할 수 있다.
+// 하지만 가시성 지시자나 annotation 표기가 class 선언에 있다면 생략할 수 없다.
+class Bird(_name: String, _wing: Int, _beak: String, _color: String) { ... }</pre>
+  <h4 class="mb-0">Property를 포함한 주 생성자</h4>
+<pre>
+// constructor 생략
+class Bird(<strong>var name: String, var wing: Int, var beak: String, var color: String</strong>) {
+  // Property를 주 생성자의 매개변수에 선언했으므로 본문에선 생략.
+  ...
+}</pre>
+  <h4>초기화 block을 가진 주 생성자 : <strong>init{}</strong></h4>
+<pre>
+class Bird(<strong>var name: String, var wing: Int, var beak: String, var color: String</strong>) {
+  // 초기화 block
+  <strong>init {</strong>
+    println("--- Start init block ---")
+    println("name is $name, beak is $beak")
+    this.sing(3)
+    println("--- End init block ---")
+  <strong>}</strong>
+  ...
+}
+
+fun main() {
+  val coco = Bird("mybird", 2, "short", "blue") // 객체 생성과 함께 초기화 block를 수행한다.
+  coco.color = "yellow"
+  println("coco.color is ${coco.color}")
+  coco.fly()
+}<hr>>>
+--- Start init block ---
+name is mybird, beak is short
+Sing vol: 3
+--- End init block ---
+coco.color is yellow
+Fly wing: 2</pre>
+  <h4>Property의 기본값 지정</h4>
+<pre>
+class Bird(<strong>var name: String = "NONAME", var wing: Int = 2, var beak: String, var color: String</strong>) {
+  ...
+}
+
+fun main() {
+  // 기본값이 없는 것만 전달 가능.
+  val coco = Bird(beak = "long", color = "red")
+
+  println("coco.name is ${coco.name}, coco.wing is ${coco.wing}")
+  println("coco.color is ${coco.color}, coco.beak is ${coco.beak}")
+}<hr>>>
+coco.name is NONAME, coco.wing is 2
+coco.color is red, coco.beak is long</pre>  
+  <hr>
+  <h2 class="title"><span class="titleNumber">05-3</span>상속과 다형성</h2>
+  <h2 class="title"><span class="titleNumber">05-4</span>super와 this의 참조</h2>
+  <h2 class="title"><span class="titleNumber">05-5</span>정보 은닉 캡슐화</h2>
+  <h2 class="title"><span class="titleNumber">05-6</span>Class와 Class의 관계</h2>
+  <hr>
+  <h1><span class="titleNumber">06</span>Property와 초기화</h1>
+  <h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
+
   <p id="end">END</p>
 </body>
 
