@@ -7,6 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <style>
+    .no-bgc {
+      background-color: transparent;
+    }
+
     .red {
       color: red
     }
@@ -190,6 +194,15 @@
       background-color: lightgray;
       padding: 0 .25rem;
       border-radius: 0.25rem;
+    }
+
+    .keyword {
+      color: #c83;
+      font-weight: bolder;
+    }
+
+    .custom {
+      color: #ee3
     }
   </style>
   <title>Kotlin programming</title>
@@ -2280,35 +2293,321 @@ fun hello(name: String)<strong>: Unit</strong> {
 fun hello(name: String) {
   println(name)
 }</pre>
-생략할 경우 Kotlin compiler는 <code>Unit</code>을 반환하는 것으로 가정한다.
-<p><span class="material-icons red">info</span>Lambda식에서 <code>return</code>은 label 표기와 함께 사용해야 하고 <code>break</code>와 <code>continue</code>는 아직 지원하지 않는다.</p>
+  생략할 경우 Kotlin compiler는 <code>Unit</code>을 반환하는 것으로 가정한다.
+  <p><span class="material-icons red">info</span>Lambda식에서 <code>return</code>은 label 표기와 함께 사용해야 하고 <code>break</code>와 <code>continue</code>는 아직 지원하지 않는다.</p>
   <h4>Lambda식에서 <code>return</code> 사용하기</h4>
   <ul>
     <li><code>inline</code>으로 선언되지 않는 lambda식에는 <code>return</code>을 그냥 사용할 수 없다.</li>
     <li><code>return@label</code>과 같이 label 표기와 함께 사용해야 한다.</li>
     <li><b>Label</b>이란 code에서 특정한 위치를 임의로 표시한 것으로 <strong>@ 기호와 이름</strong>을 붙여서 사용한다.</li>
-    <li>inline으로 선언된 함수에서 lambda식을 매개변수로 사용하면 lambda식에서 <code>return</code>을 사용할 수 있다. <strong>Non-Local Return</strong>
+    <li>inline으로 선언된 함수에서 lambda식을 매개변수로 사용하면 lambda식에서 <code>return</code>을 사용할 수 있다. <strong>Non-local Return</strong>
       <pre>
 fun main() {
-  retFunc()
+  myFunc()
 }
 
-inline fun 
-      </pre>
+<strong>inline</strong> fun inlineLambda(a: Int, b: Int, <strong>out: (Int, Int) -> Unit</strong>) {
+  out(a, b)
+}
+
+fun myFunc() {
+  println("Start myFunc()")
+
+  inlineLambda(10, 3) {
+      a, b ->
+      if (a + b > 10)
+          <strong>return</strong> // Non-local Return. inlineLambda()가 아니라 myFunc()에서 나간다. ↙①로 이동.
+
+      println("a + b = ${a + b}")
+  }
+
+  println("End myFunc()")
+} // ---------------- ①
+<hr>>> Start myFunc()</pre>
     </li>
   </ul>
   <h4>Lambda식에서 label과 함께 <code>return</code> 사용하기</h4>
-  <h4>암묵적 label</h4>
-  <h4>익명 함수를 사용한 반환</h4>
-  <h3 class="title"><code>break</code>문과 <code>continue</code>문</h3>
+  <pre>
+람다식_함수이름 <strong>Label이름@</strong> {
+  ...
+  <strong>return@Label이름</strong>
+}</pre>
+  <pre>
+fun main() {
+  myFunc()
+}
+
+// inline 함수가 아니다.
+fun inlineLambda(a: Int, b: Int, <strong>out: (Int, Int) -> Unit</strong>) {
+  out(a, b)
+}
+  
+fun myFunc() {
+  println("Start myFunc()")
+
+  inlineLambda(10, 3) <strong>lit@</strong> {
+      a, b ->
+      if (a + b > 10)
+          <strong>return@lit</strong> // inlineLambda()에서 나간다. ↙①로 이동한다. 
+
+      println("a + b = ${a + b}")
+  } // ---------------- ①
+
+  println("End myFunc()")
+}<hr>>>
+Start myFunc()
+End myFunc()</pre>
+  <h4 class="mb-0">암묵적 label</h4>
+  Lambda식을 인자로 가진 함수 이름을 그대로 label처럼 사용할 수 있다.
+  <pre>
+fun myFunc() {
+  println("Start myFunc()")
+
+  <strong>inlineLambda</strong>(10, 3) {
+      a, b ->
+      if (a + b > 10)
+          <strong>return@inlineLambda</strong> // inlineLambda()에서 나간다. ↙①로 이동한다.
+
+      println("a + b = ${a + b}")
+  } // ---------------- ①
+
+  println("End myFunc()")
+}</pre>
+  <h4 class="mb-0">익명 함수를 사용한 반환</h4>
+  <pre>
+fun myFunc() {
+  println("Start myFunc()")
+
+  inlineLambda(10, 3, <strong>fun (a, b)</strong> {
+    if (a + b > 10)
+      <strong>return</strong> // inlineLambda()에서 나간다. ↙①로 이동한다. 
+
+    println("a + b = ${a + b}")
+  }) // ---------------- ①
+
+  println("End myFunc()")
+}
+
+// Lambda식을 사용한 반환
+val getMessage = <strong>lambda@</strong> {
+  num: Int ->
+    if (num !in 1..100)
+      <strong>return@lambda "Error"</strong> // label을 통한 값 반환
+
+    <strong>"Success"</strong> // 마지막 식이 반환
+}
+
+// 익명 함수를 사용한 반환
+val getMessage = fun (num: Int) {
+  if (num !in 1.. 100)
+    <strong>return</strong> "Error"
+  
+  <strong>return</strong> "Success"
+}
+
+val result = getMessage()</pre>
+  <h4 class="mb-0">Lambda식과 익명 함수를 함수에 할당할 때 주의할 점</h4>
+  <pre>
+// 함수에 lambda식 할당
+fun greet() = { println("Hello") }
+greet() // do nothing! 그냥 lambda식 자체.
+greet()() // "Hello!"
+
+// 함수가 할당됨을 명시적으로 표현하려면 익명 함수를 사용하는게 더 읽기 좋다.
+fun greet() = <strong>fun()</strong> { println("Hello!") }
+greet() // Hello!</pre>
+  <h3 class="title mb-0"><code>break</code>문과 <code>continue</code>문</h3>
+  <pre>
+for (i in 1..5) {
+  if (i == 3) <strong>break</strong> // ↙①
+  print(i)
+} // ①
+println()
+print("outside")<hr>>>
+12
+outside</pre>
+  <pre>
+for (i in 1..5) { // ①
+  if (i == 3) <strong>continue</strong> // ↖①
+  print(i)
+}
+println()
+print("outside")<hr>>>
+1245
+outside</pre>
   <h4><code>break</code>와 <code>continue</code>에 label 함께 사용하기</h4>
-  <h3 class="title">예외 처리</h3>
-  <h4>특정 예외 처리</h4>
-  <h4>Stack의 추적</h4>
-  <h4>예외 발생시키기</h4>
-  <h4>사용자 정의 예외</h4>
+  <pre>
+fun myFunc() {
+  println("start myFunc")
+  for (i in 1..5) {
+      for (j in 1..5) {
+          if (j == 3) <strong>break</strong> // ↙①
+          println("i=$i, j=$j")
+      } // ---------------- ①
+      println("after for j")
+  }
+  println("after for i")
+}<hr>>>
+start myFunc
+i=1, j=1
+i=1, j=2
+after for j
+i=2, j=1
+i=2, j=2
+after for j
+i=3, j=1
+i=3, j=2
+after for j
+i=4, j=1
+i=4, j=2
+after for j
+i=5, j=1
+i=5, j=2
+after for j
+after for i</pre>
+  <pre>
+// 2중 for문을 한번에 나갈때 편하다.
+fun myFunc() {
+  println("start myFunc")
+  <strong>first@</strong> for (i in 1..5) {
+      for (j in 1..5) {
+          if (j == 3) <strong>break@first</strong> // ↙①
+          println("i=$i, j=$j")
+      }
+      println("after for j")
+  } // ---------------- ①
+  println("after for i")
+}<hr>>>
+start myFunc
+i=1, j=1
+i=1, j=2
+after for i</pre>
+  <pre>
+fun myFunc() {
+  println("start myFunc")
+  <strong>first@</strong> for (i in 1..5) {
+      for (j in 1..5) {
+          if (j == 3) <strong>continue@first</strong>
+          println("i=$i, j=$j")
+      }
+      println("after for j")
+  }
+  println("after for i")
+}<hr>>>
+start myFunc
+i=1, j=1
+i=1, j=2
+i=2, j=1
+i=2, j=2
+i=3, j=1
+i=3, j=2
+i=4, j=1
+i=4, j=2
+i=5, j=1
+i=5, j=2
+after for i</pre>
+  <h3 class="title mb-0">예외 <sub>Exception</sub> 처리</h3>
+  Program이 제대로 작동하지 못하고 중단되는 현상을 <b>예외</b>라고 한다.<br>
+  대부분의 Error는 code 작성하는 도중에 compiler가 잡아낼 수 있지만 실행 도중의 잠재적 오류(Memory 부족, file 손상 같은)까지 검사할 수 없다.
+  <ul><b>예외를 발생시키는 상황들</b>
+    <li>운영체제의 문제. 잘못된 system 호출의 문제.</li>
+    <li>입력값의 문제. 존재하지 않는 file 또는 숫자 입력란에 문자 입력 등.</li>
+    <li>받아 들일 수 없는 연산. <code class="no-bgc">0</code>으로 나누기 등.</li>
+    <li>Memory 할당 실패 및 부족</li>
+    <li>Computer 자체의 문제. 전원, 망가진 기억 장치 등.</li>
+  </ul>
+  <pre>
+// 예외 처리
+<strong>try</strong> {
+  예외 발생 가능성 있는 문장
+} <strong>catch</strong> (e: 예외 처리 class 이름) {
+  예외를 처리하기 위한 문장
+} <strong>finally</strong> {
+  반드시 실행되어야 하는 문장
+}</pre>
+  <pre>
+fun main() {
+  try {
+      val c = 6 / 0
+      println(c)
+  } catch (e: Exception) {
+      println(e)
+  } finally {
+      println("finally block은 반드시 실행된다.")
+  }
+}<hr>>>
+java.lang.ArithmeticException: / by zero
+finally block은 반드시 실행된다.  
+</pre>
+  <h4 class="mb-0">특정 예외 처리</h4>
+  <pre>
+...
+} catch (e: <strong>ArithmeticException</strong>) {
+  println(e.message)
+}</pre>
+  <h4 class="mb-0">Stack의 추적</h4>
+  <pre>
+...
+} catch (e: Exception) {
+  e.printStackTrace()
+}<hr>>>
+java.lang.ArithmeticException: / by zero
+	at HelloKotlinKt.main(HelloKotlin.kt:3)
+	at HelloKotlinKt.main(HelloKotlin.kt)
+finally block은 반드시 실행된다.</pre>
+  <span class="material-icons red">info</span><code class="no-bgc">println()</code>은 <code>System.out</code>을 사용하고 오류 출력은 <code>System.err</code>을 사용한다.
+  <h4>예외 발생시키기 : <strong>throw</strong></h4>
+<pre><strong>throw</strong> Exception(message: String)</pre>
+<pre>
+fun main() {
+  val amount = 500
 
+  try {
+      checkAmount(amount)
+  } catch (e: Exception) {
+      println(e.message)
+  }
 
+  println("amount = $amount")
+}
+
+fun checkAmount(amount: Int) {
+  if (amount &lt; 1000)
+      <strong>throw Exception("잔고가 ${amount}으로 1000 이하입니다.")</strong>
+}<hr>>>
+잔고가 500으로 1000 이하입니다.
+amount = 500</pre>
+  <h4 class="mb-0">사용자 정의 예외</h4>
+<pre>class 사용자_예외_class_이름(message: String) : Exception(message)</pre>
+<pre>
+import java.lang.Exception
+
+class <strong>InvalidNameException</strong>(message: String) : Exception(message)
+
+fun main() {
+    try {
+        validateName("peter parker 1962")
+    } catch (e: <strong>InvalidNameException</strong>) { // 숫자가 포함된 이름 예외 처리
+        println(e)
+    } catch(e: Exception) { // 기타 예외 처리
+        println(e)
+    }
+}
+
+fun validateName(name: String) {
+    if (name.matches(Regex(".*\\d+.*"))) {
+        <strong>throw</strong> <strong>InvalidNameException</strong>("Your name is $name, contains number.")
+    }
+}<hr>>>
+InvalidNameException: Your name is peter parker 1962, contains number.  
+</pre><hr>
+<h1 class="madang"><span class="madang_number">둘째 마당</span><br>객체 지향<br>Programming</h1>
+<h1><span class="titleNumber">05</span>Class와 객체</h1>
+<h2 class="title"><span class="titleNumber">01-1</span> 탄생 배경</h2>
+<h3 class="title">소개합니다</h3>
+<hr>
+<h1><span class="titleNumber">06</span>Property와 초기화</h1>
+<h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
   <p id="end">END</p>
 </body>
 
