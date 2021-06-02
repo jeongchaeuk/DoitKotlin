@@ -7,6 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <style>
+    .lh-1 {
+      line-height: 1rem;
+    }
+
     .no-bgc {
       background-color: transparent;
     }
@@ -53,7 +57,7 @@
       color: #FFF;
       border-radius: 2rem;
       text-align: center;
-      box-shadow: 1px 1px 2px gray;
+      box-shadow: .1rem .1rem .1rem black;
     }
 
     .my-float {
@@ -102,7 +106,7 @@
     }
 
     h2.title {
-      border-width: 1px;
+      border-width: .1rem;
       border-bottom-style: dashed
     }
 
@@ -112,26 +116,20 @@
       margin-right: .5rem;
     }
 
-    ul.roundBox {
-      border: 1px solid lightgray;
-      border-radius: 0.5em;
-      padding: .5rem 2rem;
-    }
-
     table,
     th,
     td {
       border-collapse: collapse;
-      border: 1px solid gray;
-      padding: 0.25em;
+      border: .05rem solid gray;
+      padding: 0.25rem;
     }
 
     table.noneLine,
     table .noneLine {
       border-collapse: collapse;
-      border: 1px none;
-      padding: 0.25em;
-      margin: 0.25em;
+      border: .05rem none;
+      padding: 0.25rem;
+      margin: 0.25rem;
       background-color: #EEE;
     }
 
@@ -2812,7 +2810,7 @@ class Class이름 {
   constructor(매개변수[, 매개변수...]) { // code }
   constructor(매개변수[, 매개변수...]) { // code }
 }</pre>
-<pre>
+  <pre>
 class Bird {
   var name: String
   var wing: Int
@@ -2853,14 +2851,14 @@ class Bird <strong>constructor</strong>(_name: String, _wing: Int, _beak: String
 // 하지만 가시성 지시자나 annotation 표기가 class 선언에 있다면 생략할 수 없다.
 class Bird(_name: String, _wing: Int, _beak: String, _color: String) { ... }</pre>
   <h4 class="mb-0">Property를 포함한 주 생성자</h4>
-<pre>
+  <pre>
 // constructor 생략
 class Bird(<strong>var name: String, var wing: Int, var beak: String, var color: String</strong>) {
   // Property를 주 생성자의 매개변수에 선언했으므로 본문에선 생략.
   ...
 }</pre>
   <h4>초기화 block을 가진 주 생성자 : <strong>init{}</strong></h4>
-<pre>
+  <pre>
 class Bird(<strong>var name: String, var wing: Int, var beak: String, var color: String</strong>) {
   // 초기화 block
   <strong>init {</strong>
@@ -2885,7 +2883,7 @@ Sing vol: 3
 coco.color is yellow
 Fly wing: 2</pre>
   <h4>Property의 기본값 지정</h4>
-<pre>
+  <pre>
 class Bird(<strong>var name: String = "NONAME", var wing: Int = 2, var beak: String, var color: String</strong>) {
   ...
 }
@@ -2898,12 +2896,331 @@ fun main() {
   println("coco.color is ${coco.color}, coco.beak is ${coco.beak}")
 }<hr>>>
 coco.name is NONAME, coco.wing is 2
-coco.color is red, coco.beak is long</pre>  
+coco.color is red, coco.beak is long</pre>
   <hr>
-  <h2 class="title"><span class="titleNumber">05-3</span>상속과 다형성</h2>
-  <h2 class="title"><span class="titleNumber">05-4</span>super와 this의 참조</h2>
-  <h2 class="title"><span class="titleNumber">05-5</span>정보 은닉 캡슐화</h2>
+  <h2 class="title"><span class="titleNumber">05-3</span>상속 <sub>Inheritance</sub>과 다형성 <sub>Polymorphism</sub></h2>
+  <ul>
+    <li><b>상속</b> : 자식 class는 부모 class의 속성과 기능을 물려 받는다.</li>
+    <li><b>다형성</b> : Method가 같은 이름을 사용하지만 구현 내용이 다르거나<sub>Overriding</sub> 매개변수가 달라서 하나의 이름 <sub>Overloading</sub>으로 다양한 기능을 수행할 수 있다.</li>
+  </ul>
+  <h3 class="title">상속과 Class의 계층</h3>
+  <table class="no-border">
+    <caption style="caption-side: bottom;">&lt;기본 class와 파생된 하위 class></caption>
+    <tr>
+      <td></td>
+      <td class="bg-lg border" style="text-align: center;">Any</td>
+      <td>최상위 class <sub>Super Class</sub></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="bg-lg border" style="text-align: center;">Bird</td>
+      <td>기반 Class <sub>Base Class</sub></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="bg-lg border">name: String<br>wing: Int = 2<br>beak: String<br>color: String</td>
+      <td rowspan="2"></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="bg-lg border">fly(): Unit<br>sing(vol: Int): Unit</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+      <td>상속</td>
+    </tr>
+    <tr>
+      <td class="bg-lg border" style="text-align: center;">Lark</td>
+      <td></td>
+      <td class="bg-lg border" style="text-align: center;">Parrot</td>
+    </tr>
+    <tr>
+      <td class="bg-lg border"><br><br></td>
+      <td></td>
+      <td class="bg-lg border">language: String</td>
+    </tr>
+    <tr>
+      <td class="bg-lg border">singHitone()</td>
+      <td></td>
+      <td class="bg-lg border">speak()</td>
+    </tr>
+  </table>
+  <h4>하위 Class 선언하기</h4>
+  Kotlin은 <strong style="font-size: 1rem;">open</strong> 없이 기본으로 class를 선언하면 상속할 수 없는 기본 class가 된다.
+  <pre>
+<strong>open class</strong> 기반_Class_이름 { // 묵시적으로 <strong>Any</strong>로 부터 상속됨.
+  ...
+}
+
+<strong>class</strong> 파생_Class_이름 : 기반_Class_이름 {
+  ...
+}</pre><br>
+  Sample.kt
+  <pre>
+// 상속 가능한 class를 만들기 위해 open 사용
+<strong>open</strong> class <span class="custom">Bird</span>(var name: String, var wing: Int, var beak: String, var color: String) {
+  fun fly() = println("Fly wing: $wing")
+  fun sing(vol: Int) = println("Sing vol: $vol")
+}
+
+// 주 생성자를 사용한 상속
+class <span class="custom">Lark</span>(name: String, wing: Int, beak: String, color: String)<strong> : Bird</strong>(name, wing, beak, color) {
+  fun <strong>singHitone</strong>() = println("Happy Song!") // 새로 추가한 method
+}
+
+// 부 생성자를 사용한 상속
+class <span class="custom">Parrot</span> : Bird {
+  val language: String
+
+  <strong>constructor</strong>(name: String, wing: Int, beak: String, color: String, <strong>language: String</strong>) : <strong>super</strong>(name, wing, beak, color) {
+      <strong class="lh-1">this.language = language</strong> // 새로 추가한 property
+  }
+
+  fun <strong>speak()</strong> = println("Speak! $language")
+}
+
+fun main() {
+  val coco = Bird("mybird", 2, "short", "blue")
+  val lark = Lark("mylark", 2, "long", "brown")
+  val parrot = Parrot("myparrot", 2, "short", "multiple", <strong>korean"</strong>)
+
+  println("Coco: ${coco.name}, ${coco.wing}, ${coco.beak}, ${coco.color}")
+  println("Lark: ${lark.name}, ${lark.wing}, ${lark.beak}, ${lark.color}")
+
+  with(parrot) { println("Parrot: ${name}, ${wing}, ${beak}, ${color}, ${language}") }
+
+  <strong>lark.singHitone()</strong>
+  <strong class="lh-1">parrot.speak()</strong>
+  lark.fly()
+}<hr>>>
+Coco: mybird, 2, short, blue
+Lark: mylark, 2, long, brown
+Parrot: myparrot, 2, short, multiple, korean
+Happy Song!
+Speak! korean
+Fly wing: 2</pre>
+  <pre>
+// 주 생성자를 사용한 상속
+// 마지막 인자만 var로 선언되어 property가 추가되었음을 알 수 있다.
+class <span class="custom">Parrot</span>(name: String, wing: Int, beak: String, color: String, <strong>var</strong> language: String) : Bird(name, wing, beak, color) {
+  fun speak() = println("Speak! $language")
+}</pre>
+  <h3 class="title">다형성</h3>
+  <h4 class="mt-0 mb-0">Overloading</h4>
+  같은 이름의 method를 매개변수만 다르게 해서 여러 번 정의할 수 있다.<br>
+  반환값만 다르고 매개변수는 같은 경우에는 해당되지 않는다.
+  <pre>
+fun add(x: Int, y: Int): Int { return x + y }
+fun add(x: Double, y: Double): Double { return x + y }
+fun add(x: Int, y: Int, z: Int): Int { return x + y + z }
+
+// return type 만으로 overloading 안된다.
+fun add(x: Int, y: Int)<strong>: Long</strong> { return (x + y).toLong() } // <span class="red">Error! Conflicting overloadings.</span>
+</pre>
+  <h4 class="mb-0">Overriding</h4>
+  <ul class="mt-0">
+    <li>상위 Class의 method를 재정의한다.</li>
+    <li>상위 Class는 <strong>open</strong>을 하위 Class에서는 <strong>override</strong> keyword를 사용해야 한다.</li>
+    <li>Kotlin에서는 property도 overriding 할 수 있다.</li>
+  </ul>
+  <pre>
+<strong>open</strong> class Bird {
+  fun fly() { ... } // override 불가!
+
+  <strong>open</strong> fun sing() { ... } // override 가능.
+}
+
+class Lark() : Bird() {
+  fun fly() { ... } // <span class="red">Error!</span>
+
+  <strong>override</strong> fun sing() { ... } // 재정의.
+}</pre><br>
+  만약, Lark을 상속한 class에서 sing()의 overriding 막고 싶다면 <strong>final</strong>를 앞에 붙인다.
+  <pre>
+<strong>open</strong> class Lark() : Bird() {
+  <strong class="lh-1">final</strong> override fun sing() { ... } // 재정의. 하위 class에서 재정의 불가.
+}
+
+class Skylark() : Lark() {
+  override fun sing() { ... } // <span class="red">Error!</span>
+}</pre>
+  <hr>
+  <h2 class="title"><span class="titleNumber">05-4</span><code class="no-bgc" style="font-size: 1em;">super</code>와 <code class="no-bgc" style="font-size: 1em;">this</code>의 참조</h2>
+  <h3 class="title mb-0"><code class="no-bgc" style="font-size: 1.2rem">super</code>로 상위 객체 참조하기</h3>
+  <pre>
+open class Bird {
+  open fun sing() {
+    println("Bird sing.")
+  }
+} 
+
+class Parrot() : Bird() {
+  override fun sing() {
+    <strong>super.sing()</strong>
+
+    println("Parrot sing")
+  }
+}</pre>
+  <h3 class="title mb-0"><code class="no-bgc" style="font-size: 1.2rem">this</code>로 현재 객체 참조하기</h3>
+  <h4 class="mb-0">여러 개의 부 생성자에서 참조하기</h4>
+  <pre>
+<span class="keyword">open class</span> <span class="custom">Person</span> {
+  <span class="keyword">constructor</span>(firstName: String) {
+      println("[Person] $firstName")
+  }
+
+  // ①
+  <span class="keyword">constructor</span>(firstName: String, age: Int) {
+      println("[Person] $firstName, $age")
+  }
+}
+
+<span class="keyword">class</span> <span class="custom">Developer</span> : <span class="custom">Person</span> {
+  <span class="keyword">constructor</span>(firstName: String) : <strong>this</strong>(firstName, 18) { // call ②
+      println("[Developer] $firstName")
+  }
+
+  // ②
+  <span class="keyword">constructor</span>(firstName: String, age: Int) : <strong>super</strong>(firstName, age) { // call ①
+      println("[Developer] $firstName, $age")
+  }
+}
+
+fun main() {
+  val peter = Developer("Peter")
+}<hr>>>
+[Person] Peter, 10
+[Developer] Peter, 10
+[Developer] Peter</pre>
+  <h4 class="mb-0">주 생성자와 부 생성자 함께 사용하기</h4>
+  <pre>
+class Person(firstName: String, out: Unit = println("[Primary Constructor] Parameter")) { // ② 주 생성자
+  val name = println("[Property] Person name: $firstName") // ③ property 할당
+
+  // ④ 초기화 block
+  init {
+      println("[init] Person init block")
+  }
+
+  // ① 부 생성자
+  constructor(
+    firstName: String, 
+    age: Int, 
+    out: Unit = println("[Secondary Constructor] Parameter")) : <strong>this</strong>(firstName) {
+      println("[Secondary Constructor] Body: $firstName, $age") // ⑤ 부 생성자 본문
+  }
+}
+
+fun main() {
+  val p1 = Person("Peter", 18) // ①②③④⑤
+  println("-----------------------")
+  val p2 = Person("Tony") // ②③④
+}<hr>>>
+[Secondary Constructor] Parameter
+[Primary Constructor] Parameter
+[Property] Person name: Peter
+[init] Person init block
+[Secondary Constructor] Body: Peter, 18
+-----------------------
+[Primary Constructor] Parameter
+[Property] Person name: Tony
+[init] Person init block</pre>
+  <h3 class="title mb-0">바깥 Class 호출하기</h3>
+  <pre>
+open class Base {
+  open val x: Int = 1 // ④
+  open fun f() = println("Base Class f()") // ①
+}
+
+class Child : Base() {
+  override val x: Int = super.x + 1
+  override fun f() = println("Child Class f()") // ②
+
+  <strong>inner</strong> class Inside {
+      fun f() = println("Inside Class f()") // ③
+
+      fun test() {
+          f() // ③
+          <strong>Child().f()</strong> // ②
+          <strong class="lh-1">super@Child.f()</strong> // ①
+          println("[Inside] super@Child.x: ${<strong>super@Child.x</strong>}")
+      }
+  }
+}
+
+fun main() {
+  <strong>Child().Inside().test()</strong>
+}<hr>>>
+Inside Class f()
+Child Class f()
+Base Class f()
+[Inside] super@Child.x: 1</pre>
+  <h3 class="title mb-0">Interface에서 참조하기</h3>
+  <ul class="mt-0">
+    <li>Interface는 구현약속이다.</li>
+    <li>Interface 자체로는 객체를 만들 수 없고 항상 Interface를 구현하는 Class에서 생성해야 한다.</li>
+    <li>Kotlin은 Class를 하나만 상속 받을 수 있다.</li>
+    <li>Interface는 여러 개를 구현할 수 있다.</li>
+  </ul>
+  <pre>
+// 이름 중복해결하기
+
+open class A {
+  open fun <strong>f()</strong> = println("class A f()")
+  fun a() = println("class A a()")
+}
+
+// Interface는 기본으로 open 이다.
+interface B {
+  fun <strong>f()</strong> = println("interface B f()")
+  fun b() = println("interface B b()")
+}
+
+// ','로 구분해서 상속할 class와 interface를 여러 개 지정할 수 있다.
+class C : <strong>A(), B</strong> {
+  // class A와 interface B에 f()가 중복되므로 반드시 f()는 override해야 한다.
+  <strong>override fun f()</strong> = println("class C f()")
+
+  fun test() {
+      f()
+      b()
+
+      // super&lt;부모_Type>을 사용해서 누구의 f()를 사용할지 선택한다.
+      <strong>super&lt;A>.f()</strong> // class A의 f()
+      <strong class="lh-1">super&lt;B>.f()</strong> // interface B의 f()
+  }
+}
+
+fun main() {
+  C().test()
+}<hr>>>
+class C f()
+interface B b()
+class A f()
+interface B f()</pre>
+  <hr>
+  <h2 class="title"><span class="titleNumber">05-5</span>정보 은닉 캡슐화 <sub>Encapsulation</sub></h2>
+  <h3 class="title">가시성 <sub>Visibility</sub> 지시자</h3>
+  <h4><code class="no-bgc">private</code></h4>
+  <h4><code class="no-bgc">protected</code></h4>
+  <h4><code class="no-bgc">internal</code></h4>
+  <h3 class="title">가시성 지시자와 Class의 관계</h3>
+  <h4>자동차와 도둑의 예제</h4>
+  <hr>
   <h2 class="title"><span class="titleNumber">05-6</span>Class와 Class의 관계</h2>
+  <h3 class="title">Class 혹은 객체 간의 관계</h3>
+  <h4>Class 간의 관계를 판별하는 방법</h4>
+  <h4>연관 관계</h4>
+  <h4>의존 관계</h4>
+  <h4>집합 관계</h4>
+  <h4>구성 관계</h4>
+  <h3 class="title">객체 간의 Message 전달하기</h3>
   <hr>
   <h1><span class="titleNumber">06</span>Property와 초기화</h1>
   <h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
