@@ -7,12 +7,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <style>
+    span.error {
+      color: red;
+    }
+
+    .info {
+      color: red;
+    }
+
     .lh-1 {
       line-height: 1rem;
     }
 
     .no-bgc {
       background-color: transparent;
+    }
+
+    pre.no-bgc {
+      background-color: transparent;
+      color: black;
     }
 
     .red {
@@ -87,6 +100,10 @@
       font-family: monospace;
     }
 
+    strong>code {
+      background-color: transparent;
+    }
+
     .madang,
     .center {
       text-align: center;
@@ -131,6 +148,10 @@
       padding: 0.25rem;
       margin: 0.25rem;
       background-color: #EEE;
+    }
+
+    table.th-ta-r th {
+      text-align: right;
     }
 
     th {
@@ -196,6 +217,12 @@
     .keyword {
       color: #c83;
       font-weight: bolder;
+    }
+
+    .keyword-on-light {
+      color: #008;
+      font-weight: bolder;
+      font-size: 1rem;
     }
 
     .custom {
@@ -2882,6 +2909,12 @@ Sing vol: 3
 --- End init block ---
 coco.color is yellow
 Fly wing: 2</pre>
+  <h4 class="mb-0">호출 순서</h4>
+  <ul class="mt-0">
+    <li>주 생성자 <span class="material-icons">arrow_forward</span> init {}</li>
+    <li>init{} <span class="material-icons">arrow_forward</span> 부 생성자</li>
+  </ul>
+  <span class="material-icons red">info</span> init{}과 부 생성자에는 getter/setter가 사용된다.
   <h4>Property의 기본값 지정</h4>
   <pre>
 class Bird(<strong>var name: String = "NONAME", var wing: Int = 2, var beak: String, var color: String</strong>) {
@@ -3011,7 +3044,7 @@ Fly wing: 2</pre>
 class <span class="custom">Parrot</span>(name: String, wing: Int, beak: String, color: String, <strong>var</strong> language: String) : Bird(name, wing, beak, color) {
   fun speak() = println("Speak! $language")
 }</pre>
-  <h3 class="title">다형성</h3>
+  <h3 class="title mb-0">다형성</h3>
   <h4 class="mt-0 mb-0">Overloading</h4>
   같은 이름의 method를 매개변수만 다르게 해서 여러 번 정의할 수 있다.<br>
   반환값만 다르고 매개변수는 같은 경우에는 해당되지 않는다.
@@ -3048,7 +3081,7 @@ class Lark() : Bird() {
 }
 
 class Skylark() : Lark() {
-  override fun sing() { ... } // <span class="red">Error!</span>
+  override fun sing() { ... } // <span class="red">Error!</span> 재정의할 수 없다.
 }</pre>
   <hr>
   <h2 class="title"><span class="titleNumber">05-4</span><code class="no-bgc" style="font-size: 1em;">super</code>와 <code class="no-bgc" style="font-size: 1em;">this</code>의 참조</h2>
@@ -3206,25 +3239,924 @@ class A f()
 interface B f()</pre>
   <hr>
   <h2 class="title"><span class="titleNumber">05-5</span>정보 은닉 캡슐화 <sub>Encapsulation</sub></h2>
-  <h3 class="title">가시성 <sub>Visibility</sub> 지시자</h3>
+  <h3 class="title mb-0">가시성 지시자 <sub>Visibility Modifier</sub></h3>
+  가시성 : 각 class나 method, property의 접근 범위.
+  <table class="th-ta-r">
+    <tr>
+      <th><code>private</code></th>
+      <td>private class는 같은 file 안에서만 생성할 수 있다.<br>class안의 private property는 class 안에서만 접근할 수 있다.</td>
+    </tr>
+    <tr>
+      <th><code>protected</code></th>
+      <td>자신과 자식 class에서만 접근할 수 있다.<br>최상위 요소에는 지정할 수 없다.<br><code>class</code>나 <code>interface</code> 안의 memeber에만 지정할 수 있다.</td>
+    </tr>
+    <tr>
+      <th><code>internal</code></th>
+      <td>같은 module <sub>build 된 하나의 묶음</sub> 안에서만 접근할 수 있다.<br>Project에 한 개의 module만 있다면 internal의 접근 범위는 Project 전체가 된다.</td>
+    </tr>
+    <tr>
+      <th><code>public</code></th>
+      <td><strong>기본값</strong> 어디에서든 접근할 수 있다.</td>
+    </tr>
+  </table>
   <h4><code class="no-bgc">private</code></h4>
-  <h4><code class="no-bgc">protected</code></h4>
+  <pre>
+<strong>private</strong> class PrivateClass {
+  <strong class="lh-1">private</strong> var i = 1
+
+  <strong>private</strong> fun privateFunc() { i += 1 }
+
+  fun access() { privateFunc() }
+}
+
+class OtherClass {
+  val pc = PrivateClass() // <span class="red">!Error</span>
+
+  // private class를 지정하려면 똑같이 private으로 선언해야 한다.
+  <strong>private</strong> val pc2 = PrivateClass()
+
+  fun test() {
+      val pc = PrivateClass()
+  }
+}
+
+fun main() {
+  val pc = PrivateClass() // 가능
+
+  pc.i  // <span class="red">!Error</span>
+  pc.privateFunc()  // <span class="red">!Error</span>
+}
+
+fun topFunc() {
+  val pc = PrivateClass() // 가능.
+}</pre>
+  <h4><code class="no-bgc mb-0">protected</code></h4>
+  <pre>
+// 최상위 class에는 protected를 사용할 수 없다.
+open class Base {
+    <strong>protected</strong> var i = 1
+
+    <strong>protected</strong> fun protectedFunc() { i += 1}
+    fun access() { protectedFunc() }
+
+    // 내부 class에는 protected를 사용할 수 있다.
+    <strong>protected</strong> class Nested
+}
+
+// 부모 class인 Base의 protected 요소에 접근할 수 있다.
+class Derived : Base() {
+    fun test(base: Base): Int {
+        protectedFunc()
+        return i
+    }
+}
+
+fun main() {
+    val base = Base()
+
+    base.i // <span class="error">!Error</span>
+    base.protectedFunc() // <span class="error">!Error</span>
+
+    base.access()
+}</pre>
   <h4><code class="no-bgc">internal</code></h4>
-  <h3 class="title">가시성 지시자와 Class의 관계</h3>
-  <h4>자동차와 도둑의 예제</h4>
+  <table class="no-border">
+    <tr>
+      <td><span class="material-icons info" style="float:left">info</span></td>
+      <td>Java의 가시성 지시자 기본값인 <strong><code>package</code></strong> 지시자는 Kotlin에서는 사용하지 않는다.<br>
+        Java에서 <code class="no-bgc">package</code>로 지정된 경우 같은 package라면 project 단위 묶음인 .jar 파일이 달라도 모두 접근 할 수 있다.
+        이는 보안 문제가 발생할 수 있다.<br>그래서 Kotlin에서는 package를 버리고 같은 module 안에서만 접근할 수 있는 <code>internal</code>을 사용한다.<br>
+        Module이 다른 .jar 파일에서는 internal로 선언된 요소에 접근할 수 없다는 뜻이다.</td>
+    </tr>
+  </table>
+  Sample.kt
+  <pre>
+<strong>internal</strong> class InternalClass {
+  <strong class="lh-1">internal</strong> var i = 1
+
+  <strong>internal</strong> fun internalFunc() { i += 1 }
+
+  fun access() { internalFunc() }
+}
+
+class OtherClass {
+  // 같은 internal로 선언해야 한다.
+  <strong>internal</strong> var ic = InternalClass()
+
+  fun test() {
+      ic.i
+      ic.internalFunc()
+  }
+}
+
+fun main() {
+  val ic = InternalClass()
+  ic.i
+  ic.internalFunc()
+}</pre><br>
+  OtherFile.kt
+  <pre>
+fun main() {
+  val ic = InternalClass()
+  ic.i
+  ic.internalFunc()
+}</pre>
+  <h3 class="title mb-0">가시성 지시자와 Class의 관계</h3>
+  <pre>
+open class Base {
+  // 접근 가능 : a, b, c, d, e
+  
+  private         val a = 1
+  protected open  val b = 2
+  internal        val c = 3
+                  val d = 4 // 기본값은 public
+
+  protected class Nested {
+      // 접근 가능 : a, b, c, d, e, f 
+      
+              val e = 5
+      private val f = 6
+  }
+}
+
+class Derived : Base() {
+  // 접근 불가 : a, f
+  // 접근 가능 : b, c, d, e
+  
+  // <strong>Overriding된 member는 상위 class와 동일한 가시성을 가진다.</strong>
+  override val b = 5 // protected
+}
+
+class Other(base: Base) {
+  // 같은 module이므로 접근 가능 : Base.c, Base.d
+}</pre>
+  <h4 class="mb-0">자동차와 도둑의 예제</h4>
+  <pre>
+// 주 생성자가 protected이므로 자식 class에서만 Car 객체를 만들 수 있다.
+// 이때는 constructor keyword를 생략할 수 없다.
+open class Car <strong>protected</strong> constructor(
+  <strong>private</strong> val year: Int,  
+  var model: String,
+  <strong>protected</strong> open var power: String,
+  <strong class="lh-1">internal</strong> var wheel: String,
+) {
+    protected fun start(key: Boolean) {
+      if (key) println("Start the Engine!")
+    }
+
+    class Driver(<strong>private</strong> var name: String, var license: String) {
+      <strong>internal</strong> fun driving() = println("[Driver] Driving() - $name")
+    }
+}
+
+class Tico(
+    year: Int,
+    model: String,
+    override var power: String = "50hp",
+    wheel: String,
+    var name: String,
+    private var key: Boolean,
+) : Car(year, model, power, wheel) {
+    val driver = Driver(name, "first class")
+
+    constructor(name: String, key: Boolean)
+            : this(2014, "basic", "100hp", "normal", name, key) {
+    }
+
+    fun access(password: String) {
+        when (password) {
+            "gotico" -> {
+                println("----- [Tico] access() -----")
+                super.year // <span class="error">Error!</span> private 접근 불가
+                println("model = $model")
+                println("power = $power")
+                println("wheel = $wheel")
+                start(true)
+
+                driver.name // <span class="error">Error!</span> private 접근 불가
+                println("dirver.license = ${driver.license}")
+                driver.driving()
+            }
+            else -> println("Your are a burglar!")
+        }
+    }
+}
+
+class Burglar {
+    fun steal(any: Any) {
+        when (any) {
+            <strong>is</strong> Tico -> {
+                println("----- [Burglar] steal() -----")
+                println(any.year) // <span class="error">Error!</span> private 접근 불가
+                println(any.power) // <span class="error">Error!</span> protected 접근 불가
+
+                println(any.name)
+                println(any.wheel)
+                println(any.model)
+
+                println(any.driver.license)
+                any.driver.driving()
+                any.start() // <span class="error">Error!</span> protected 접근 불가
+                any.access("dontknow")
+            }
+            else -> println("Nothing to steal.")
+        }
+    }
+}
+
+fun main() {
+    val car = Car() // <span class="error">Error!</span> protected 직접 생성 불가
+
+    val tico = Tico("peter", true)
+    tico.access("gotico")
+
+    val burglar = Burglar()
+    burglar.steal(tico)
+}<hr>>>
+----- [Tico] access() -----
+model = basic
+power = 100hp
+wheel = normal
+Start the Engine!
+dirver.license = first class
+[Driver] Driving() - peter
+----- [Burglar] steal() -----
+peter
+normal
+basic
+first class
+[Driver] Driving() - peter
+Your are a burglar!</pre>
   <hr>
   <h2 class="title"><span class="titleNumber">05-6</span>Class와 Class의 관계</h2>
   <h3 class="title">Class 혹은 객체 간의 관계</h3>
   <h4>Class 간의 관계를 판별하는 방법</h4>
-  <h4>연관 관계</h4>
-  <h4>의존 관계</h4>
-  <h4>집합 관계</h4>
-  <h4>구성 관계</h4>
-  <h3 class="title">객체 간의 Message 전달하기</h3>
+  <ul class="mt-0">
+    <li>두 class가 서로 참조하는가?</li>
+    <li>두 class가 생명주기에 영향을 주는가?</li>
+  </ul>
+  <table class="center no-border">
+    <tr>
+      <td class="border">Class 서로 참조 유지 여부 ?</td>
+      <td><span class="material-icons">horizontal_rule</span>N<span class="material-icons">arrow_forward</span></td>
+      <td class="bg-lg border">의존 <sub>Dependency</sub></td>
+    </tr>
+    <tr>
+      <td><span class="material-icons">arrow_downward</span>Y</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="bg-lg border">연관 <sub>Association</sub></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><span class="material-icons">arrow_downward</span>&nbsp;&nbsp;</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="border">Class 각자의 생명주기 유지 ?</td>
+      <td><span class="material-icons">horizontal_rule</span>N<span class="material-icons">arrow_forward</span></td>
+      <td class="bg-lg border">구성 <sub>Composition</sub></td>
+    </tr>
+    <tr>
+      <td><span class="material-icons">arrow_downward</span>Y</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="bg-lg border">집합 <sub>Aggregation</sub></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  <h4>연관 관계 <sub>Association</sub></h4>
+  <ul class="mt-0">
+    <li>2개의 서로 분리된 class가 연결을 가지는 것이다.</li>
+    <li>단방향, 양방향으로 연결될 수 있다.</li>
+    <li>핵심은 두 요소가 서로 독립적인 생명주기를 가진다는 것이다.</li>
+  </ul>
+  <pre>
+class Doctor(val name: String) {
+  fun patientList(patient: Patient) {
+      println("Doctor: $name - Patient: ${patient.name}")
+  }
+}
+
+class Patient(val name: String) {
+  fun doctorList(doctor: Doctor) {
+      println("Patient: $name - Doctor: ${doctor.name}")
+  }
+}
+
+fun main() {
+  val doctor = Doctor("Strange")
+  val patient = Patient("Peter")
+
+  doctor.patientList(patient)
+  patient.doctorList(doctor)
+}<hr>>>
+Doctor: Strange - Patient: Peter
+Patient: Peter - Doctor: Strange</pre>
+  <h4 class="mb-0">의존 관계 <sub>Dependency</sub></h4>
+  <pre>
+class Patient(val name: String, val id: Int) {}
+
+// Doctor class는 Patient class에 의존하고 있다.
+class Doctor(val name: String, <strong>val patient: Patient</strong>) {
+  private val customerId = patient.id
+
+  fun patientList() {
+      println("Doctor = $name, Patient = ${patient.name}")
+      println("Patient Id = $customerId")
+  }
+}
+
+fun main() {
+  val patient = Patient("Peter", 1234)
+  val doctor = Doctor("Strange", patient)
+  doctor.patientList()
+}<hr>>>
+Doctor = Strange, Patient = Peter
+Patient Id = 1234</pre>
+  <h4 class="mb-0">집합 관계 <sub>Aggregation</sub> <strong>has a</strong></h4>
+  연관관계와 거의 동일하지만 특정 객체를 소유한다는 개념이 추가되었다.
+  <pre>
+// 연못에 있는 오리들을 저장할 list 매개변수 (집합)
+class Pond(<strong>val members: MutableList&lt;Duck></strong>) {
+  constructor() : this(<strong class="lh-1">mutableListOf&lt;Duck>()</strong>)
+}
+
+class Duck(val name: String)
+
+fun main() {
+  // 두 객체는 서로 생명주기에 영향을 주지 않는다.
+  val pond = Pond()
+  val duck1 = Duck("donald")
+  val duck2 = Duck("daisy")
+
+  // 연못에 오리를 추가.(오리의 집합)
+  pond.members.add(duck1)
+  pond.members.add(duck2)
+
+  // 연못에 있는 오리들
+  for (duck in pond.members) {
+      println(duck.name)
+  }
+}<hr>>>
+donald
+daisy</pre>
+  <h4>구성 관계 <sub>Composition</sub> <strong>own a</strong></h4>
+  <ul class="mt-0">
+    <li>집합 관계와 거의 동일하지만 특정 class가 어느 한 class의 부분이 되는 것이다.</li>
+    <li>구성품으로 지정된 class는 생명주기가 소유자 class에 의존한다.</li>
+    <li>소유자 class가 삭제되면 구성된 class도 삭제된다.</li>
+  </ul>
+  <pre>
+class Car {
+  // Engine class는 Car class의 생명주기에 의존적이다.
+  // Car 객체가 사라지면 Engine 객체도 사라진다.
+  private val engine = <strong>Engine()</strong>
+
+  fun startEngine() = engine.start()
+  fun stopEngine() = engine.stop()
+}
+
+class Engine {
+  fun start() = println("Start engine")
+  fun stop() = println("Stop engine")
+}
+
+fun main() {
+  val car = Car()
+  car.startEngine()
+  car.stopEngine()
+}<hr>>>
+Start engine
+Stop engine</pre>
+  <h3 class="title mb-0">객체 간의 Message 전달하기</h3>
+  시간의 흐름에 따라 일어나는 경우가 대부분기 때문에 UML의 Sequence Diagram으로 표현한다.
   <hr>
   <h1><span class="titleNumber">06</span>Property와 초기화</h1>
-  <h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
+  Kotlin에서 class의 property는 <strong>변수</strong>와 <strong>접근 method</strong>가 포함된 개념이다.<br>
+  접근 method는 <code>getter</code>, <code>setter</code>라고 부르고 자동으로 만들어 진다.<br>
+  Property는 반드시 초기화되어야 한다.
+  <h2 class="title mb-0"><span class="titleNumber">06-1</span>Property의 접근</h2>
+  Class 내에 선언한 변수를 property라고 부른다.
+  <h3 class="title mb-0">Kotlin에서 getter와 setter가 작동하는 방식</h3>
+  내부적으로 getter, setter를 자동으로 만들어 준다.
+  <pre>class User(val id: Int, var name: String, var age: Int)</pre>
+  val은 불변값이므로 getter만, var는 getter/setter를 만들어 준다.
+  <code class="no-bgc">
+  <table>
+    <tr>
+      <th>Kotlin</th>
+      <th>Java</th>
+    </tr>
+    <tr>
+      <td>user.name</td>
+      <td>user.getName()</td>
+    </tr>
+    <tr>
+      <td>user.age = 18</td>
+      <td>user.setAge(18)</td>
+    </tr>
+  </table></code>
+  <h3 class="title mb-0">기본 getter와 setter 직접 지정하기</h3>
+  <table>
+    <caption>구조</caption>
+    <tr>
+      <td>
+        <pre class="no-bgc">
+<span class="keyword-on-light">var</span> Property_이름[: Property_자료형][= Property_초기화]
+  [<strong>get</strong>() { getter_본문 }]
+  [<strong class="lh-1">set</strong>(value) { setter_본문 }]</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <pre class="no-bgc">
+<span class="keyword-on-light">val</span> Property_이름[: Property_자료형][= Property_초기화]
+  [<strong>get</strong>() { getter_본문 }]</pre>
+      </td>
+    </tr>
+  </table><br>
+  <table>
+    <caption>getter, setter에 사용되는 특수 변수</caption>
+    <tr>
+      <th scope="row"><code>value</code></th>
+      <td>setter의 매개변수.</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>field</code></th>
+      <td>보조 <sub>Backing</sub> Field.<br>Property를 참조하는 변수.</td>
+    </tr>
+  </table>
+  <pre>
+class User(_id: Int, _name: String, _age: Int) {
+  val id: Int = _id
+      get() = field
 
+  var name: String = _name
+      get() = field
+      set(value) {
+          field = value
+      }
+
+
+  var age: Int = _age
+      get() = field
+      set(value) {
+          field = value
+      }
+}</pre>
+  <h3 class="title mb-0">Custom getter와 setter의 사용</h3>
+  사용자가 직접 getter/setter를 정의하면서 새로운 내용을 작성하는 것.
+  <pre>
+class User(_id: Int, _name: String, _age: Int) {
+  val id: Int = _id
+
+  var <strong>name</strong>: String = _name
+      <strong class="lh-1">set</strong>(<span class="keyword">value</span>) {
+        <span class="keyword">field</span> = value<span class="custom">.uppercase()</span> // 대문자로 저장한다.
+      }
+
+  var age: Int = _age
+}
+
+fun main() {
+  val user = User(1962, "peter", 18)
+  println(user.name)
+
+  <strong>user.name = "parker"</strong>
+  println(user.name)
+}<hr>>>
+peter
+PARKER</pre><br>
+  보안으로 외부에서 name에 접근하지 못하게 하려면 가시성 지시자를 사용하면 된다.<br>
+  아래와 같이 setter를 <code>private</code>으로 지정하면 외부에서 name에 값을 할당할 수 없다.
+  <pre>
+var name: String = _name // public
+  // getter의 가시성은 property의 가시성과 <strong>같아야</strong> 한다.
+  <span class="error">private</span> get() = field // <span class="error">Error!</span>
+
+  <strong>private</strong> set(<span class="keyword">value</span>) {
+    <span class="keyword">field</span> = value<span class="custom">.uppercase()</span>
+}</pre>
+  <h4 class="mb-0">보조 property의 사용</h4>
+  보조 field를 사용하지 않는 경우에는 임시로 사용할 property를 선언해 놓고 getter/setter에서 사용할 수 있다.
+  <h4 class="mb-0">Property의 overriding</h4>
+  Property는 기본적으로 overriding 할 수 없다.<br>
+  Overriding을 하려면 <strong>open</strong> keyword와 함께 property를 선언해야 한다.
+<pre>
+open class First {
+  <strong>open</strong> val x: Int = 0
+      get() {
+          println("First x")
+          return field
+      }
+
+  val y: Int = 0
+}
+
+class Second : First() {
+  <strong>override</strong> val x: Int = 0
+      get() {
+          println("Second x")
+          return field + 3
+      }
+
+  <span class="error">// 'y' in 'First' is final and cannot be overridden</span>
+  override val y: Int = 0 <span class="error">// Error!</span>
+}
+
+fun main() {
+  val second = Second()
+  println(second.x)
+  println(second.y)
+}<hr>>>
+Second x
+3
+0</pre>
+<span class="material-icons red" style="float:left;">info</span> Overriding 때 상위 class에 property를 <code>val</code>로 정의한 경우에는 하위 class에서 <code>var</code>로 변경할 수 있다.<br>
+반대로 <code>var</code>를 <code>val</code>로 변경할 수는 없다.<br>
+  <hr>
+  <h2 class="title"><span class="titleNumber">06-2</span>지연 초기화와 위임</h2>
+  Property를 선언하면 기본적으로 모두 초기화해야 한다. 하지만 객체의 정보가 나중에 나타나는 경우 객체 생성과 동시에 초기화하기 힘든 경우가 있다. 이럴 때 지연 초기화를 사용한다.
+  <h3 class="title">lateinit을 사용한 지연 초기화</h3>
+  <h4>Property 지연 초기화하기</h4>
+  <ul><b>Property를 초기화하는 방법</b>
+    <li>주 생성자에서 초기화</li>
+    <li>init {} 초기화</li>
+    <li>부 생성자 초기화</li>
+    <li>매개변수의 기본값 초기화</li>
+  </ul>
+  <ul><b><code>lateinit</code>의 제한</b>
+    <li><code>var</code>로 선언된 property만 가능하다.</li>
+    <li>property에 대한 getter/setter를 사용할 수 없다.</li>
+  </ul>
+  <pre>
+class Person {
+  <strong>lateinit var</strong> name: String // 지연 초기화를 위한 선언
+
+  fun test() {
+      println(
+          // <strong>::name</strong> name property 참조.
+          // property의 초기화 여부를 판단한다.
+          if (<strong>::name.isInitialized</strong>) "initialized"
+          else "not initialized"
+      )
+  }
+}
+
+fun main() {
+  val peter = Person() // peter.name은 아직 초기화 되지 않았다.
+  peter.test()
+  peter.name = "peter" // 이 시점에 초기화된다.
+  peter.test()
+
+  // 초기화 하지 않고 참조하면 예외가 발생한다.
+  // <span class="error">kotlin.UninitializedPropertyAccessException:</span>
+  // <span class="error">lateinit property name has not been initialized</span>
+  println("name=${peter.name}")
+}<hr>>>
+not initialized
+initialized
+name=peter</pre>
+  <h4>객체 지연 초기화하기</h4>
+<pre>
+data class Person(var name: String, var age: Int)
+
+<strong>lateinit</strong> var person: Person // 객체 생성의 지연 초기화.
+
+fun main() {
+    <strong>person = Person("peter", 18)</strong> // 생성자 호출 시점에서 초기화됨.
+    println(person)
+}</pre>
+  <h3 class="title">lazy를 사용한 지연 초기화</h3>
+  <ul class="mt-0">
+    <b>lazy 특징</b>
+    <li>호출 시점에 <strong>by lazy {...}</strong> 정의에 의해 block 부분의 초기화를 진행한다.</li>
+    <li><strong>val</strong>에서만 사용할 수 있다.</li>
+    <li><code>val</code>이므로 값을 다시 변경할 수 없다.</li>
+  </ul>
+  <h4 class="mb-0">Property 지연 초기화하기</h4>
+  <code>lazy</code>는 lambda식으로 구성되어 lazy instance 반환값을 가지는 함수다.<br>
+  property에 <strong>최초로 접근</strong>한 시점에 해당 property가 초기화된다.
+  <pre>
+class LazyTest {
+  init {
+      println("init block")
+  }
+
+  <strong>val</strong> subject <strong>by lazy</strong> {
+      println("lazy initialized")
+      "kotlin programming"
+  }
+
+  fun flow() {
+      println("not initialized")
+      
+      // val로 선언되었기 때문에 다시 값을 설정할 수 없다.
+      println("subject one: <strong>$subject</strong>") // 최초 초기화 시점
+      
+      println("subject two: <strong>$subject</strong>") // 이미 초기화된 값 사용
+  }
+}
+
+fun main() {
+  val test = LazyTest() // 객체 생성. init{} 실행
+  test.flow()
+}<hr>>>
+init block
+not initialized
+lazy initialized
+subject one: kotlin programming
+subject two: kotlin programming</pre>
+  <h4 class="mb-0">객체 지연 초기화하기</h4>
+  객체의 property나 method가 접근되는 시점에 초기화된다. 
+  <pre>
+class Person(val name: String, val age: Int)
+
+fun main() {
+    var isPersonInstantiated: Boolean = false // 초기화 확인 용도
+
+    <strong>val</strong> <span class="custom">person</span>: <strong>Person</strong> <strong>by lazy</strong> {
+        isPersonInstantiated = true
+        Person("peter", 18) // Lazy 객체로 반환된다.
+    }
+
+    // 위임 변수를 사용한 초기화
+    <strong>val</strong> <span class="custom">personDelegate</span> = <strong>lazy</strong> { Person("Tony", 40) }
+
+    println("person Init: $isPersonInstantiated")
+    println("personDelegate Init: ${personDelegate<span class="keyword">.isInitialized()</span>}")
+
+    // 객체의 property나 method가 접근되는 시점에 초기화된다.
+    println("person.name=${<strong>person</strong>.name}") // 이 시점에 초기화
+    println("personDelegate.value.name = ${<strong>personDelegate.value</strong>.name}") // 이 시점에 초기화
+
+    println("person Init: $isPersonInstantiated")
+    println("personDelegate Init: ${personDelegate<span class="keyword">.isInitialized()</span>}")
+
+    <span class="custom">person</span>.javaClass                // class Person
+    <span class="custom">personDelegate</span>.javaClass        // class kotlin.SynchronizedLazyImpl
+    <span class="custom">personDelegate.value</span>.javaClass  // class Person  
+}<hr>>>
+person Init: false
+personDelegate Init: false
+person.name=peter
+personDelegate.value.name = Tony
+person Init: true
+personDelegate Init: true</pre>
+<table class="th-ta-r">
+  <tr>
+    <th><code class="no-bgc">by lazy {}</code></th>
+    <td>객체의 위임</td>
+  </tr>
+  <tr>
+    <th><code class="no-bgc">lazy {}</code></th>
+    <td>변수에 위임된 Lazy 객체. 이 객체의 <strong>value</strong> property로 실제 객체에 접근한다.</td>
+  </tr>
+</table>
+  <h4>lazy 모드 확인하기</h4>
+  LazyJVM.kt
+<pre>
+public actual fun &lt;T> <span class="custom">lazy</span>(initializer: () -> T): <strong>Lazy&lt;T></strong> = <span class="custom">SynchronizedLazyImpl</span>(initializer)
+
+public actual fun &lt;T> <span class="custom">lazy</span>(mode: LazyThreadSafetyMode, initializer: () -> T): <strong>Lazy&lt;T></strong> =
+  when (mode) {
+      LazyThreadSafetyMode<span class="keyword">.SYNCHRONIZED</span> -> <span class="custom">SynchronizedLazyImpl</span>(initializer)
+      LazyThreadSafetyMode<span class="keyword">.PUBLICATION</span> -> <span class="custom">SafePublicationLazyImpl</span>(initializer)
+      LazyThreadSafetyMode<span class="keyword">.NONE</span> -> <span class="custom">UnsafeLazyImpl</span>(initializer)
+  }</pre>
+  <table class="th-ta-r">
+    <caption>Lazy mode</caption>
+    <tr>
+      <th>SYNCHRONIZED</th>
+      <td>기본값. lock을 사용해 단일 thread만이 사용하는 것을 보장한다.</td>
+    </tr>
+    <tr>
+      <th>PUBLICATION</th>
+      <td>여러 군데에서 호출될 수 있으나 처음 초기화된 후 반환값을 사용한다.</td>
+    </tr>
+    <tr>
+      <th>NONE</th>
+      <td>lock을 사용하지 않기 때문에 빠르지만 다중 thread가 접근할 수 있다. (값의 일관성을 보장할 수 없다.)</td>
+    </tr>
+  </table>
+  <h3 class="title mb-0">by를 이용한 위임 <sub>Delegation</sub></h3>
+  <pre>// 위임자 : Property나 Class를 대신할 객체
+&lt;val | var | class> property 또는 class 이름: 자료형 <strong>by</strong> 위임자</pre>
+  <h4>Class의 위임</h4>
+  Sample.kt
+<pre>
+interface Animal {
+  fun eat() { ... }
+  ...
+}
+
+class Cat : Animal {}
+val cat = Cat()
+
+// Animal의 정의된 Cat의 모든 member를 Robot에 위임
+class Robot : Animal <strong>by cat</strong></pre>
+Robot은 Cat이 가지는 모든 Animal의 method를 가진다.<br><br>
+Sample.decompiled.java로 변환된 source code (대략)
+<pre>
+public interface Animal {
+  void eat();
+
+  public static final class DefaultImpls {
+    public static void eat(@NotNull Animal $this) {}
+  }
+}
+  
+public final class Cat implements Animal {
+  public void eat() {
+      Animal.DefaultImpls.eat(this);
+  }
+}
+
+public final class SampleKt {
+  @NotNull
+  private static final Cat cat = new Cat();
+
+  @NotNull
+  public static final Cat getCat() { return cat; }
+}
+
+public final class Robot implements Animal {
+  private final Cat cat = SampleKt.getCat();
+
+  public void eat() {
+      this.cat.eat();
+  }
+}</pre>
+Robot class를 사용할 때 Animal을 명시적으로 참조하지 않고도 eat()를 바로 호출하는 것이 가능하다.<br>
+
+<p><span class="material-icons red">info</span>왜 위임을 사용할까?<br>
+  기본적으로 Kotlin이 가지고 있는 표준 library는 open으로 정의되지 않은 class를 사용하고 있다.<br>
+  즉, 모두 final 형태의 class로 상속이나 직접 class의 기능을 확장하는것을 어렵게 만들었다.<br>
+  이렇게 함으로써 표준 library의 무분별한 상속에 따른 복잡한 문제를 방지할 수 있었다.<br>
+  따라서 필요한 경우에만 위임을 통해 상속과 비슷하게 해당 class의 모든 기능을 사용하면서 동시에 기능을 추가 확장을 구현할 수 있다.</p>
+<pre>
+interface Car {
+  fun info(): String
+}
+
+class VanImpl(val power: String) : Car {
+  override fun info() = "짐을 적재하며 ${power}을 가진다."
+}
+
+class SportImpl(val power: String) : Car {
+  override fun info() = "경주용에 사용되며 ${power}을 가진다."
+}
+
+class CarModel(val model: String, <strong>impl: Car</strong>) : Car <strong>by</strong> impl {
+  fun carInfo() {
+      println("$model : ${<strong>info()</strong>}") // 참조 없이 각 interface 구현 class의 info()에 접근.
+  }
+}
+
+fun main() {
+  val truck = CarModel("트럭 2010", <strong>VanImpl("100마력")</strong>)
+  val sport = CarModel("포르쉐 2008", <strong class="lh-1">SportImpl("350마력")</strong>)
+
+  truck.carInfo()
+  sport.carInfo()
+}<hr>>>
+트럭 2010 : 짐을 적재하며 100마력을 가진다.
+포르쉐 2008 : 경주용에 사용되며 350마력을 가진다.</pre>
+  <h4>Property 위임과 <code>by lazy</code></h4>
+  <ul class="mt-0" style="list-style: decimal;"><b>동작 설명</b>
+    <li>lazy lambda식은 lambda식을 전달받아 저장한 Lazy&lt;T> instance를 반환한다.</li>
+    <li>최초 property의 getter 실행은 lazy에 넘겨진 lambda식을 실행하고 결과를 기록한다.</li>
+    <li>이후 property의 getter 실행은 이미 초기화되어 기록된 값을 반환한다.</li>
+  </ul>
+  <code>by lazy</code>에 의한 지연 초기화는 thread에 좀 더 안정적으로 property를 사용할 수 있다.<br>
+  예를 들어 program 시작 시 큰 객체가 있다면 초기화할 때 모든 내용을 시작 시간에 할당해야 하므로 느려질 수밖에 없다.<br>
+  이것을 필요에 따라 해당 객체를 접근하는 시점에 초기화하면 시작할 때마다 property를 생성하느라 소비되는 시간을 줄일 수 있다.<br>
+  <h4>observable()과 vetoable()의 위임</h4>
+  <pre>import kotlin.properties.Delegates</pre>
+  <ul>
+    <li>observable()<br>property를 감시하고 있다가 특정 code의 logic에서 변경이 일어날 때 호출되어 처리된다.<br>
+    특정 변경 event에 따라 호출되므로 callback이라고도 불린다.</li>
+    <li>vetoable()<br>
+    반환값에 따라 property 변경을 허용하거나 취소할 수 있다.</li>
+  </ul>
+  Delegates.kt
+  <pre>
+public object Delegates {
+  ...
+  // initialValue : property의 초깃값
+  // onChange : property 변경된 후 호출되는 callback
+  public inline fun &lt;T> <strong>observable</strong>(
+    initialValue: T, 
+    crossinline onChange: (property: KProperty&lt;*>, oldValue: T, newValue: T) -> Unit
+  ): ReadWriteProperty&lt;Any?, T> = object: ObservableProperty&lt;T>(initialValue) {
+    override fun <strong>afterChange</strong>(property: KProperty&lt;*>, oldValue: T, newValue: T) = <strong>onChange</strong>(property, oldValue, newValue)
+  }
+
+  // initialValue : property의 초깃값
+  // onChange : property 값의 변경이 시도되기 전 호출.
+  // 이 callback이 호출되었을 때는 property는 아직 변경되지 않음.
+  // callback이 true를 반환하면 새 값이 지정된것이고, false라면 새 값은 취소되고 이전 값을 유지한다.
+  public inline fun &lt;T> <strong>vetoable</strong>(
+    initialValue: T, 
+    crossinline onChange: (property: KProperty&lt;*>, oldValue: T, newValue: T) -> Boolean
+  ): ReadWriteProperty&lt;Any?, T> = object: ObservableProperty&lt;T>(initialValue) {
+    override fun <strong>beforeChange</strong>(property: KProperty&lt;*>, oldValue: T, newValue: T): Boolean = <strong>onChange</strong>(property, oldValue, newValue)
+  }
+}</pre>
+  <h4 class="mb-0">observable()의 사용 방법</h4>
+  <pre>
+import kotlin.properties.Delegates
+
+class User {
+  var name: String <strong>by</strong> <strong>Delegates.observable</strong>("NONAME") { // property 위임
+    prop, old, new -> println("$old -> $new") // event가 발생할 때만 실행
+  }
+}
+
+fun main() {
+  val user = User()
+  user.name = "peter"   // 값이 변경되는 시점에서 첫 event 발생
+  user.name = "parker"  // 값이 변경되는 시점에서 두 번째 event 발생
+}<hr>>>
+NONAME -> peter
+peter -> parker</pre>
+  <h4 class="mb-0">vetoable()의 사용 방법</h4>
+  <pre>
+import kotlin.properties.Delegates
+
+fun main() {
+  var max: Int <strong>by</strong> <strong>Delegates.vetoable</strong>(0) { prop, old, new -> 
+    new > old // 조건에 맞지 않으면 old 값을 유지한다.
+  }
+
+  println(max)
+
+  max = 10
+  println(max)
+
+  max = 5
+  println(max)
+}<hr>>>
+0
+10
+10</pre>
+  <hr>
+  <h2 class="title"><span class="titleNumber">06-3</span>정적<sub>Static</sub> 변수와 Companion 객체</h2>
+  Program을 실행할 때 고정으로 가지는 memory로 객체 생성 없이 사용할 수 있다.
+  <h3 class="title">정적 변수와 Companion 객체</h3>
+  <h4>Companion 객체 사용하기</h4>
+  Kotlin에서는 정적 변수를 사용할 때 static keyword가 없는 대신 Companion 객체를 제공한다.
+  <pre>
+class <span class="custom">Person</span> {
+  var id: Int = 0
+  var name: String = "peter"
+  
+  // singleton
+  <strong>companion object</strong> {
+    var language: String = "english"
+    fun work() {
+      println("Working...")
+    }
+  }
+}
+
+fun main() {
+  // Person의 instance를 만들지 않고 사용
+  println(<span class="custom">Person</span>.language)
+  <span class="custom">Person</span>.language = "korean"
+  println(<span class="custom">Person</span>.language)
+  <span class="custom">Person</span>.work()
+
+  println(<span class="custom">Person</span>.name) // <span class="error">Error!</span> name은 Companion 객체가 아니다.
+}<hr>>>
+english
+korean
+Working...</pre>
+  <h4>Kotlin에서 Java의 static member 사용하기</h4>
+  
+  <h4>Java에서 Kotlin Companion 객체 사용하기</h4>
+  <h3 class="title">최상위 함수 사용하기</h3>
+  <h3 class="title">object와 singleton</h3>
+  <h4>object 선언</h4>
+  <h4>object 표현식</h4>
+  <hr>
+  <h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
+  <h2 class="title"><span class="titleNumber">07-1</span>추상 Class와 Interface</h2>
+  <h3 class="title">Class 혹은 객체 간의 관계</h3>
+  <h4>Class 간의 관계를 판별하는 방법</h4>
+  <hr>
+  <h2 class="title"><span class="titleNumber">07-2</span>Data Class와 기타 Class</h2>
+  <hr>
+  <h2 class="title"><span class="titleNumber">07-3</span>연산자 Overloading</h2>
+  <hr>
   <p id="end">END</p>
 </body>
 
