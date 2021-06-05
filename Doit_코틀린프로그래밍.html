@@ -23,11 +23,6 @@
       background-color: transparent;
     }
 
-    pre.no-bgc {
-      background-color: transparent;
-      color: black;
-    }
-
     .red {
       color: red
     }
@@ -85,6 +80,31 @@
       background-color: #073042;
       color: lightgray;
       width: fit-content;
+    }
+
+    pre.no-bgc {
+      background-color: transparent;
+      color: black;
+    }
+
+    pre .keyword {
+      color: #cc7832;
+    }
+
+    pre .annotation-name {
+      color: #bbb529;
+    }
+
+    pre .comment {
+      color: #629755FF;
+    }
+
+    pre .func-decl {
+      color: #ffc66d;
+    }
+
+    pre .property {
+      color: #9876aa;
     }
 
     strong {
@@ -177,7 +197,7 @@
     }
 
     a {
-      text-decoration: none;
+      text-decoration: inherit;
       border-bottom: 1px solid lightgray;
       cursor: pointer;
       color: inherit
@@ -404,17 +424,18 @@ Process finished with exit code 0</pre>
   같은 이름의 file이라도 package가 다르면 다른 file로 인식되어 중복 오류가 발생하지 않는다.
   <h3 class="title">Kotlin project에 package 만들기</h3>
   <h4>Package 이름 정하기</h4>
-  <ul>
+  <ul class="mt-0">
     <li>이름은 file 첫 줄에 적는다.</li>
-    <li><code><strong>package</strong></code> keyword를 앞에 붙인다.</li>
+    <li><strong>package</strong> keyword를 앞에 붙인다.</li>
     <li>이름은 특수문자나 숫자로 시작하면 안된다.</li>
     <li>여러 단계의 분류가 필요하면 <strong>.</strong> 을 붙여 이름을 짓는다.</li>
   </ul>
-  예) <code><strong>package com.acaroom.net.upload</strong></code>
+  <pre>package com.acaroom.net.upload</pre>
+  <span class="material-icons red">info</span> IntelliJ에서 Kotlin/JVM project는 <code>/src/main/kotlin</code> folder를 기준으로 package, file들을 만든다.
   <h3 class="title">기본 package 활용하기</h3>
   <ul>
     <li>기본 package는 자주 사용하는 class와 함수 등을 미리 만들어 놓은 것이다.</li>
-    <li><code><strong>import</strong></code> keyword로 package를 선언하지 않아도 바로 사용할 수 있다.</li>
+    <li><code>import</code> keyword로 package를 선언하지 않아도 바로 사용할 수 있다.</li>
   </ul>
   <table>
     <caption>기본 package</caption>
@@ -3750,7 +3771,7 @@ var name: String = _name // public
   <h4 class="mb-0">Property의 overriding</h4>
   Property는 기본적으로 overriding 할 수 없다.<br>
   Overriding을 하려면 <strong>open</strong> keyword와 함께 property를 선언해야 한다.
-<pre>
+  <pre>
 open class First {
   <strong>open</strong> val x: Int = 0
       get() {
@@ -3780,8 +3801,8 @@ fun main() {
 Second x
 3
 0</pre>
-<span class="material-icons red" style="float:left;">info</span> Overriding 때 상위 class에 property를 <code>val</code>로 정의한 경우에는 하위 class에서 <code>var</code>로 변경할 수 있다.<br>
-반대로 <code>var</code>를 <code>val</code>로 변경할 수는 없다.<br>
+  <span class="material-icons red" style="float:left;">info</span> Overriding 때 상위 class에 property를 <code>val</code>로 정의한 경우에는 하위 class에서 <code>var</code>로 변경할 수 있다.<br>
+  반대로 <code>var</code>를 <code>val</code>로 변경할 수는 없다.<br>
   <hr>
   <h2 class="title"><span class="titleNumber">06-2</span>지연 초기화와 위임</h2>
   Property를 선언하면 기본적으로 모두 초기화해야 한다. 하지만 객체의 정보가 나중에 나타나는 경우 객체 생성과 동시에 초기화하기 힘든 경우가 있다. 이럴 때 지연 초기화를 사용한다.
@@ -3826,7 +3847,7 @@ not initialized
 initialized
 name=peter</pre>
   <h4>객체 지연 초기화하기</h4>
-<pre>
+  <pre>
 data class Person(var name: String, var age: Int)
 
 <strong>lateinit</strong> var person: Person // 객체 생성의 지연 초기화.
@@ -3876,7 +3897,7 @@ lazy initialized
 subject one: kotlin programming
 subject two: kotlin programming</pre>
   <h4 class="mb-0">객체 지연 초기화하기</h4>
-  객체의 property나 method가 접근되는 시점에 초기화된다. 
+  객체의 property나 method가 접근되는 시점에 초기화된다.
   <pre>
 class Person(val name: String, val age: Int)
 
@@ -3911,19 +3932,19 @@ person.name=peter
 personDelegate.value.name = Tony
 person Init: true
 personDelegate Init: true</pre>
-<table class="th-ta-r">
-  <tr>
-    <th><code class="no-bgc">by lazy {}</code></th>
-    <td>객체의 위임</td>
-  </tr>
-  <tr>
-    <th><code class="no-bgc">lazy {}</code></th>
-    <td>변수에 위임된 Lazy 객체. 이 객체의 <strong>value</strong> property로 실제 객체에 접근한다.</td>
-  </tr>
-</table>
+  <table class="th-ta-r">
+    <tr>
+      <th><code class="no-bgc">by lazy {}</code></th>
+      <td>객체의 위임</td>
+    </tr>
+    <tr>
+      <th><code class="no-bgc">lazy {}</code></th>
+      <td>변수에 위임된 Lazy 객체. 이 객체의 <strong>value</strong> property로 실제 객체에 접근한다.</td>
+    </tr>
+  </table>
   <h4>lazy 모드 확인하기</h4>
   LazyJVM.kt
-<pre>
+  <pre>
 public actual fun &lt;T> <span class="custom">lazy</span>(initializer: () -> T): <strong>Lazy&lt;T></strong> = <span class="custom">SynchronizedLazyImpl</span>(initializer)
 
 public actual fun &lt;T> <span class="custom">lazy</span>(mode: LazyThreadSafetyMode, initializer: () -> T): <strong>Lazy&lt;T></strong> =
@@ -3952,7 +3973,7 @@ public actual fun &lt;T> <span class="custom">lazy</span>(mode: LazyThreadSafety
 &lt;val | var | class> property 또는 class 이름: 자료형 <strong>by</strong> 위임자</pre>
   <h4>Class의 위임</h4>
   Sample.kt
-<pre>
+  <pre>
 interface Animal {
   fun eat() { ... }
   ...
@@ -3963,9 +3984,9 @@ val cat = Cat()
 
 // Animal의 정의된 Cat의 모든 member를 Robot에 위임
 class Robot : Animal <strong>by cat</strong></pre>
-Robot은 Cat이 가지는 모든 Animal의 method를 가진다.<br><br>
-Sample.decompiled.java로 변환된 source code (대략)
-<pre>
+  Robot은 Cat이 가지는 모든 Animal의 method를 가진다.<br><br>
+  Sample.decompiled.java로 변환된 source code (대략)
+  <pre>
 public interface Animal {
   void eat();
 
@@ -3995,14 +4016,14 @@ public final class Robot implements Animal {
       this.cat.eat();
   }
 }</pre>
-Robot class를 사용할 때 Animal을 명시적으로 참조하지 않고도 eat()를 바로 호출하는 것이 가능하다.<br>
+  Robot class를 사용할 때 Animal을 명시적으로 참조하지 않고도 eat()를 바로 호출하는 것이 가능하다.<br>
 
-<p><span class="material-icons red">info</span>왜 위임을 사용할까?<br>
-  기본적으로 Kotlin이 가지고 있는 표준 library는 open으로 정의되지 않은 class를 사용하고 있다.<br>
-  즉, 모두 final 형태의 class로 상속이나 직접 class의 기능을 확장하는것을 어렵게 만들었다.<br>
-  이렇게 함으로써 표준 library의 무분별한 상속에 따른 복잡한 문제를 방지할 수 있었다.<br>
-  따라서 필요한 경우에만 위임을 통해 상속과 비슷하게 해당 class의 모든 기능을 사용하면서 동시에 기능을 추가 확장을 구현할 수 있다.</p>
-<pre>
+  <p><span class="material-icons red">info</span>왜 위임을 사용할까?<br>
+    기본적으로 Kotlin이 가지고 있는 표준 library는 open으로 정의되지 않은 class를 사용하고 있다.<br>
+    즉, 모두 final 형태의 class로 상속이나 직접 class의 기능을 확장하는것을 어렵게 만들었다.<br>
+    이렇게 함으로써 표준 library의 무분별한 상속에 따른 복잡한 문제를 방지할 수 있었다.<br>
+    따라서 필요한 경우에만 위임을 통해 상속과 비슷하게 해당 class의 모든 기능을 사용하면서 동시에 기능을 추가 확장을 구현할 수 있다.</p>
+  <pre>
 interface Car {
   fun info(): String
 }
@@ -4043,9 +4064,9 @@ fun main() {
   <pre>import kotlin.properties.Delegates</pre>
   <ul>
     <li>observable()<br>property를 감시하고 있다가 특정 code의 logic에서 변경이 일어날 때 호출되어 처리된다.<br>
-    특정 변경 event에 따라 호출되므로 callback이라고도 불린다.</li>
+      특정 변경 event에 따라 호출되므로 callback이라고도 불린다.</li>
     <li>vetoable()<br>
-    반환값에 따라 property 변경을 허용하거나 취소할 수 있다.</li>
+      반환값에 따라 property 변경을 허용하거나 취소할 수 있다.</li>
   </ul>
   Delegates.kt
   <pre>
@@ -4140,9 +4161,96 @@ fun main() {
 english
 korean
 Working...</pre>
+  <h4><a href="https://kotlinlang.org/docs/gradle.html#targeting-the-jvm" target="_blank">Targeting the JVM</a> (with Gradle)</h4>
+  To target the JVM, apply the Kotlin JVM plugin.
+  <pre>
+// build.gradle.kts    
+plugins {
+  kotlin("jvm") version "1.5.10"
+}</pre>
+  <h4 class="mb-0">Kotlin과 Java sources</h4>
+  Kotlin sources는 Java sources와 같은 folder에 저장되거나 다른 folder에 저장될 수 있다.<br>
+  기본 규칙은 다른 folder를 사용하는 것이다.
+  <pre>
+project
+  - src
+    - main (root)
+      - kotlin
+      - java</pre>
+  기본 규칙을 사용하지 않으면 대응되는 <code>sourceSet</code> 속성을 갱신해야 한다.
+  <pre>
+sourceSet.main {
+  java.srcDirs("src/main/myJava", "src/main/myKotlin")
+}</pre>
   <h4>Kotlin에서 Java의 static member 사용하기</h4>
-  
-  <h4>Java에서 Kotlin Companion 객체 사용하기</h4>
+  /src/main/<code>java/chaop06/section3/</code>Customer.java
+<pre>
+package chap06.section3;
+
+public class Customer {
+  public <strong>static</strong> final String <span class="custom">LEVEL</span> = "BASIC";
+
+  public <strong>static</strong> void <span class="custom">login</span>() {
+      System.out.println("Login...");
+  }
+}</pre><br>
+/src/main/<code>kotlin/chaop06/section3/</code>CustomerAccess.kt
+<pre>
+package chap06.section3
+
+fun main() {
+  println(<strong>Customer</strong>.<span class="custom">LEVEL</span>)
+  <strong>Customer</strong>.<span class="custom">login</span>()
+}<hr>>>
+BASIC
+Login...</pre>
+  <h4>Java에서 Kotlin Companion 객체 사용하기 <strong><code>@JvmStatic</code></strong></h4>
+  <span class="material-icons red" style="float:left; font-size: 2rem;">info</span>Annotation : @ 기호로 시작.<br>Code에서는 특수한 의미를 부여해 compiler가 목적에 맞춰 해석하도록 하거나 실행할 때 특정 기능을 수행하게 할 수 있다.<br><br>
+  /src/main/<code>kotlin/chaop06/section3/</code>KCustomer.kt
+  <pre>
+<span class="keyword">package</span> chap06.section3
+
+<span class="keyword">class</span> KCustomer {
+  <strong>companion object</strong> {
+    // const는 complile time에 값이 할당된다. Java에서 접근하기 위해 필요하다. (val은 runtime에 할당된다.)
+    // const는 기본형과 String에만 사용할 수 있다.
+    <strong class="lh-1">const</strong> <span class="keyword">val</span> <span class="property">LEVEL</span> = <span class="comment">"INTERMEDIATE"</span>
+
+    // @JvmStatic은 java source에서 code를 해석할 때 Companion을 생략할 수 있게 해준다.
+    <strong class="lh-1">@JvmStatic</strong> <span class="keyword">fun</span> <span class="func-decl">login</span>() = println(<span class="comment">"Login ..."</span>)
+
+    <strong class="lh-1">@JvmStatic</strong>
+    <span class="keyword">fun</span> <span class="func-decl">hello</span>() = println(<span class="comment">"Hello!"</span>)
+
+    // 특정 자료형을 사용하기 위한 annotation
+    <strong>@JvmField val JOB = KJob()</strong>
+  }
+}
+
+class <strong>KJob</strong>(var title: String = "Programmer")</pre><br>
+/src/main/<code>java/chaop06/section3/</code>KCustomerAccess.java
+<pre>
+<span class="keyword">package</span> chap06.section3<span class="keyword">;</span>
+
+<span class="keyword">public class</span> KCustomerAccess {
+
+  <span class="keyword">public static void</span> <span class="func-decl">main</span>(String[] args) {
+    System.<span class="property">out</span>.println(KCustomer.<span class="property">LEVEL</span>);
+    KCustomer.login();            // @JvmStatic을 사용하는 경우.
+    KCustomer.<span class="property">Companion</span>.login();  // @JvmStatic을 사용하지 않는 경우.
+
+    // KJob에 대한 객체 생성 후 접근
+    KJob kjob = <strong>KCustomer.JOB</strong>;
+    System.out.println(<strong class="lh-1">kjob.getTitle()</strong>);
+
+    // KCustomer를 통한 접근
+    <strong>KCustomer.JOB.setTitle("Designer");</strong>
+    System.out.println(<strong class="lh-1">KCustomer.JOB.getTitle()</strong>);
+  }
+}<hr>>>
+INTERMEDIATE
+Login ...
+Login ...</pre>
   <h3 class="title">최상위 함수 사용하기</h3>
   <h3 class="title">object와 singleton</h3>
   <h4>object 선언</h4>
