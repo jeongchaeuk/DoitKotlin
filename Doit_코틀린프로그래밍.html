@@ -31,6 +31,10 @@
       margin-bottom: 0;
     }
 
+    .mb-25 {
+      margin-bottom: .25rem;
+    }
+
     .mt-0 {
       margin-top: 0;
     }
@@ -109,7 +113,7 @@
 
     strong {
       background-color: goldenrod;
-      padding: 0rem .25rem;
+      padding: 0rem 0.25rem;
       border-radius: .25rem;
       color: black;
       display: inline-flex;
@@ -4250,11 +4254,261 @@ class <strong>KJob</strong>(var title: String = "Programmer")</pre><br>
 }<hr>>>
 INTERMEDIATE
 Login ...
-Login ...</pre>
-  <h3 class="title">최상위 함수 사용하기</h3>
+Login ...
+Programmer
+Designer</pre>
+  <h3 class="title mb-25">최상위 함수 사용하기 <sub>Top-level Function / Package-level Function</sub></h3>
+  /src/main/kotlin/chap06/section3/PackageLevelFunction.kt
+  <pre>
+package chap06.section3
+
+fun packageLevelFunc() {
+  println("Package-level Function")
+}
+
+fun main() {
+  packageLevelFunc()
+}</pre><br>
+PackageLevelFunction.decompiled.java (간략)
+<pre>
+package chap06.section3;
+
+// .kt file 이름으로 자동 생성된 class
+public final class <strong>PackageLevelFunctionKt</strong> {
+  public <strong class="lh-1">static final</strong> void packageLevelFunc() {
+    System.out.println("Package-level Function");
+  }
+
+  public static final void main() {
+    packageLevelFunc();
+  }
+
+  public static void main(String[] var0) {
+    main();
+  }
+}</pre>
+Class 이름을 자동 생성하지 않고 kotlin code에서 이름을 명시할 수 있다.<br>
+이름을 변경하고 싶다면 <strong><code>@file:JvmName("ClassName")</code></strong>을 code 위쪽에 입력하면 된다.<br>
+<pre>
+<strong>@file:JvmName("PKLevel")</strong>
+
+package chap06.section3
+
+fun packageLevelFunc() {
+  println("Package-level Function")
+}
+
+fun main() {
+  packageLevelFunc()
+}</pre>
+<pre>
+package chap06.section3;
+
+import kotlin.jvm.JvmName;
+
+@JvmName(
+  name = "PKLevel"
+)
+public final class <strong>PKLevel</strong> {
+  public <strong class="lh-1">static final</strong> void packageLevelFunc() {
+    System.out.println("Package-level Function");
+  }
+  ...
+}</pre>
+최상위 함수는 JVM에서 실행하기 위해 내부적으로 static으로 선언되기 때문에 main() block에서 객체 생성없이 사용될 수 있다.
   <h3 class="title">object와 singleton</h3>
   <h4>object 선언</h4>
+  <ul class="mt-0">
+    <li>객체 첫 접근 때 객체가 생성된다.</li>
+    <li>생성자 호출을 하지 않으므로 object 선언에는 주 생성자와 부 생성자를 사용할 수 <strong>없다</strong>.</li>
+    <li>init{}은 최초 접근에서 실행된다.</li>
+    <li>object 선언에도 class나 interface를 상속할 수 있다.</li>
+    <li>Java에서 object 선언으로 생성된 instance에 접근하려면 <strong>INSTANCE</strong>를 사용한다.</li>
+  </ul>
+  /src/main/kotlin/chap06/section3/ObjectDeclaration.kt
+<pre>
+package chap06.section3
+
+class Hobby(val name: String)
+
+// object keyword를 사용한 방식
+<strong>object</strong> OCustomer {
+  var name = "peter"
+
+  init {
+    println("Init")
+  }
+
+  fun greeting() = println("Hello World!")
+  val HOBBY = Hobby("spider-man")
+}
+
+// Companion 객체를 사용한 방식
+class CCustomer {
+  <strong>companion object</strong> {
+    <strong class="lh-1">const</strong> val HELLO = "Hello" // 상수 표현
+    val name = "tony"
+
+    <strong>@JvmField</strong> val HOBBY = Hobby("iron-man")
+    <strong class="lh-1">JvmStatic</strong> fun greeting() = println("Hello World!")
+  }
+}
+
+fun main() {
+    OCustomer.greeting() // 접근 시점에 객체가 생성된다. init{} 실행
+    OCustomer.name = "parker"
+    println("name=${OCustomer.name}")
+    println("hobby=${OCustomer.HOBBY.name}")
+    println("-----------------------")
+
+    CCustomer.greeting()
+    println("name=${CCustomer.name}, HELLO=${CCustomer.HELLO}")
+    println("hobby=${CCustomer.HOBBY.name}")
+}<hr>>>
+Init
+Hello World!
+name=parker
+hobby=spider-man
+-----------------------
+Hello World!
+name=tony, HELLO=Hello
+hobby=iron-man</pre><br>
+/src/main/java/chap06/section3/OCustomAccess.java
+<pre>
+package chap06.section3;
+
+public class OCustomAccess {
+  public static void main(String[] args) {
+    // Kotlin의 object 선언 객체의 method 접근.
+    String name = OCustomer.<strong>INSTANCE</strong>.getName();
+    System.out.println(name);
+  }
+}<hr>>>
+Init
+peter</pre><br>
+ObjectDeclaration.decompiled.java (간략)
+<pre>
+public final class OCustomer {
+  @NotNull
+  private <strong>static</strong> String name;
+  @NotNull
+  private <strong>static final</strong> Hobby HOBBY;
+  @NotNull
+  public <strong>static final</strong> OCustomer <strong>INSTANCE</strong>;
+
+  @NotNull
+  public final String getName() {
+    return name;
+  }
+
+  public final void setName(@NotNull String var1) {
+    name = var1;
+  }
+
+  public final void greeting() {
+    System.out.println("Hello World!");
+  }
+
+  @NotNull
+  public final Hobby getHOBBY() {
+    return HOBBY;
+  }
+
+  private OCustomer() {}
+
+  <strong>static</strong> {
+    OCustomer var0 = new OCustomer();
+    <strong>INSTANCE</strong> = var0;
+    name = "peter";
+    HOBBY = new Hobby("spider-man");
+    System.out.println("Init");
+  }
+}</pre>
   <h4>object 표현식</h4>
+  <ul class="mt-0">
+    <li>object 선언과 달리 이름이 없고 singleton이 아니다.</li>
+    <li>object 표현식이 사용될 때마다 새로운 instance가 만들어진다.</li>
+    <li>결과적으로 익명 내부 class로 불리는 형태를 object 표현식으로 만들 수 있다.</li>
+  </ul>
+<pre>
+package chap06.section3
+
+<strong>open</strong> class Superman {
+  fun work() = println("Taking photos.")
+  fun talk() = println("Talking with people.")
+  <strong>open</strong> fun <strong>fly()</strong> = println("Flying in the sky.")
+}
+
+fun main() {
+  val pretendMan = <strong>object:</strong> Superman() {
+    // 재정의
+    <strong>override</strong> fun <strong class="lh-1">fly()</strong> = println("I'm not a real Superman. I can't fly!")
+  }
+
+  pretendMan.work()
+  pretendMan.talk()
+  pretendMan.fly()
+}<hr>>>
+Taking photos.
+Talking with people.
+I'm not a real Superman. I can't fly!</pre><br>
+딱 한 번만 사용되는 interface인 경우.
+<pre>
+interface Shape {
+  fun onDraw()
+}
+
+// 익명 interafce 구현 class
+val triangle = <strong>object:</strong> Shape {
+  override fun onDraw() { ... }
+}</pre><br>
+객체는 필요하지만 상위 interface나 class가 없는 경우.
+<pre>
+fun foo() {
+  val adHoc = <strong>object</strong> {
+    var x: Int = 0
+    var y: Int = 0
+  }
+
+  println(adHoc.x + adHoc.y)
+}</pre>
+<ul class="mt-0">
+  <li>이런 익명 객체는 local이나 private 정의 영역에서만 자료형으로 사용될 수 있다.</li>
+  <li>만일 익명 객체를 public 함수의 반환 자료형이나 public 속성의 자료형에 쓴다면,<br>이러한 함수나 속성의 실제 자료형은 익명 객체로 선언된 상위 자료형이거나 상위 자료형을 선언하지 않으면 Any형이 된다.</li>
+</ul>
+<pre>
+class C {
+  // 반환 자료형은 익명 객체 자료형
+  <strong>private</strong> fun foo() = object {
+    val x: String = "x"
+  }
+
+  // 반환 자료형은 Any
+  <strong>public</strong> fun publicFoo() = object {
+    val x: String = "x"
+  }
+
+  fun bar() {
+    val x1 = foo().x        // Ok
+    val x2 = publicFoo().x  // <span class="error">Error!</span> Unresolved reference: x
+  }
+}</pre>
+Java의 익명 내부 class와 같이, object 표현식 안의 code는 둘러싸여 있는 범위 내부의 변수에 접근할 수 있다.<br>
+<pre>
+fun countClicks(window: JComponent) {
+  var <strong>clickCount</strong> = 0
+  var <strong class="lh-1">enterCount</strong> = 0
+  
+  window.addMouseListener(<strong>object:</strong> MouseAdapter() {
+    override fun mouseClicked(e: MouseEvent?) {
+      clickCount++
+    }
+
+    override fun mouseEntered(e: MouseEvent?) {
+      enterCount++
+    }
+  })
+}</pre>
   <hr>
   <h1><span class="titleNumber">07</span>다양한 Class와 Interface</h1>
   <h2 class="title"><span class="titleNumber">07-1</span>추상 Class와 Interface</h2>
