@@ -59,21 +59,38 @@
       vertical-align: middle;
     }
 
-    .float {
+    .top {
+      position: fixed;
+      width: 4rem;
+      height: 4rem;
+      bottom: 6.5rem;
+      right: 2rem;
+      background-color: #a11;
+      color: whitesmoke;
+      box-shadow: 0rem .1rem .1rem black;
+      border-radius: 2rem;
+      border: none;
+      text-align: center;
+    }    
+
+    .bottom {
       position: fixed;
       width: 4rem;
       height: 4rem;
       bottom: 2rem;
       right: 2rem;
-      background-color: blueviolet;
-      color: #FFF;
+      background-color: #11a;
+      color: whitesmoke;
+      box-shadow: 0rem .1rem .1rem black;
       border-radius: 2rem;
+      border: none;
       text-align: center;
-      box-shadow: .1rem .1rem .1rem black;
     }
+
 
     .my-float {
       font-size: 4rem;
+      line-height: 4.5rem;
     }
 
     pre {
@@ -83,7 +100,7 @@
       font-size: .9rem;
       background-color: #073042;
       color: lightgray;
-      width: fit-content;
+      width: min-content;
     }
 
     pre.no-bgc {
@@ -118,14 +135,15 @@
       color: black;
       display: inline-flex;
       font-size: .9rem;
-    }
-
-    pre>strong {
-      font-family: monospace;
+      font-family: D2Coding;
     }
 
     strong>code {
       background-color: transparent;
+    }
+
+    code {
+      font-weight: bolder;
     }
 
     .madang,
@@ -179,6 +197,11 @@
 
     table.th-ta-r th {
       text-align: right;
+    }
+
+    table.td-ta-r td:first-child {
+      text-align: right;
+      padding-right: .5rem;
     }
 
     th {
@@ -260,12 +283,9 @@
 </head>
 
 <body>
-  <a href="#end" class="float">
-    <span class="material-icons my-float">
-      arrow_circle_down
-    </span>
-  </a>
-  <h1 class="madang"><span class="madang_number">첫째 마당</span><br>Kotlin<br>기본 익히기</h1>
+  <a href="#top" class="top"><span class="material-icons my-float">publish</span></a>
+  <a href="#end" class="bottom"><span class="material-icons my-float">download</span></a>
+  <h1 id="top" class="madang"><span class="madang_number">첫째 마당</span><br>Kotlin<br>기본 익히기</h1>
   <h1><span class="titleNumber">01</span>시작하기</h1>
   <h2 class="title"><span class="titleNumber">01-1</span> 탄생 배경</h2>
   <h3 class="title">소개합니다</h3>
@@ -4191,7 +4211,7 @@ sourceSet.main {
 }</pre>
   <h4>Kotlin에서 Java의 static member 사용하기</h4>
   /src/main/<code>java/chaop06/section3/</code>Customer.java
-<pre>
+  <pre>
 package chap06.section3;
 
 public class Customer {
@@ -4201,8 +4221,8 @@ public class Customer {
       System.out.println("Login...");
   }
 }</pre><br>
-/src/main/<code>kotlin/chaop06/section3/</code>CustomerAccess.kt
-<pre>
+  /src/main/<code>kotlin/chaop06/section3/</code>CustomerAccess.kt
+  <pre>
 package chap06.section3
 
 fun main() {
@@ -4235,8 +4255,8 @@ Login...</pre>
 }
 
 class <strong>KJob</strong>(var title: String = "Programmer")</pre><br>
-/src/main/<code>java/chaop06/section3/</code>KCustomerAccess.java
-<pre>
+  /src/main/<code>java/chaop06/section3/</code>KCustomerAccess.java
+  <pre>
 <span class="keyword">package</span> chap06.section3<span class="keyword">;</span>
 
 <span class="keyword">public class</span> KCustomerAccess {
@@ -4272,8 +4292,8 @@ fun packageLevelFunc() {
 fun main() {
   packageLevelFunc()
 }</pre><br>
-PackageLevelFunction.decompiled.java (간략)
-<pre>
+  PackageLevelFunction.decompiled.java (간략)
+  <pre>
 package chap06.section3;
 
 // .kt file 이름으로 자동 생성된 class
@@ -4290,9 +4310,9 @@ public final class <strong>PackageLevelFunctionKt</strong> {
     main();
   }
 }</pre>
-Class 이름을 자동 생성하지 않고 kotlin code에서 이름을 명시할 수 있다.<br>
-이름을 변경하고 싶다면 <strong><code>@file:JvmName("ClassName")</code></strong>을 code 위쪽에 입력하면 된다.<br>
-<pre>
+  Class 이름을 자동 생성하지 않고 kotlin code에서 이름을 명시할 수 있다.<br>
+  이름을 변경하고 싶다면 <strong><code>@file:JvmName("ClassName")</code></strong>을 code 위쪽에 입력하면 된다.<br>
+  <pre>
 <strong>@file:JvmName("PKLevel")</strong>
 
 package chap06.section3
@@ -4304,7 +4324,7 @@ fun packageLevelFunc() {
 fun main() {
   packageLevelFunc()
 }</pre>
-<pre>
+  <pre>
 package chap06.section3;
 
 import kotlin.jvm.JvmName;
@@ -4318,7 +4338,7 @@ public final class <strong>PKLevel</strong> {
   }
   ...
 }</pre>
-최상위 함수는 JVM에서 실행하기 위해 내부적으로 static으로 선언되기 때문에 main() block에서 객체 생성없이 사용될 수 있다.
+  최상위 함수는 JVM에서 실행하기 위해 내부적으로 static으로 선언되기 때문에 main() block에서 객체 생성없이 사용될 수 있다.
   <h3 class="title">object와 singleton</h3>
   <h4>object 선언</h4>
   <ul class="mt-0">
@@ -4329,7 +4349,7 @@ public final class <strong>PKLevel</strong> {
     <li>Java에서 object 선언으로 생성된 instance에 접근하려면 <strong>INSTANCE</strong>를 사용한다.</li>
   </ul>
   /src/main/kotlin/chap06/section3/ObjectDeclaration.kt
-<pre>
+  <pre>
 package chap06.section3
 
 class Hobby(val name: String)
@@ -4376,8 +4396,8 @@ hobby=spider-man
 Hello World!
 name=tony, HELLO=Hello
 hobby=iron-man</pre><br>
-/src/main/java/chap06/section3/OCustomAccess.java
-<pre>
+  /src/main/java/chap06/section3/OCustomAccess.java
+  <pre>
 package chap06.section3;
 
 public class OCustomAccess {
@@ -4389,8 +4409,8 @@ public class OCustomAccess {
 }<hr>>>
 Init
 peter</pre><br>
-ObjectDeclaration.decompiled.java (간략)
-<pre>
+  ObjectDeclaration.decompiled.java (간략)
+  <pre>
 public final class OCustomer {
   @NotNull
   private <strong>static</strong> String name;
@@ -4433,7 +4453,7 @@ public final class OCustomer {
     <li>object 표현식이 사용될 때마다 새로운 instance가 만들어진다.</li>
     <li>결과적으로 익명 내부 class로 불리는 형태를 object 표현식으로 만들 수 있다.</li>
   </ul>
-<pre>
+  <pre>
 package chap06.section3
 
 <strong>open</strong> class Superman {
@@ -4455,8 +4475,8 @@ fun main() {
 Taking photos.
 Talking with people.
 I'm not a real Superman. I can't fly!</pre><br>
-딱 한 번만 사용되는 interface인 경우.
-<pre>
+  딱 한 번만 사용되는 interface인 경우.
+  <pre>
 interface Shape {
   fun onDraw()
 }
@@ -4465,8 +4485,8 @@ interface Shape {
 val triangle = <strong>object:</strong> Shape {
   override fun onDraw() { ... }
 }</pre><br>
-객체는 필요하지만 상위 interface나 class가 없는 경우.
-<pre>
+  객체는 필요하지만 상위 interface나 class가 없는 경우.
+  <pre>
 fun foo() {
   val adHoc = <strong>object</strong> {
     var x: Int = 0
@@ -4475,11 +4495,11 @@ fun foo() {
 
   println(adHoc.x + adHoc.y)
 }</pre>
-<ul class="mt-0">
-  <li>이런 익명 객체는 local이나 private 정의 영역에서만 자료형으로 사용될 수 있다.</li>
-  <li>만일 익명 객체를 public 함수의 반환 자료형이나 public 속성의 자료형에 쓴다면,<br>이러한 함수나 속성의 실제 자료형은 익명 객체로 선언된 상위 자료형이거나 상위 자료형을 선언하지 않으면 Any형이 된다.</li>
-</ul>
-<pre>
+  <ul class="mt-0">
+    <li>이런 익명 객체는 local이나 private 정의 영역에서만 자료형으로 사용될 수 있다.</li>
+    <li>만일 익명 객체를 public 함수의 반환 자료형이나 public 속성의 자료형에 쓴다면,<br>이러한 함수나 속성의 실제 자료형은 익명 객체로 선언된 상위 자료형이거나 상위 자료형을 선언하지 않으면 Any형이 된다.</li>
+  </ul>
+  <pre>
 class C {
   // 반환 자료형은 익명 객체 자료형
   <strong>private</strong> fun foo() = object {
@@ -4496,8 +4516,8 @@ class C {
     val x2 = publicFoo().x  // <span class="error">Error!</span> Unresolved reference: x
   }
 }</pre>
-Java의 익명 내부 class와 같이, object 표현식 안의 code는 둘러싸여 있는 범위 내부의 변수에 접근할 수 있다.<br>
-<pre>
+  Java의 익명 내부 class와 같이, object 표현식 안의 code는 둘러싸여 있는 범위 내부의 변수에 접근할 수 있다.<br>
+  <pre>
 fun countClicks(window: JComponent) {
   var <strong>clickCount</strong> = 0
   var <strong class="lh-1">enterCount</strong> = 0
@@ -4537,8 +4557,8 @@ fun countClicks(window: JComponent) {
   <strong>abstract</strong> var maxSpeed: Double
 
   // 추상 method. 반드시 하위 class에서 구현해야 한다.
-  <strong>abstract</strong> fun start()
-  <strong class="lh-1">abstract</strong> fun stop()
+  <strong class="lh-1">abstract</strong> fun start()
+  <strong>abstract</strong> fun stop()
 
   // 일반 property. 초깃값인 상태를 저장할 수 있다.
   var year = "2021"
@@ -4547,13 +4567,13 @@ fun countClicks(window: JComponent) {
 }
 
 class Car(name: String, color: String, weight: Double, <strong>override</strong> var maxSpeed: Double) : Vehicle(name, color, weight) {
-  <strong>override</strong> fun start() = println("Car started")
-  <strong class="lh-1">override</strong> fun stop() = println("Car stopped")
+  <strong class="lh-1">override</strong> fun start() = println("Car started")
+  <strong>override</strong> fun stop() = println("Car stopped")
 }
 
 class Motorcycle(name: String, color: String, weight: Double, <strong>override</strong> var maxSpeed: Double) : Vehicle(name, color, weight) {
-  <strong>override</strong> fun start() = println("Motorcycle started.")
-  <strong class="lh-1">override</strong> fun stop()  = println("Motorcycle stopped.")
+  <strong class="lh-1">override</strong> fun start() = println("Motorcycle started.")
+  <strong>override</strong> fun stop()  = println("Motorcycle stopped.")
 }
 
 fun main() {
@@ -4569,7 +4589,7 @@ name=porsche, color=red, weight=1500.0, year=2021, maxSpeed=300.0
 Car started
 name=aq-300, color=black, weight=170.0, year=2021, maxSpeed=150.0
 Motorcycle started.</pre>
-<pre>
+  <pre>
 <strong>abstract</strong> class Printer {
   <strong class="lh-1">abstract</strong> fun print()
 }
@@ -4600,7 +4620,7 @@ interface interface_이름 [: interface_이름...] {
 
   [일반_Method_선언 { ... }]
 }</pre>
-<pre>
+  <pre>
 <strong>interface</strong> Pet {
   <strong class="lh-1">var</strong> category: String    // 추상 property.
   fun feeding()           // 추상 method.
@@ -4608,12 +4628,12 @@ interface interface_이름 [: interface_이름...] {
   // 구현부가 있는 경우 일반 method.
   fun patting() = println("Keep patting!")
 }</pre>
-<ul>
-  <li>Interface에는 abstract를 붙여 주지 않아도 기본적으로 추상 property와 추상 method로 지정된다.</li>
-  <li>Method에 구현부가 있다면 일반 method이다.</li>
-  <li>Property는 상태값을 가질 수 없다.</li>
-</ul>
-<pre>
+  <ul>
+    <li>Interface에는 abstract를 붙여 주지 않아도 기본적으로 추상 property와 추상 method로 지정된다.</li>
+    <li>Method에 구현부가 있다면 일반 method이다.</li>
+    <li>Property는 상태값을 가질 수 없다.</li>
+  </ul>
+  <pre>
 class Cat(<strong>override</strong> var category: String) : <strong>Pet</strong> {
   <strong class="lh-1">override</strong> fun feeding() = println("Feed the cat a tuna can.")
 }
@@ -4636,26 +4656,166 @@ interface Pet {
   fun feeding()           // 추상 method.
 
   // val 선언 시 getter의 구현이 가능. 
-  <strong>val msgTags: String</strong>
-      <strong class="lh-1">get() = "I'm your lovely pet!"</strong>
+  <strong class="lh-1">val msgTags: String</strong>
+      <strong>get() = "I'm your lovely pet!"</strong>
 
   // 구현부가 있는 경우 일반 method.
   fun patting() = println("Keep patting!")
 }
 ...
 println("${obj.msgTags}")</pre>
-<span class="material-icons red" style="float:left">info</span>
-<ul>
-  <li><code>val</code>로 선언된 msgTags는 초기화할 수 없지만 getter를 통해 반환값을 지정할 수 있다.</li>
-  <li>하지만 여전히 보조 Field인 <code>field</code>를 사용할 수 없다.</li>
-  <li><code>var</code>로 property를 선언하더라도 보조 Field를 사용할 수 없기 때문에 받은 <code>value</code>를 저장할 수 없다.</li>
-</ul>
-  <h4>Interface 구현의 필요성</h4>
+  <span class="material-icons red" style="float:left">info</span>
+  <ul>
+    <li><code>val</code>로 선언된 msgTags는 초기화할 수 없지만 getter를 통해 반환값을 지정할 수 있다.</li>
+    <li>하지만 여전히 보조 Field인 <code>field</code>를 사용할 수 없다.</li>
+    <li><code>var</code>로 property를 선언하더라도 보조 Field를 사용할 수 없기 때문에 받은 <code>value</code>를 저장할 수 없다.</li>
+  </ul>
   <h3 class="title">여러 Interface의 구현</h3>
-  <h3 class="title">Interface의 위임</h3>
-  <h4>위임을 이용한 member 접근</h4>
+  <h4>여러 interface를 이용한 다중 상속</h4>
+  <pre>
+package chap07.section1
+
+<strong>interface Bird</strong> {
+  val wings: Int
+  fun fly()
+
+  // 일반 method. 필요하면 구현 class에서 overriding 할 수 있다.
+  fun jump() = println("Bird jump.")
+}
+
+<strong>interface Horse</strong> {
+  val maxSpeed: Int
+  fun run()
+  fun jump() = println("Horse jump. maxSpeed = $maxSpeed")
+}
+
+class Pegasus(<strong>override</strong> val wings: Int = 2, <strong>override</strong> val maxSpeed: Int = 100) : <strong>Bird, Horse</strong> {
+
+  init { println("Pegasus init") }
+
+  <strong class="lh-1">override</strong> fun fly() = println("Fly!")
+  <strong class="lh-1">override</strong> fun run() = println("Run!")
+  <strong class="lh-1">override</strong> fun jump() {
+    <strong>super&lt;Horse></strong>.jump() // Horse의 jump()를 사용하는 경우다.
+    println("Pegasus jump!")
+  }
+}
+
+fun main() {
+  Pegasus().run {
+    fly()
+    run()
+    jump()
+  }
+}<hr>>>
+Pegasus init
+Fly!
+Run!
+Horse jump. maxSpeed = 100
+Pegasus jump!</pre>
+  <h3 class="title mb-0">Interface의 위임</h3>
+  <pre>
+<strong>interface A</strong> {
+  fun funcA() = println("A.funcA()")
+}
+
+<strong>interface B</strong> {
+  fun funcB() = println("B.funcB()")
+}
+
+class C(<strong>val a: A, val b: B</strong>) {
+  fun funcC() {
+    <strong class="lh-1">a.</strong>funcA()
+    <strong>b.</strong>funcB()
+  }
+}
+
+class DelegatedC(<strong>a: A, b: B</strong>) : <strong>A by a, B by b</strong> {
+  fun funcC() {
+    funcA() // method를 '.' 없이 접근할 수 있다.
+    funcB()
+  }
+}
+
+fun main() {
+  C(object: A {}, object: B {}).funcC()
+  DelegatedC(object: A {}, object: B {}).funcC()
+}<hr>>>
+A.funcA()
+B.funcB()
+A.funcA()
+B.funcB()</pre>
+  <h4 class="mb-0">위임을 이용한 member 접근</h4>
+<pre>
+interface Nameable {
+  var name: String
+}
+
+class StaffName(override var name: String = "Peter") : Nameable
+
+class Work : <strong>Runnable</strong> { // thread 실행을 위한 interface.
+  <strong>override</strong> fun run() {
+    println("Working...")
+  }
+}
+
+// 매개변수에 해당하는 interface를 위임.
+class Person(name: Nameable, work: Runnable) : <strong>Nameable by name, Runnable by work</strong>
+
+fun main() {
+  val person = Person(StaffName(), Work()) // 생성자를 사용해 객체를 바로 전달.
+  println(<strong>person.name</strong>)
+  <strong class="lh-1">person.run()</strong>
+}<hr>>>
+Peter
+Working...</pre>
   <h3 class="title">Coffee 제조기 만들어 보기</h3>
+  요구사항
+  <pre>
+Coffee를 만들려면 물을 끓이는 Heater가 필요하다.
+Heater는 켜거나 끌 수 있다. 충분히 뜨거운지도 알 수 있다.
+Coffee는 열사이펀<sub>Thermosiphon</sub>을 통해 추출한다.
+열사이펀은 기압차를 통해 pumping하는 원리로 coffee액을 추출한다.
+Coffee module은 이 열사이펀을 사용해 drip coffee를 제조한다.
+이제 coffee를 제조하는 brewing 과정을 실행할 수 있게 한다.
+Brewing 과정은 전원을 켜고 pumping -> coffee 완성 -> 전원 끄기 순서로 진행된다.</pre>
+<table class="td-ta-r">
+  <caption>Coffee 제조를 위한 용어 정리</caption>
+  <tr>
+    <th scope="col">선언</th>
+    <th scope="col">설명</th>
+  </tr>
+  <tr>
+    <td>Heater</td>
+    <td>일반적인 켜기, 끄기, 뜨거운 상태를 확인한다.</td>
+  </tr>
+  <tr>
+    <td>ElectricHeater</td>
+    <td>추상적인 heater를 구체화한 class</td>
+  </tr>
+  <tr>
+    <td>Pump</td>
+    <td>열사이펀 과정을 위한 pumping 기능을 가진 개념</td>
+  </tr>
+  <tr>
+    <td>Thermosiphon</td>
+    <td>Coffee 추출을 위한 방법 중 하나</td>
+  </tr>
+  <tr>
+    <td>CoffeeModule</td>
+    <td>Coffee module은 추출 방법을 선택할 수 있다. (여기선 열사이펀 방법만 사용한다.)</td>
+  </tr>
+  <tr>
+    <td>MyDripCoffeeModule</td>
+    <td>Coffee module을 전기 heater와 열사이펀을 조합해 구체화한다.</td>
+  </tr>
+  <tr>
+    <td>CoffeeMaker</td>
+    <td>최종 제품으로 coffee module을 통해 brewing 과정을 진행한다.</td>
+  </tr>
+</table>
   <h4>Coffee 제조기의 구현</h4>
+  
   <hr>
   <h2 class="title"><span class="titleNumber">07-2</span>Data Class와 기타 Class</h2>
   <h3 class="title">Data 전달을 위한 Data Class</h3>
