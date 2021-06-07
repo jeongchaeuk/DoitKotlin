@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="night-mode">
+  <!-- <html lang="ko"> -->
 
 <head>
   <meta charset="UTF-8">
@@ -7,6 +8,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <style>
+    html.night-mode {
+      background-color: black;
+      color: whitesmoke;
+    }
+
+    html.night-mode code {
+      color: black;
+    }
+
+    html.night-mode code.no-bgc {
+      color: white;
+    }
+
+    html.night-mode th {
+      color: black;
+    }
+
     span.error {
       color: red;
     }
@@ -111,8 +129,13 @@
     pre.border-line {
       border-radius: .25rem;
       background-color: transparent;
-      color: black;
+      color: white;
       border: 1px solid black;
+    }
+
+    html.night-mode pre.border-line {
+      color: white;
+      border: 1px solid white;
     }
 
     pre .keyword {
@@ -5085,10 +5108,121 @@ class A {
     // 외부 class A의 property, method에 접근 불가.
   }
 }</pre>
-  <h4>중첩 Class</h4>
-  <h4>Inner Class</h4>
-  <h4>지역 Class</h4>
-  <h4>익명 객체</h4>
+  <h4 class="mb-0">중첩 Class</h4>
+  <ul class="mt-0">
+    <li>바깥 class의 객체 생성 없이 사용 가능</li>
+    <li>바깥 class의 member에 접근 불가</li>
+    <li>바깥 class의 <strong>companion object</strong>에는 접근 가능.</li>
+  </ul>
+  <pre>
+class Outer {
+  val outVal = 1
+
+  <strong>companion object</strong> {
+    const val co = 3
+    fun coFunc() = println("coFunc()")
+  }
+
+  class Nested {
+    val inVal = 2
+
+    fun inside() {
+      println(inVal)
+      println(outVal) // <span class="error">Error!</span>
+
+      // 외부 class의 companion object 접근 가능
+      println(co)
+      coFunc()
+    }
+  }
+
+  fun outside() {
+    Nested().inside()
+    println(Nested().inVal)
+  }
+}
+
+fun main() {
+  <strong>Outer.Nested()</strong>.inside()
+
+  Outer.outside() // <span class="error">Error!</span>
+  <strong>Outer()</strong>.outside()
+}</pre>
+  <h4 class="mb-0">Inner Class <strong>inner</strong></h4>
+  <ul class="mt-0">
+    <li>바깥 class의 member에 접근 가능</li>
+    <li>바깥 class의 <code>private</code> member에도 접근 가능</li>
+  </ul>
+  <pre>
+class Outer {
+  <strong>private</strong> val ov1 = 1
+  val ov2 = 2
+
+  <strong>inner</strong> class Inner {
+    fun innerFunc() {
+      val iv = 3
+      println("$ov1, $ov2, $iv")
+    }
+  }
+}
+
+fun main() {
+  <strong>Outer().Inner()</strong>.innerFunc()
+}</pre>
+  <h4 class="mb-0">지역 Class</h4>
+  Block 범위에서만 유효한 class<br>
+  <pre>
+class Outer {
+  <strong>private</strong> val a = 1
+  val b = 2
+
+  fun myFunc() {
+    val c = 3
+
+    <strong>class</strong> Local {
+      val d = 4
+
+      fun localFunc() {
+          val e = 5
+          println("<strong>$a, $b, $c, $d, $e</strong>")
+      }
+    }
+
+    <strong>Local()</strong>.localFunc()
+  }
+}
+
+fun main() {
+  Outer().myFunc()
+}</pre>
+  <h4>익명 객체 <strong>object</strong></h4>
+  <pre>
+<strong>interface Switch</strong> {
+  fun on()
+}
+
+class SmartPhone {
+  private var power = "off"
+
+  fun powerOn() {
+    val msg = "power"
+
+    val powerSwitch = <strong>object : Switch</strong> {
+      val a = 1
+      
+      <strong>override</strong> fun on() {
+          power = "on"
+          println("$msg $power $a")
+      }
+    }
+
+    powerSwitch.on()
+  }
+}
+
+fun main() {
+  SmartPhone().powerOn()
+}</pre>
   <h3 class="title">Sealed Class와 열거형 Class</h3>
   <h4>Sealed Class</h4>
   <h4>열거형 Class</h4>
