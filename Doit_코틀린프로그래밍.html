@@ -108,6 +108,13 @@
       color: black;
     }
 
+    pre.border-line {
+      border-radius: .25rem;
+      background-color: transparent;
+      color: black;
+      border: 1px solid black;
+    }
+
     pre .keyword {
       color: #cc7832;
     }
@@ -198,7 +205,7 @@
     table.th-ta-r th {
       text-align: right;
     }
-
+    
     table.td-ta-r td:first-child {
       text-align: right;
       padding-right: .5rem;
@@ -1135,7 +1142,7 @@ fun main() {
   <h2 class="title"><span class="titleNumber">02-4</span>코틀린 연산자</h2>
   <h3 class="title">기본 연산자</h3>
   <h4>수식의 구조</h4>
-  <code>
+  <code class="no-bgc">
   <table style="text-align: center;" class="no-border">
     <tr>    
       <td colspan="3"></td>
@@ -4814,14 +4821,270 @@ Brewing 과정은 전원을 켜고 pumping -> coffee 완성 -> 전원 끄기 순
     <td>최종 제품으로 coffee module을 통해 brewing 과정을 진행한다.</td>
   </tr>
 </table>
-  <h4>Coffee 제조기의 구현</h4>
-  
+  <h4 class="mb-0">Coffee 제조기의 구현</h4>
+  Heater.kt
+  <pre>
+interface Heater {
+  fun on()
+  fun off()
+  fun isHot(): Boolean
+}</pre><br>
+ElectricHeater.kt
+<pre>
+class ElectricHeater(private var <strong>heating</strong>: Boolean = false) : <strong>Heater</strong> {
+
+  <strong>override</strong> fun on() {
+    println("[${this.javaClass.simpleName}] on")
+    println("[${this.javaClass.simpleName}] heating...")
+    heating = true
+  }
+
+  <strong>override</strong> fun off() {
+    println("[${this.javaClass.simpleName}] off")
+    heating = false
+  }
+
+  <strong>override</strong> fun isHot(): Boolean = heating
+}</pre><br>
+Pump.kt
+<pre>
+interface Pump {
+  fun pump()
+}</pre><br>
+Thermosiphon.kt
+<pre>
+class Thermosiphon(heater: Heater) : <strong>Pump</strong>, <strong>Heater by heater</strong> {
+
+  <strong>override</strong> fun pump() {
+    if (isHot()) println("[${this.javaClass.simpleName}] pumping...")
+  }
+}</pre><br>
+CoffeeModule.kt
+<pre>
+interface CoffeeModule {
+  fun <strong>getThermosiphon</strong>(): Thermosiphon
+}</pre><br>
+MyDripCoffeeModule.kt
+<pre>
+class MyDripCoffeeModule : CoffeeModule {
+
+  <strong class="lh-1">companion object</strong> {
+    <strong>val</strong> electricHeater: ElectricHeater <strong>by lazy</strong> {
+      ElectricHeater()
+    }
+  }
+
+  <strong>private val</strong> _thermosiphon: Thermosiphon <strong>by lazy</strong> {
+    Thermosiphon(electricHeater)
+  }
+
+  // 오직 이 method에서만 Thermosiphon을 초기화한다.
+  // electricHeater, _thermosiphon는 여기서 초기화된다.
+  <strong>override</strong> fun <strong>getThermosiphon</strong>(): Thermosiphon = _thermosiphon
+}</pre><br>
+CoffeeMaker.kt
+<pre>
+class CoffeeMaker(val coffeeModule: CoffeeModule) {
+  fun <strong>brew</strong>() {
+    val theSiphon: Thermosiphon = coffeeModule.getThermosiphon()
+    theSiphon.apply {
+      on()
+      pump()
+      println("Coffee, here! Enjoy!")
+      off()
+    }
+  }
+}
+
+fun main() {
+  val coffeeMaker = CoffeeMaker(<strong>MyDripCoffeeModule()</strong>)
+  coffeeMaker.brew()
+}<hr>>>
+[ElectricHeater] on
+[ElectricHeater] heating...
+[Thermosiphon] pumping...
+Coffee, here! Enjoy!
+[ElectricHeater] off</pre>
   <hr>
   <h2 class="title"><span class="titleNumber">07-2</span>Data Class와 기타 Class</h2>
-  <h3 class="title">Data 전달을 위한 Data Class</h3>
+  <h3 class="title mb-0">Data 전달을 위한 Data Class</h3>
+  <ul class="mt-0">
+    <li>Data 전달을 위한 객체를 <b>DTO</b><sub>Data Transfer Object</sub> 라고 한다.<br>Java에서는 <b>POJO</b><sub>Plain Old Java Object</sub> 라고 부르기도 한다.</li>
+    <li>DTO는 구현 logic를 가지지 않고 순수한 data 객체를 표현하기 때문에 속성과 getter/setter를 가진다.</li>
+    <li>추가로 <code>toString(), equals()</code>등과 같은 data를 표현하거나 비교하는 method를 가진다.</li>
+    <li>Kotlin은 data class를 정의할 때 이 method들을 내부적으로 자동으로 만들어 준다.</li>
+  </ul>
+  <ul><b>자동 생성되는 method들</b>
+    <li>Property를 위한 getter/setter</li>
+    <li>비교를 위한 <code>equals()</code>, key 사용을 위한 <code>hashCode()</code></li>
+    <li>Property를 문자열로 변환해 순서대로 보여주는 <code>toString()</code></li>
+    <li>객체 복사를 위한 <code>copy()</code></li>
+    <li>Property에 상응하는 <code>component1(), component2()</code> 등</li>
+  </ul>
+  <pre class="border-line">Kotlin의 property = field (변수) + getter/setter</pre>
   <h4>Data Class 선언하기</h4>
-  <h4>객체 Destructuring 하기</h4>
-  <h3 class="title">내부 Class 기법</h3>
+  <pre><strong>data</strong> class Customer(<strong>var</strong> name: String, <strong>var</strong> email: String)</pre>
+  <ul style="padding-left: 1rem; list-style: inside;">Data class는 다음 <b>조건을 만족</b>해야 한다.
+    <li>주 생성자는 최소한 하나의 매개변수를 가져야 한다.</li>
+    <li>주 생성자의 모든 매개변수는 <conde>val, var</conde>로 지정된 property여야 한다.</li>
+    <li>Data class는 <code>abstract, open, sealed, inner</code>를 사용할 수 없다.</li>
+  </ul>
+  Data class는 오로지 data를 기술하는 용도로만 사용되지만 <br>필요하다면 부 생성자나 init block을 넣어 data를 위한 간단한 logic을 포함 할 수 있다.<br>
+  <pre>
+<strong>data</strong> class Customer(<strong>var name: String, var email: String</strong>) {
+
+  var job: String = "Unknown"
+
+  <strong>constructor</strong>(name: String, email: String, job: String) : this(name, email) {
+    this.job = job
+  }
+
+  <strong>init</strong> { // 간단한 logic은 여기에
+    println("init")
+  }
+}
+
+fun main() {
+  val customer = Customer("peter", "spiderman@avengers.com")
+  println(customer)
+}<hr>>>
+init
+<strong>Customer(name=peter, email=spiderman@avengers.com)</strong></pre>
+  <table class="td-ta-r">
+    <caption>Data class가 자동 생성하는 method들</caption>
+    <tr>
+      <th scope="col">method</th>
+      <th scope="col">기능</th>
+    </tr>
+    <tr>
+      <td><code class="no-bgc">equals()</code></td>
+      <td>두 객체의 내용이 같은지 비교하는 연산자 (고유값은 다르지만 의미 값이 같을 때), <code>==</code> 연산자</td>
+    </tr>
+    <tr>
+      <td><code class="no-bgc">hashCode()</code></td>
+      <td>객체를 구별하기 위한 고유한 정숫값 생성<br>Data set이나 hash table을 사용하기 위한 하나의 생성된 index</td>
+    </tr>
+    <tr>
+      <td><code class="no-bgc">copy()</code></td>
+      <td>Builder 없이 특정 property만 변경해서 객체 복사하기
+        <pre>val customer2 = customer.copy(name = "tony") // name 만 변경해서 복사</pre>
+      </td>
+    </tr>
+    <tr>
+      <td><code class="no-bgc">toString()</code></td>
+      <td>Data 객체를 읽기 편한 문자열로 반환하기</td>
+    </tr>
+    <tr>
+      <td><code class="no-bgc">componentN()</code></td>
+      <td>객체의 선언부 구조를 분해하기 위해 property에 상응하는 method</td>
+    </tr>    
+  </table>
+  <h4 class="mb-0">객체 Destructuring 하기</h4>
+  Destructuring : 객체가 가지고 있는 property를 개별 변수로 분해해 할당하는 것이다.
+  <pre>
+val (name, email) = customer
+println("$name, $email") // peter, spiderman@avengers.com
+val (_, email) = customer // email만 가져온다.
+
+name = customer.component1() // 1st property
+email = customer.component2() // 2nd property</pre>
+<pre>
+val a = Customer("a", "a@mail.com")
+val b = Customer("b", "b@mail.com")
+val c = Customer("c", "c@mail.com")
+val d = Customer("d", "d@mail.com")
+
+val list = listOf(a, b, c, d)
+
+for (<strong>(name, email)</strong> in list) {
+  println("$name, $email")
+}</pre>
+<pre>
+fun myFunc(): Customer {
+  <strong>return</strong> Customer("peter", "peter@mail.com")
+}
+...
+val (name, email) = <strong>myFunc</strong>()</pre>
+<pre>
+val myLambda = { <strong>(name, email)</strong>: Customer ->
+  println(name)
+  println(email)
+}
+myLambda(customer)</pre>
+  <h3 class="title mb-0">내부 Class 기법</h3>
+  <table class="td-ta-r">
+    <caption>Java의 내부 class 종류</caption>
+    <tr>
+      <th scope="col">종류</th>
+      <th scope="col">역할</th>
+    </tr>
+    <tr>
+      <td>정적<sub>Static</sub> class</td>
+      <td><strong>static</strong> keyword를 가지며 외부 class를 instance화하지 않고 바로 사용 가능한 내부 class.<br>(주로 builder에 이용)</td>
+    </tr>
+    <tr>
+      <td>Member class</td>
+      <td>Instance class로도 불리며 외부 class의 field나 method와 연동하는 내부 class.</td>
+    </tr>
+    <tr>
+      <td>Local class</td>
+      <td>초기화 block이나 method 내의 block에서만 유효한 class.</td>
+    </tr>
+    <tr>
+      <td>익명<sub>Anonymous</sub> class</td>
+      <td>이름이 없고 주로 일회용 객체를 instance화하면서 override method를 구현하는 내부 class.<br>가독성이 떨어진다.</td>
+    </tr>
+  </table>
+  Java의 내부 class는 외부 class의 어떤 member field도 참조할 수 있다.<br>반대로 외부 class도 내부 class의 field에 접근할 수 있다.<br><br>
+  <table class="td-ta-r">
+    <caption>Java와 Kotlin의 내부 class 비교</caption>
+    <tr>
+      <th scope="col">Java</th>
+      <th scope="col">Kotlin</th>
+    </tr>
+    <tr>
+      <td>정적<sub>Static</sub> class</td>
+      <td>중첩<sub>Nested</sub> class.<br>객체 생성 없이 사용 가능.</td>
+    </tr>
+    <tr>
+      <td>Member class</td>
+      <td>Inner class.<br>Field나 method와 연동하는 내부 class. <strong>inner</strong> keyword가 필요하다.</td>
+    </tr>
+    <tr>
+      <td>Local class</td>
+      <td>Local class.<br>Class의 선언이 block 안에 있다.</td>
+    </tr>
+    <tr>
+      <td>익명<sub>Anonymous</sub> class</td>
+      <td>Anonymous Object.<br><strong>object</strong> keyword를 통해 선언한다.</td>
+    </tr>
+  </table>
+  <pre>
+// Java의 Member class
+class A {
+  class B {
+    // 외부 class A의 field에 접근 가능
+  }
+}
+
+// Kotlin의 Inner class
+class A {
+  <strong>inner</strong> class B {
+    // 외부 class A의 field에 접근 가능
+  }
+}
+<hr>
+// Java Static class
+class A {
+  <strong>static</strong> class B {}
+}
+
+// Kotlin Nested class
+class A {
+  class B {
+    // 외부 class A의 property, method에 접근 불가.
+  }
+}</pre>
   <h4>중첩 Class</h4>
   <h4>Inner Class</h4>
   <h4>지역 Class</h4>
