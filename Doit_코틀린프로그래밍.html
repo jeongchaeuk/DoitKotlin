@@ -25,24 +25,14 @@
       color: black;
     }
 
-    span.error {
+    .error,
+    .info,
+    .red {
       color: red;
-    }
-
-    .info {
-      color: red;
-    }
-
-    .lh-1 {
-      line-height: 1rem;
     }
 
     .no-bgc {
       background-color: transparent;
-    }
-
-    .red {
-      color: red
     }
 
     .mb-0 {
@@ -166,6 +156,7 @@
       display: inline-flex;
       font-size: .9rem;
       font-family: D2Coding;
+      line-height: 1rem;
     }
 
     strong>code {
@@ -246,7 +237,7 @@
     kbd {
       border: 1px solid gray;
       border-radius: .25rem;
-      padding: 0.25em;
+      padding: 0rem .25rem;
       background-color: lightgray;
       box-shadow: .05rem .05rem black;
     }
@@ -285,6 +276,10 @@
 
     table.no-border .border {
       border: 1px solid black;
+    }
+
+    html.night-mode table.no-border .border {
+      border: 1px solid white;
     }
 
     code {
@@ -533,10 +528,10 @@ Process finished with exit code 0</pre>
   </table>
   <sub>별표(*)는 해당 package에 포함된 모든 요소를 의미한다.</sub>
   <h4>IntelliJ 단축키</h4>
-  <ul>
-    <li style="line-height: 1.5rem;"><kbd>Ctr</kbd> + <kbd>B</kbd> : 선택한 class나 함수의 source file을 찾아 보여준다.</li>
+  <ul class="mt-0">
+    <li><kbd>Ctr</kbd> + <kbd>B</kbd> : 선택한 class나 함수의 source file을 찾아 보여준다.</li>
     <li><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F10</kbd> : 현재 file 실행하기</li>
-  </ul>
+  </ul>  
   <h3 class="title">사용자 class 가져오기</h3>
   <pre>
 package com.example.edu.Person
@@ -1450,7 +1445,6 @@ fun main() {
 fun max(a: Int, b: Int): Int = if (a > b) a else b</pre>
   <h4 class="mb-0">함수와 Stack Frame</h4>
   함수의 각 정보는 Frame이라는 정보로 Stack memory의 높은 주소부터 거꾸로 자라듯이 채워져 간다.
-  <code>
   <table class="no-border" style="text-align: center; border: 1px solid black">
     <caption>Stack과 각 함수의 Stack Frame</caption>
     <tr style="background-color: yellowgreen;">
@@ -1523,7 +1517,7 @@ fun max(a: Int, b: Int): Int = if (a > b) a else b</pre>
       <td>Stack</td>
       <td></td>
     </tr>
-  </table></code>
+  </table>
   지역 변수 - 함수가 종료되면 stack frame과 함께 사라지는 임시 변수.
   <h4 class="mb-0">Stack Frame의 생성과 소멸</h4>
   함수가 호출될 때마다 해당 정보는 stack memory에 쌓이는데 이것을 <strong>stack frame</strong>이라고 부른다.
@@ -3092,7 +3086,7 @@ class <span class="custom">Parrot</span> : Bird {
   val language: String
 
   <strong>constructor</strong>(name: String, wing: Int, beak: String, color: String, <strong>language: String</strong>) : <strong>super</strong>(name, wing, beak, color) {
-      <strong class="lh-1">this.language = language</strong> // 새로 추가한 property
+      <strong>this.language = language</strong> // 새로 추가한 property
   }
 
   fun <strong>speak()</strong> = println("Speak! $language")
@@ -3109,7 +3103,7 @@ fun main() {
   with(parrot) { println("Parrot: ${name}, ${wing}, ${beak}, ${color}, ${language}") }
 
   <strong>lark.singHitone()</strong>
-  <strong class="lh-1">parrot.speak()</strong>
+  <strong>parrot.speak()</strong>
   lark.fly()
 }<hr>>>
 Coco: mybird, 2, short, blue
@@ -3157,7 +3151,7 @@ class Lark() : Bird() {
   만약, Lark을 상속한 class에서 sing()의 overriding 막고 싶다면 <strong>final</strong>를 앞에 붙인다.
   <pre>
 <strong>open</strong> class Lark() : Bird() {
-  <strong class="lh-1">final</strong> override fun sing() { ... } // 재정의. 하위 class에서 재정의 불가.
+  <strong>final</strong> override fun sing() { ... } // 재정의. 하위 class에서 재정의 불가.
 }
 
 class Skylark() : Lark() {
@@ -3261,7 +3255,7 @@ class Child : Base() {
       fun test() {
           f() // ③
           <strong>Child().f()</strong> // ②
-          <strong class="lh-1">super@Child.f()</strong> // ①
+          <strong>super@Child.f()</strong> // ①
           println("[Inside] super@Child.x: ${<strong>super@Child.x</strong>}")
       }
   }
@@ -3306,7 +3300,7 @@ class C : <strong>A(), B</strong> {
 
       // super&lt;부모_Type>을 사용해서 누구의 f()를 사용할지 선택한다.
       <strong>super&lt;A>.f()</strong> // class A의 f()
-      <strong class="lh-1">super&lt;B>.f()</strong> // interface B의 f()
+      <strong>super&lt;B>.f()</strong> // interface B의 f()
   }
 }
 
@@ -3342,7 +3336,7 @@ interface B f()</pre>
   <h4><code class="no-bgc">private</code></h4>
   <pre>
 <strong>private</strong> class PrivateClass {
-  <strong class="lh-1">private</strong> var i = 1
+  <strong>private</strong> var i = 1
 
   <strong>private</strong> fun privateFunc() { i += 1 }
 
@@ -3412,7 +3406,7 @@ fun main() {
   Sample.kt
   <pre>
 <strong>internal</strong> class InternalClass {
-  <strong class="lh-1">internal</strong> var i = 1
+  <strong>internal</strong> var i = 1
 
   <strong>internal</strong> fun internalFunc() { i += 1 }
 
@@ -3478,7 +3472,7 @@ open class Car <strong>protected</strong> constructor(
   <strong>private</strong> val year: Int,  
   var model: String,
   <strong>protected</strong> open var power: String,
-  <strong class="lh-1">internal</strong> var wheel: String,
+  <strong>internal</strong> var wheel: String,
 ) {
     protected fun start(key: Boolean) {
       if (key) println("Start the Engine!")
@@ -3666,7 +3660,7 @@ Patient Id = 1234</pre>
   <pre>
 // 연못에 있는 오리들을 저장할 list 매개변수 (집합)
 class Pond(<strong>val members: MutableList&lt;Duck></strong>) {
-  constructor() : this(<strong class="lh-1">mutableListOf&lt;Duck>()</strong>)
+  constructor() : this(<strong>mutableListOf&lt;Duck>()</strong>)
 }
 
 class Duck(val name: String)
@@ -3752,7 +3746,7 @@ Stop engine</pre>
         <pre class="no-bgc">
 <span class="keyword-on-light">var</span> Property_이름[: Property_자료형][= Property_초기화]
   [<strong>get</strong>() { getter_본문 }]
-  [<strong class="lh-1">set</strong>(value) { setter_본문 }]</pre>
+  [<strong>set</strong>(value) { setter_본문 }]</pre>
       </td>
     </tr>
     <tr>
@@ -3799,7 +3793,7 @@ class User(_id: Int, _name: String, _age: Int) {
   val id: Int = _id
 
   var <strong>name</strong>: String = _name
-      <strong class="lh-1">set</strong>(<span class="keyword">value</span>) {
+      <strong>set</strong>(<span class="keyword">value</span>) {
         <span class="keyword">field</span> = value<span class="custom">.uppercase()</span> // 대문자로 저장한다.
       }
 
@@ -4103,7 +4097,7 @@ class CarModel(val model: String, <strong>impl: Car</strong>) : Car <strong>by</
 
 fun main() {
   val truck = CarModel("트럭 2010", <strong>VanImpl("100마력")</strong>)
-  val sport = CarModel("포르쉐 2008", <strong class="lh-1">SportImpl("350마력")</strong>)
+  val sport = CarModel("포르쉐 2008", <strong>SportImpl("350마력")</strong>)
 
   truck.carInfo()
   sport.carInfo()
@@ -4273,12 +4267,12 @@ Login...</pre>
   <strong>companion object</strong> {
     // const는 complile time에 값이 할당된다. Java에서 접근하기 위해 필요하다. (val은 runtime에 할당된다.)
     // const는 기본형과 String에만 사용할 수 있다.
-    <strong class="lh-1">const</strong> <span class="keyword">val</span> <span class="property">LEVEL</span> = <span class="comment">"INTERMEDIATE"</span>
+    <strong>const</strong> <span class="keyword">val</span> <span class="property">LEVEL</span> = <span class="comment">"INTERMEDIATE"</span>
 
     // @JvmStatic은 java source에서 code를 해석할 때 Companion을 생략할 수 있게 해준다.
-    <strong class="lh-1">@JvmStatic</strong> <span class="keyword">fun</span> <span class="func-decl">login</span>() = println(<span class="comment">"Login ..."</span>)
+    <strong>@JvmStatic</strong> <span class="keyword">fun</span> <span class="func-decl">login</span>() = println(<span class="comment">"Login ..."</span>)
 
-    <strong class="lh-1">@JvmStatic</strong>
+    <strong>@JvmStatic</strong>
     <span class="keyword">fun</span> <span class="func-decl">hello</span>() = println(<span class="comment">"Hello!"</span>)
 
     // 특정 자료형을 사용하기 위한 annotation
@@ -4300,11 +4294,11 @@ class <strong>KJob</strong>(var title: String = "Programmer")</pre><br>
 
     // KJob에 대한 객체 생성 후 접근
     KJob kjob = <strong>KCustomer.JOB</strong>;
-    System.out.println(<strong class="lh-1">kjob.getTitle()</strong>);
+    System.out.println(<strong>kjob.getTitle()</strong>);
 
     // KCustomer를 통한 접근
     <strong>KCustomer.JOB.setTitle("Designer");</strong>
-    System.out.println(<strong class="lh-1">KCustomer.JOB.getTitle()</strong>);
+    System.out.println(<strong>KCustomer.JOB.getTitle()</strong>);
   }
 }<hr>>>
 INTERMEDIATE
@@ -4330,7 +4324,7 @@ package chap06.section3;
 
 // .kt file 이름으로 자동 생성된 class
 public final class <strong>PackageLevelFunctionKt</strong> {
-  public <strong class="lh-1">static final</strong> void packageLevelFunc() {
+  public <strong>static final</strong> void packageLevelFunc() {
     System.out.println("Package-level Function");
   }
 
@@ -4365,7 +4359,7 @@ import kotlin.jvm.JvmName;
   name = "PKLevel"
 )
 public final class <strong>PKLevel</strong> {
-  public <strong class="lh-1">static final</strong> void packageLevelFunc() {
+  public <strong>static final</strong> void packageLevelFunc() {
     System.out.println("Package-level Function");
   }
   ...
@@ -4401,11 +4395,11 @@ class Hobby(val name: String)
 // Companion 객체를 사용한 방식
 class CCustomer {
   <strong>companion object</strong> {
-    <strong class="lh-1">const</strong> val HELLO = "Hello" // 상수 표현
+    <strong>const</strong> val HELLO = "Hello" // 상수 표현
     val name = "tony"
 
     <strong>@JvmField</strong> val HOBBY = Hobby("iron-man")
-    <strong class="lh-1">JvmStatic</strong> fun greeting() = println("Hello World!")
+    <strong>JvmStatic</strong> fun greeting() = println("Hello World!")
   }
 }
 
@@ -4497,7 +4491,7 @@ package chap06.section3
 fun main() {
   val pretendMan = <strong>object:</strong> Superman() {
     // 재정의
-    <strong>override</strong> fun <strong class="lh-1">fly()</strong> = println("I'm not a real Superman. I can't fly!")
+    <strong>override</strong> fun <strong>fly()</strong> = println("I'm not a real Superman. I can't fly!")
   }
 
   pretendMan.work()
@@ -4552,7 +4546,7 @@ class C {
   <pre>
 fun countClicks(window: JComponent) {
   var <strong>clickCount</strong> = 0
-  var <strong class="lh-1">enterCount</strong> = 0
+  var <strong>enterCount</strong> = 0
   
   window.addMouseListener(<strong>object:</strong> MouseAdapter() {
     override fun mouseClicked(e: MouseEvent?) {
@@ -4589,7 +4583,7 @@ fun countClicks(window: JComponent) {
   <strong>abstract</strong> var maxSpeed: Double
 
   // 추상 method. 반드시 하위 class에서 구현해야 한다.
-  <strong class="lh-1">abstract</strong> fun start()
+  <strong>abstract</strong> fun start()
   <strong>abstract</strong> fun stop()
 
   // 일반 property. 초깃값인 상태를 저장할 수 있다.
@@ -4599,12 +4593,12 @@ fun countClicks(window: JComponent) {
 }
 
 class Car(name: String, color: String, weight: Double, <strong>override</strong> var maxSpeed: Double) : Vehicle(name, color, weight) {
-  <strong class="lh-1">override</strong> fun start() = println("Car started")
+  <strong>override</strong> fun start() = println("Car started")
   <strong>override</strong> fun stop() = println("Car stopped")
 }
 
 class Motorcycle(name: String, color: String, weight: Double, <strong>override</strong> var maxSpeed: Double) : Vehicle(name, color, weight) {
-  <strong class="lh-1">override</strong> fun start() = println("Motorcycle started.")
+  <strong>override</strong> fun start() = println("Motorcycle started.")
   <strong>override</strong> fun stop()  = println("Motorcycle stopped.")
 }
 
@@ -4623,7 +4617,7 @@ name=aq-300, color=black, weight=170.0, year=2021, maxSpeed=150.0
 Motorcycle started.</pre>
   <pre>
 <strong>abstract</strong> class Printer {
-  <strong class="lh-1">abstract</strong> fun print()
+  <strong>abstract</strong> fun print()
 }
 
 val myPrinter = <strong>object</strong>: Printer() { // 객체 instance
@@ -4654,7 +4648,7 @@ interface interface_이름 [: interface_이름...] {
 }</pre>
   <pre>
 <strong>interface</strong> Pet {
-  <strong class="lh-1">var</strong> category: String    // 추상 property.
+  <strong>var</strong> category: String    // 추상 property.
   fun feeding()           // 추상 method.
 
   // 구현부가 있는 경우 일반 method.
@@ -4667,7 +4661,7 @@ interface interface_이름 [: interface_이름...] {
   </ul>
   <pre>
 class Cat(<strong>override</strong> var category: String) : <strong>Pet</strong> {
-  <strong class="lh-1">override</strong> fun feeding() = println("Feed the cat a tuna can.")
+  <strong>override</strong> fun feeding() = println("Feed the cat a tuna can.")
 }
 
 fun main() {
@@ -4681,14 +4675,15 @@ Pet category = small
 Feed the cat a tuna can.
 Keep patting!</pre>
   <h4 class="mb-0">Getter를 구현한 property</h4>
-  Interface에서는 property에 값을 저장할 수 없다. 단, <strong><code>val</code></strong>로 선언된 property는 getter를 통해 필요한 내용을 구현할 수 있다.
+  Interface에서는 property에 값을 저장할 수 없다.<br>
+  단, <strong><code>val</code></strong>로 선언된 property는 getter를 통해 필요한 내용을 구현할 수 있다.
   <pre>
 interface Pet {
   var category: String    // 추상 property.
   fun feeding()           // 추상 method.
 
   // val 선언 시 getter의 구현이 가능. 
-  <strong class="lh-1">val msgTags: String</strong>
+  <strong>val msgTags: String</strong>
       <strong>get() = "I'm your lovely pet!"</strong>
 
   // 구현부가 있는 경우 일반 method.
@@ -4725,9 +4720,9 @@ class Pegasus(<strong>override</strong> val wings: Int = 2, <strong>override</st
 
   init { println("Pegasus init") }
 
-  <strong class="lh-1">override</strong> fun fly() = println("Fly!")
-  <strong class="lh-1">override</strong> fun run() = println("Run!")
-  <strong class="lh-1">override</strong> fun jump() {
+  <strong>override</strong> fun fly() = println("Fly!")
+  <strong>override</strong> fun run() = println("Run!")
+  <strong>override</strong> fun jump() {
     <strong>super&lt;Horse></strong>.jump() // Horse의 jump()를 사용하는 경우다.
     println("Pegasus jump!")
   }
@@ -4757,7 +4752,7 @@ Pegasus jump!</pre>
 
 class C(<strong>val a: A, val b: B</strong>) {
   fun funcC() {
-    <strong class="lh-1">a.</strong>funcA()
+    <strong>a.</strong>funcA()
     <strong>b.</strong>funcB()
   }
 }
@@ -4797,7 +4792,7 @@ class Person(name: Nameable, work: Runnable) : <strong>Nameable by name, Runnabl
 fun main() {
   val person = Person(StaffName(), Work()) // 생성자를 사용해 객체를 바로 전달.
   println(<strong>person.name</strong>)
-  <strong class="lh-1">person.run()</strong>
+  <strong>person.run()</strong>
 }<hr>>>
 Peter
 Working...</pre>
@@ -4893,7 +4888,7 @@ interface CoffeeModule {
   <pre>
 class MyDripCoffeeModule : CoffeeModule {
 
-  <strong class="lh-1">companion object</strong> {
+  <strong>companion object</strong> {
     <strong>val</strong> electricHeater: ElectricHeater <strong>by lazy</strong> {
       ElectricHeater()
     }
@@ -5236,8 +5231,8 @@ fun main() {
   </ul>
   Sealed class를 선언하는 첫 번째 방법
   <pre>
-<strong class="lh-1">sealed</strong> class <span class="custom">Result</span> {
-  <strong>open</strong> class Success(val message: String) <strong class="lh-1">: Result()</strong>
+<strong>sealed</strong> class <span class="custom">Result</span> {
+  <strong>open</strong> class Success(val message: String) <strong>: Result()</strong>
   class Error(val code: Int, val message: String) <strong>: Result()</strong>
 }
 
@@ -5264,8 +5259,8 @@ fun main() {
 
 // 상태를 검사한다.
 fun eval(result: Result): String = <strong>when</strong> (result) {
-  <strong class="lh-1">is</strong> Status -> "in progress."
-  <strong class="lh-1">is</strong> Result.Success -> result.message
+  <strong>is</strong> Status -> "in progress."
+  <strong>is</strong> Result.Success -> result.message
   <strong>is</strong> Result.Error -> result.message
 }</pre>
   <h4>열거형 Class <strong>enum</strong></h4>
@@ -5274,16 +5269,16 @@ fun eval(result: Result): String = <strong>when</strong> (result) {
     <li>Sealed class 처럼 다양한 자료형을 다루지 못하고 자료형이 동일한 상수를 나열한다.</li>
     <li>열거형 class의 각 상수는 객체로 취급한다.</li>
   </ul>
-<pre class="border-line">
+  <pre class="border-line">
 enum class Class_이름 [(생성자)] {
   상수1[(값)], 상수2[(값)], 상수3[(값)] ...
   [; Property 또는 Method]
 }</pre>
-<pre>
+  <pre>
 enum class Direction {
   NORTH, EAST, SOUTH, WEST
 }</pre>
-<pre>
+  <pre>
 enum class DayOfWeek(val <strong>num</strong>: Int) {
   MONDAY(<strong>1</strong>), TUESDAY(<strong>2</strong>), WEDNESDAY(<strong>3</strong>), THURSDAY(<strong>4</strong>), FRIDAY(<strong>5</strong>), SATURDAY(<strong>6</strong>), SUNDAY(<strong>7</strong>)
 }
@@ -5293,7 +5288,7 @@ when (day.num) {
   1, 2, 3, 4, 5 -> "Weekday"
   6, 7 -> "Weekend"
 }</pre>
-<pre>
+  <pre>
 enum class Color(val r: Int, val g: Int, val b: Int) {
   RED(255, 0, 0), ORANGE(255, 165, 0), YELLOW(255, 255, 0),
   GREEN(0, 255, 0), BLUE(0, 0, 255), INDIGO(75, 0, 130), 
@@ -5316,13 +5311,234 @@ fun getColor(color: Color) = when (color) {
   Color.INDIGO -> color.r             // 75
   Color.VIOLET -> color.rgb()         // 15631086
 }</pre>
+  <pre>
+<strong>interface Score</strong> {
+  fun getScore(): Int
+}
 
+<strong>enum</strong> class MemberType(val level: String) : <strong>Score</strong> {
+  <strong>NORMAL</strong>("3rd") { override fun getScore(): Int = 100 },
+  <strong>SILVER</strong>("2nd") { override fun getScore(): Int = 500 },
+  <strong>GOLD</strong>("1st") { override fun getScore(): Int = 1500 },
+}
 
-  <h3 class="title">Annotation Class</h3>
+fun main() {
+  println(MemberType.NORMAL.getScore())
+  println(MemberType.GOLD)
+  println(MemberType.valueOf("SILVER"))
+  println(MemberType.SILVER.level)
+
+  for (grade in MemberType.<strong>values</strong>())
+      println("grade.name = ${grade.name}, level=${grade.level}")
+}<hr>>>
+100
+GOLD
+SILVER
+2nd
+grade.name = NORMAL, level=3rd
+grade.name = SILVER, level=2nd
+grade.name = GOLD, level=1st</pre>
+  <h3 class="title mb-0">Annotation Class</h3>
+  <ul>
+    <li>Code에 부가 정보를 추가한다.</li>
+    <li><strong>@</strong>기호와 함께 표기한다.</li>
+    <li>Compiler나 program 실행 시간에 사전 처리를 위해 사용한다.</li>
+  </ul>
   <h4>Annotation 선언하기</h4>
+  <pre>
+<strong>annotation</strong> class <span class="custom">Fancy</span> // 선언
+
+<strong>@Fancy</strong> class MyClass // 사용
+</pre><br>
+  Annotation은 다음과 같은 몇 가지 속성을 사용해 정의될 수 있다.
+  <table class="th-ta-r">
+    <tr>
+      <th scope="row"><code>@Target</code></th>
+      <td>Annotation이 지정되어 사용할 종류(class, function, property 등)를 정의</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>@Retention</code></th>
+      <td>Annotation을 compile된 class file에 저장할 것인지 실행 시간에 반영할 것인지 결정</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>@Repeatable</code></th>
+      <td>Annotation을 같은 요소에 여러 번 사용 가능하게 할지를 결정</td>
+    </tr>
+    <tr>
+      <th scope="row"><code>@MustBeDocumented</code></th>
+      <td>Annotation이 API의 일부분으로 문서화하기 위해 사용</td>
+    </tr>
+  </table>
+  <pre>
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, 
+        AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.EXPRESSION)
+@Retention(AnnotationRetention.SOURCE) // compile-time에 제거됨.
+@MustBeDocumented
+annotation class Fancy
+</pre>
+  <p>
+    Runtime에 class를 분석하려면 class에 대한 정보를 표현하는 class reference로부터 알아 낸다.<br>
+    Class reference는 <strong>Class_이름::class</strong> 형태로 표현하고 type은 <strong>KClass&lt;*></strong>로 정의한다.</p>
+  <p><span class="material-icons red">info</span> Reflection<br>Program을 실행할 때 program의 특정 구조를 분석해 내는 기법. Class 정보를 알 수 있다.</p>
+  먼저 <strong>build.gradle.kts</strong>에 아래 code를 추가해야 한다.
+  <pre>
+...
+dependencies {
+  ...
+  <strong>implementation(kotlin("reflect"))</strong>
+}
+...</pre><br>
+  ReflectionTest.kt
+  <pre>
+<strong>package test.reflection</strong>
+
+import kotlin.reflect.KClass
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.memberProperties
+
+class User(val id: Int, val name: String, val grade: String = "Normal") {
+  fun check() {
+      when (grade) {
+          "Normal" -> println("Your grade is Normal")
+          else -> println("Your grade is NOT Normal")
+      }
+  }
+}
+
+fun main() {
+  println(<strong>User::class</strong>) // type을 출력
+
+  val classInfo = User::class
+  classInfo.<strong>members</strong>.forEach {
+      println(it)
+  }
+  println()
+
+  classInfo.<strong>memberProperties</strong>.forEach {
+      println("Property name = ${it.name}, type = ${it.returnType}")
+  }
+  println()
+
+  classInfo.<strong>memberFunctions</strong>.forEach {
+      println("Function name = ${it.name}, type = ${it.returnType}")
+  }
+  println()
+
+  getKotlinType(<strong>User::class</strong>)
+}
+
+fun getKotlinType(obj: <strong>KClass&lt;*></strong>) = println(obj.qualifiedName)<hr>>>
+class test.reflection.User
+
+val test.reflection.User.grade: kotlin.String
+val test.reflection.User.id: kotlin.Int
+val test.reflection.User.name: kotlin.String
+fun test.reflection.User.check(): kotlin.Unit
+fun test.reflection.User.equals(kotlin.Any?): kotlin.Boolean
+fun test.reflection.User.hashCode(): kotlin.Int
+fun test.reflection.User.toString(): kotlin.String
+
+Property name = grade, type = kotlin.String
+Property name = id, type = kotlin.Int
+Property name = name, type = kotlin.String
+
+Function name = check, type = kotlin.Unit
+Function name = equals, type = kotlin.Boolean
+Function name = hashCode, type = kotlin.Int
+Function name = toString, type = kotlin.String
+
+test.reflection.User
+</pre>
   <h4>Annotation의 위치</h4>
+  <pre>
+<strong>@Fancy</strong> class MyClass {
+  <strong>@Fancy</strong> fun myFunction(<strong>@Fancy</strong> myProperty: Int): Int {
+      return (<strong>@Fancy</strong> 1)
+    }
+}
+
+// 생성자에 사용하면 constructor keyword를 생략할 수 없다.
+class Person <strong>@Fancy</strong> <strong>constructor</strong>(name: String)  
+
+// getter/setter에도 사용할 수 있다.
+class Person {
+  var name: String? = null
+  <strong>@Fancy</strong> set
+}</pre>
   <h4>Annotation의 매개변수와 생성자</h4>
+  <pre>
+<span class="keyword">annotation class</span> <span class="custom">Special</span>(val <strong>why</strong>: String)
+
+<span class="custom">@Special</span>(<strong>"example"</strong>) class Foo</pre>
+<ul>매개변수로 사용될 수 있는 자료형
+  <li>Java의 기본형과 연동하는 자료형 (Int, Long 등)</li>
+  <li>문자열</li>
+  <li>Class (Class_이름::class)</li>
+  <li>열거형</li>
+  <li>기타 annotation</li>
+  <li>위의 목록을 가지는 배열</li>
+</ul>
+Annotation이 다른 annotation을 가지고 사용할 때는 @ 기호를 생략할 수 있다.
+<pre>
+<strong>annotation</strong> class <span class="custom">ReplaceWith</span>(val exp: String)
+
+<strong>annotation</strong> class <span class="custom">Deprecated</span>(
+    val msg: String,
+    val replaceWith: ReplaceWith = ReplaceWith("")
+)
+
+// ReplaceWith는 @ 기호가 생략됨.
+<strong>@Deprecated</strong>("This function is deprecated, use === instead", <strong>ReplaceWith</strong>("this === other"))</pre>
+Annotation의 인자로 특정 class가 필요하면 Kotlin의 <code>KClass</code>를 사용해야 한다.<br>
+그러면 Kotlin compiler가 자동으로 Java class로 변환한다.<br>
+이후에 Java code에서도 annotation 인자를 사용할 수 있게 된다.<br>
+<pre>
+import kotlin.reflect.KClass
+
+annotation class <span class="custom">Ann</span>(val arg1: <strong>KClass&lt;*></strong>, val arg2: <strong>KClass&lt;out Any></strong>)
+...
+<span class="custom">@Ann</span>(<strong>String::class, Int::class</strong>) class MyClass</pre>
+<code>String::class, Int::class</code>는 Kotlin의 reflection 표현이다.<br>
+이것은 <code>KClass&lt;T></code>를 반환한다.
   <h4>표준 Annotation</h4>
+  <pre>
+<strong>@JvmName</strong>("filterStrings")
+fun filter(list: List&lt;String>): Unit
+
+<strong>@JvmName</strong>("filterInts")
+fun filter(list: List&lt;Int>): Unit</pre>
+  <code>@JvmName</code>은 filter()라는 이름을 Java에서 각각 filterStrings()와 filterInts()로 바꿔준다.
+  <pre>
+public static final void filterStrings(java.util.List&lt;java.lang.String>);
+public static final void filterInts(java.util.List&lt;java.lang.Int>);</pre><br>
+<code>@JvmStatic</code>은 Java의 정적 method로 생성할 수 있게 한다.<br><br>
+<code>@Throws</code>는 Kotlin의 <code>throw</code> 구문이 Java에도 포함되게 한다.
+<pre>
+import java.io.FileNotFoundException
+import java.nio.file.Paths
+import kotlin.jvm.Throws
+
+class File(val path: String) {
+  <strong>@Throws</strong>(FileNotFoundException::class)
+  fun exists(): Boolean {
+    if (!Paths.get(path).toFile().exists())
+      <strong>throw</strong> FileNotFoundException("$path does not exist!")
+    
+    return true
+  }
+}
+<hr>// Java code
+public final class File {
+  @NotNull
+  private final String path;
+
+  public final boolean exists() <strong>throws FileNotFoundException</strong> {
+    if (!Paths.get(this.path).toFile().exists()) {
+       throw (Throwable)(new FileNotFoundException(this.path + " does not exist!"));
+    } else {
+       return true;
+    }
+ }</pre>
   <hr>
   <h2 class="title"><span class="titleNumber">07-3</span>연산자 Overloading</h2>
   <h3 class="title">연산자의 작동 방식</h3>
