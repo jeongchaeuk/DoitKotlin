@@ -128,24 +128,24 @@
       border: 1px solid white;
     }
 
-    pre .keyword {
-      color: #cc7832;
+    .keyword {
+      color: #f7a;
     }
 
-    pre .annotation-name {
+    .annotation-name {
       color: #bbb529;
     }
 
-    pre .comment {
-      color: #629755FF;
+    .comment {
+      color: #0d0;
     }
 
-    pre .func-decl {
-      color: #ffc66d;
+    .func-decl {
+      color: #fc0;
     }
 
-    pre .property {
-      color: #9876aa;
+    .property {
+      color: #f7f;
     }
 
     strong {
@@ -229,6 +229,11 @@
       background-color: lightgray;
     }
 
+    tbody.code {
+      font-family: D2Coding;
+      font-size: .9rem;
+    }
+
     span.title {
       background-color: red;
       padding: 0.1rem 0.25em;
@@ -301,7 +306,7 @@
     }
 
     .custom {
-      color: #ee3
+      color: yellow;
     }
   </style>
   <title>Kotlin programming</title>
@@ -531,7 +536,7 @@ Process finished with exit code 0</pre>
   <ul class="mt-0">
     <li><kbd>Ctr</kbd> + <kbd>B</kbd> : 선택한 class나 함수의 source file을 찾아 보여준다.</li>
     <li><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F10</kbd> : 현재 file 실행하기</li>
-  </ul>  
+  </ul>
   <h3 class="title">사용자 class 가져오기</h3>
   <pre>
 package com.example.edu.Person
@@ -1465,7 +1470,9 @@ fun max(a: Int, b: Int): Int = if (a > b) a else b</pre>
       <td></td>
     </tr>
     <tr>
-      <td colspan="4"><hr style="border-top: 1px dashed black;"></td>
+      <td colspan="4">
+        <hr style="border-top: 1px dashed black;">
+      </td>
     </tr>
     <tr>
       <td rowspan="3">max() 함수의 stack frame</td>
@@ -4742,22 +4749,22 @@ Horse jump. maxSpeed = 100
 Pegasus jump!</pre>
   <h3 class="title mb-0">Interface의 위임</h3>
   <pre>
-<strong>interface A</strong> {
+<strong>interface</strong> <span class="custom">A</span> {
   fun funcA() = println("A.funcA()")
 }
 
-<strong>interface B</strong> {
+<strong>interface</strong> <span class="custom">B</span> {
   fun funcB() = println("B.funcB()")
 }
 
-class C(<strong>val a: A, val b: B</strong>) {
+class C(val a: A, val b: B) {
   fun funcC() {
     <strong>a.</strong>funcA()
     <strong>b.</strong>funcB()
   }
 }
 
-class DelegatedC(<strong>a: A, b: B</strong>) : <strong>A by a, B by b</strong> {
+class DelegatedC(a: A, b: B) : <strong>A by a, B by b</strong> {
   fun funcC() {
     funcA() // method를 '.' 없이 접근할 수 있다.
     funcB()
@@ -5470,16 +5477,16 @@ class Person {
 <span class="keyword">annotation class</span> <span class="custom">Special</span>(val <strong>why</strong>: String)
 
 <span class="custom">@Special</span>(<strong>"example"</strong>) class Foo</pre>
-<ul>매개변수로 사용될 수 있는 자료형
-  <li>Java의 기본형과 연동하는 자료형 (Int, Long 등)</li>
-  <li>문자열</li>
-  <li>Class (Class_이름::class)</li>
-  <li>열거형</li>
-  <li>기타 annotation</li>
-  <li>위의 목록을 가지는 배열</li>
-</ul>
-Annotation이 다른 annotation을 가지고 사용할 때는 @ 기호를 생략할 수 있다.
-<pre>
+  <ul>매개변수로 사용될 수 있는 자료형
+    <li>Java의 기본형과 연동하는 자료형 (Int, Long 등)</li>
+    <li>문자열</li>
+    <li>Class (Class_이름::class)</li>
+    <li>열거형</li>
+    <li>기타 annotation</li>
+    <li>위의 목록을 가지는 배열</li>
+  </ul>
+  Annotation이 다른 annotation을 가지고 사용할 때는 @ 기호를 생략할 수 있다.
+  <pre>
 <strong>annotation</strong> class <span class="custom">ReplaceWith</span>(val exp: String)
 
 <strong>annotation</strong> class <span class="custom">Deprecated</span>(
@@ -5489,17 +5496,17 @@ Annotation이 다른 annotation을 가지고 사용할 때는 @ 기호를 생략
 
 // ReplaceWith는 @ 기호가 생략됨.
 <strong>@Deprecated</strong>("This function is deprecated, use === instead", <strong>ReplaceWith</strong>("this === other"))</pre>
-Annotation의 인자로 특정 class가 필요하면 Kotlin의 <code>KClass</code>를 사용해야 한다.<br>
-그러면 Kotlin compiler가 자동으로 Java class로 변환한다.<br>
-이후에 Java code에서도 annotation 인자를 사용할 수 있게 된다.<br>
-<pre>
+  Annotation의 인자로 특정 class가 필요하면 Kotlin의 <code>KClass</code>를 사용해야 한다.<br>
+  그러면 Kotlin compiler가 자동으로 Java class로 변환한다.<br>
+  이후에 Java code에서도 annotation 인자를 사용할 수 있게 된다.<br>
+  <pre>
 import kotlin.reflect.KClass
 
 annotation class <span class="custom">Ann</span>(val arg1: <strong>KClass&lt;*></strong>, val arg2: <strong>KClass&lt;out Any></strong>)
 ...
 <span class="custom">@Ann</span>(<strong>String::class, Int::class</strong>) class MyClass</pre>
-<code>String::class, Int::class</code>는 Kotlin의 reflection 표현이다.<br>
-이것은 <code>KClass&lt;T></code>를 반환한다.
+  <code>String::class, Int::class</code>는 Kotlin의 reflection 표현이다.<br>
+  이것은 <code>KClass&lt;T></code>를 반환한다.
   <h4>표준 Annotation</h4>
   <pre>
 <strong>@JvmName</strong>("filterStrings")
@@ -5511,9 +5518,9 @@ fun filter(list: List&lt;Int>): Unit</pre>
   <pre>
 public static final void filterStrings(java.util.List&lt;java.lang.String>);
 public static final void filterInts(java.util.List&lt;java.lang.Int>);</pre><br>
-<code>@JvmStatic</code>은 Java의 정적 method로 생성할 수 있게 한다.<br><br>
-<code>@Throws</code>는 Kotlin의 <code>throw</code> 구문이 Java에도 포함되게 한다.
-<pre>
+  <code>@JvmStatic</code>은 Java의 정적 method로 생성할 수 있게 한다.<br><br>
+  <code>@Throws</code>는 Kotlin의 <code>throw</code> 구문이 Java에도 포함되게 한다.
+  <pre>
 import java.io.FileNotFoundException
 import java.nio.file.Paths
 import kotlin.jvm.Throws
@@ -5542,15 +5549,256 @@ public final class File {
   <hr>
   <h2 class="title"><span class="titleNumber">07-3</span>연산자 Overloading</h2>
   <h3 class="title">연산자의 작동 방식</h3>
+  <pre>
+val a = 1
+val b = 2
+val c = a + b
+val d = a.plus(b)</pre>
+  <pre>
+data class Point(var x: Int = 0, var y: Int = 0) {
+  <strong>operator</strong> fun <strong>plus</strong>(p: Point): Point = Point(x + p.x, y + p.y)
+  <strong>operator</strong> fun <strong>dec</strong>() = Point(--x, --y)
+}
+
+fun main() {
+  val p1 = Point(1, 2)
+  val p2 = Point(3, 4)
+  var p3 = p1 <strong>+</strong> p2
+  println(p3)
+  println(<strong>--</strong>p3)
+}</pre>
   <h3 class="title">연산자의 종류</h3>
   <h4>산술 연산자</h4>
-  <h4>호출 연산자</h4>
-  <h4>Index 접근 연산자</h4>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">표현식</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td>a + b</td>
+        <td>a.plus(b)</td>
+      </tr>
+      <tr>
+        <td>a - b</td>
+        <td>a.minus(b)</td>
+      </tr>
+      <tr>
+        <td>a * b</td>
+        <td>a.times(b)</td>
+      </tr>
+      <tr>
+        <td>a / b</td>
+        <td>a.div(b)</td>
+      </tr>
+      <tr>
+        <td>a % b</td>
+        <td>a.rem(b)</td>
+      </tr>
+      <tr>
+        <td>a..b</td>
+        <td>a.rangeTo(b)</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>호출 연산자 <sub>Invoke Operator</sub></h4>
+  <pre>
+class Manager {
+  <strong>operator</strong> fun <strong>invoke</strong>(value: String) {
+    println(value)
+  }
+}
+
+fun main() {
+  val manager = Manager()
+  <strong>manager</strong>("Hello!")
+  <strong>manager.invoke</strong>("Hello!") // 위와 동일.
+}</pre><br>
+  Lambda식은 기본적으로 <code>invoke</code>가 정의되어 있다.
+  <pre>
+val sum = { x: Int, y: Int -> x + y }
+sum<strong>.invoke</strong>(1, 2)
+sum(1, 2)
+</pre>
+  <h4 class="mb-0">Index 접근 연산자 <sub>Index Access Operator</sub></h4>
+  getter/setter를 다루기 위한 [ ] 연산자를 제공한다.<br>
+  Index 표기법을 통해 값을 읽어 오거나 쓰기가 가능하다.<br>
+  <table>
+    <thead>
+      <tr>
+        <th scope="row">표현식</th>
+        <th scope="row">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td>a[i]</td>
+        <td>a.get(i)</td>
+      </tr>
+      <tr>
+        <td>a[i, j]</td>
+        <td>a.get(i, j)</td>
+      </tr>
+      <tr>
+        <td>a[i_1, ..., i_n]</td>
+        <td>a.get(i_1, ...., i_n)</td>
+      </tr>
+      <tr>
+        <td>a[i] = b</td>
+        <td>a.set(i, b)</td>
+      </tr>
+      <tr>
+        <td>a[i, j] = b</td>
+        <td>a.set(i, j, b)</td>
+      </tr>
+      <tr>
+        <td>a[i_1, ..., i_n] = b</td>
+        <td>a.set(i_1, ...., i_n, b)</td>
+      </tr>
+    </tbody>
+  </table>
   <h4>단일 연산자</h4>
-  <h4>범위 연산자</h4>
-  <h4>대입 연산자</h4>
-  <h4>동등성 연산자</h4>
-  <h4>비교 연산자</h4>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">표현식</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td style="text-align: center;">+a</td>
+        <td>a.unaryPlus()</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">-a</td>
+        <td>a.unaryMinus()</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">!a</td>
+        <td>a.not()</td>
+      </tr>
+    </tbody>
+  </table>
+  단일 연산자는 먼저 a의 자료형을 결정하고 매개변수 없이 각 연사자에 대한 함수를 호출한 다음 연산된 결과를 반환한다.<br><br>
+  확장 함수 기법으로 Point class에 연산자를 정의했다.
+  <pre>
+<strong>operator</strong> fun <span class="custom">Point</span>.<strong>unaryMinus</strong>() = <span class="custom">Point</span>(-x, -y)
+
+val pt = Point(10, 20)
+println(<strong>-pt</strong>) // Point(x=-10, y=-20)</pre>
+  <h4 class="mb-0">범위 연산자</h4>
+  <code>in</code> 연산자는 특정 객체를 반복하기 위해 반복문에 사용하거나 범위 연산자와 함께 포함 여부를 판단할 수도 있다.
+  <pre>
+if (i in 1..10) println(i) // 1 &lt;= i &lt;= 10
+
+for (i in 1..4) print(i) // 1234</pre>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">표현식</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td>a &nbsp;in b</td>
+        <td>&nbsp;b.contains(a)</td>
+      </tr>
+      <tr>
+        <td>a !in b</td>
+        <td>!b.contains(a)</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 class="mb-0">대입 연산자 <sub>Augmented Assignment</sub></h4>
+  연산의 결과를 할당한다.<br>
+  <p><span class="material-icons info" style="float:left;">info</span>&nbsp;+ 에 대응하는 <code>plus()</code>를 overloading하면 += 는 자동으로 구현된다.<br>
+  만일 <code>plusAssign()</code>을 또 overloading하면 모호성때문에 <span class="error">오류</span>가 발생한다.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">표현식</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td>a += b</td>
+        <td>a.plusAssign(b)</td>
+      </tr>
+      <tr>
+        <td>a -= b</td>
+        <td>a.minusAssign(b)</td>
+      </tr>
+      <tr>
+        <td>a *= b</td>
+        <td>a.timesAssign(b)</td>
+      </tr>
+      <tr>
+        <td>a /= b</td>
+        <td>a.divAssign(b)</td>
+      </tr>
+      <tr>
+        <td>a %= b</td>
+        <td>a.remAssign(b)</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>동등성 연산자 <sub>Equality and Inequality</sub></h4>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">표헌식</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td>a == b</td>
+        <td>&nbsp;&nbsp;a?.equals(b) ?: (b === null)</td>
+      </tr>
+      <tr>
+        <td>a != b</td>
+        <td>!(a?.equals(b) ?: (b === null))</td>
+      </tr>
+    </tbody>
+  </table>
+  a, b 둘 다 null 인 경우에는 true를 반환한다.<br>
+  <code>equals()</code>는 확장 함수로 구현할 수 없다.<br>
+  <pre>
+// Any.kt
+public <strong>open</strong> <strong>operator</strong> fun equals(other: Any?): Boolean</pre>
+  <p></p><span class="material-icons info" style="float:left;">info</span>&nbsp;값과 자료형의 일치 <sub>Identity</sub>를 검사하는 <code>===, !==</code> 는 overloading 할 수 <span class="info">없다</span>.</p>
+  <h4>비교 연산자 <sub>Comparison</sub></h4>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">표현식</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody class="code">
+      <tr>
+        <td>a > &nbsp;b</td>
+        <td>a.compareTo(b) > &nbsp;0</td>
+      </tr>
+      <tr>
+        <td>a &lt; &nbsp;b</td>
+        <td>a.compareTo(b) &lt; &nbsp;0</td>
+      </tr>
+      <tr>
+        <td>a >= b</td>
+        <td>a.compareTo(b) >= 0</td>
+      </tr>
+      <tr>
+        <td>a &lt;= b</td>
+        <td>a.compareTo(b) &lt;= 0</td>
+      </tr>
+    </tbody>
+  </table>
   <hr>
   <h1 class="madang"><span class="madang_number">셋째 마당</span><br>Kotlin<br>표준 Library의 활용</h1>
   <h1><span class="titleNumber">08</span>Generic과 배열</h1>
@@ -5564,8 +5812,6 @@ public final class File {
   <hr>
   <h1><span class="titleNumber">11</span>Coroutine과 동시성 Programming</h1>
   <hr>
-
-
   <p id="end">END</p>
 </body>
 
