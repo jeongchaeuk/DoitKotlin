@@ -5878,16 +5878,171 @@ val box2 = Box("Hello") // "Hello"는 String형이므로 Box&lt;String>로 추�
   <ul class="mt-0">
     <li>Generic class는 형식 매개변수를 1개 이상 받는 class 이다.</li>
     <li>Class를 선언할 때 자료형을 특정하지 않고 instance를 만들 때 자료형을 정한다.</li>
-    <li></li>
   </ul>
-  <h4>자료형 변환</h4>
+  <pre>
+class MyClass&lt;<strong>T</strong>> {
+  fun myMethod(a: <strong>T</strong>) {}
+}</pre><br>
+형식 매개변수를 class의 property에 사용하는 경우 class 내부에서는 사용할 수 없다.<br>
+자료형이 특정되지 못하므로 instance를 생성하지 못하기 때문이다.<br>
+<pre>
+class MyClass&lt;<strong>T</strong>> {
+  var myProp: <strong>T</strong> // <span class="error">Error!</span> Property는 초기화 되거나 abstract로 선언되어야 한다.
+}</pre><br>
+대신, 주 생성자나 부 생성자에 형식 매개변수를 지정해 사용할 수 있다.<br>
+<pre>
+class MyClass&lt;T>(val myProp: <strong>T</strong>)
+// or
+class MyClass&lt;T> {
+  val myProp: <strong>T</strong>
+  
+  <strong>constructor</strong>(myProp: <strong>T</strong>) {
+    this.myProp = myProp
+  }
+}</pre>
+<pre>
+val a = MyClass&lt;Int>(12)
+println(a.myProp)     // 12
+println(a.javaClass)  // MyClass
+
+val a = MyClass(12)   // Int 추론
+</pre>
+  <h4 class="mb-0">자료형 변환</h4>
+  Generic class는 가변성 <sub>in, out</sub>을 지정하지 않으면 형식 매개변수에 상•하위 class가 지정되어도 <br>서로 자료형이 변환되지 않는다.<br>
+  <pre>
+open class Parent
+
+class Child : Parent()
+
+class Cup&lt;T>
+
+fun main() {
+  val obj1: Parent = Child() // OK 상속관계. Parent형으로 선언되었지만 실제로는 Child 객체이다.
+
+  val obj2: Child = Parent() // <span class="error">Error!</span> 자료형 불일치.
+
+  val obj3: Cup&lt;Parent> = Cup&lt;Child>() // <span class="error">Error!</span> 자료형 불일치.
+  val obj4: Cup&lt;Child> = Cup&lt;Parent>() // <span class="error">Error!</span> 자료형 불일치.
+
+  val obj5 = Cup&lt;Child>()
+  val obj6: Cup&lt;Child> = obj5 // OK 자료형 일치.
+}</pre>
   <h4>형식 매개변수의 null 제어</h4>
+  Generic의 형식 매개변수는 기본적으로 nullable이다.<br>
+  <pre>
+class GenericNull&lt;T> {
+  fun equalityFunc(a: T, b: T) {
+    println(<strong>a?</strong>.equals(b))
+  }
+}
+
+fun main() {
+  val obj = GenericNull&lt;String>() // non-null String으로 선언
+  obj.equalityFunc("Hello", "World") // false
+
+  val obj2 = GenericNull&lt;<strong>Int?</strong>>() // nullable Int로 선언
+  obj2.equalityFunc(<strong>null</strong>, 1) // null
+}</pre><br>
+null을 허용하지 않으려면,
+<pre>
+// 자료형을 Any로 제한. null을 허용하지 않는다.
+class GenericNull&lt;<strong>T: Any</strong>> {
+  fun equalityFunc(a: T, b: T) {
+    println(a == b)
+  }
+}
+
+fun main() {
+  val obj2 = GenericNull&lt;<strong>Int?</strong>>() // <span class="error">Error!</span>
+}</pre>
   <h4>Generic 함수 혹은 Method</h4>
-  <h4>Generic과 Lambda식</h4>
-  <h3 class="title">자료형 제한하기</h3>
+  <ul>
+    <li>형식 매개변수를 받는 함수나 method.</li>
+    <li>선언 앞쪽에 &lt;T>를 붙인다.</li>
+    <li>&lt;K, V>와 같이 형식 매개변수를 여러 개 사용할 수 있다.</li>
+    <li>자료형의 결정은 함수가 호출될 때 compiler가 추론할 수 있다.</li>
+    <li>이 자료형은 반환 자료형과 매개변수 자료형에 사용할 수 있다.</li>
+  </ul>
+  <pre>
+fun <strong>&lt;T></strong> genericFunc(a: <strong>T</strong>): <strong>T?</strong> {}
+
+fun <strong>&lt;K, V></strong> put(key: <strong>K</strong>, value: <strong>V</strong>): Unit {}</pre>
+<pre>
+// 자료형을 추론할 수 있다면 생략할 수 있다.
+fun main() {
+  val array1: Array&lt;String> = arrayOf("a", "b", "c", "d")
+  val array2 = arrayOf(1, 2, 3, 4) // Array&lt;Int>
+
+  println(array1.indices) // 0..3
+  println(find&lt;String>(array1, "d")) // 3
+
+  println(find(array2, 2)) // 1
+  println(find(array2, 0)) // -1
+}
+
+fun <strong>&lt;T></strong> find(array: <strong>Array&lt;T></strong>, target: T): Int {
+  for (i in <strong>array.indices</strong>) { // 배열 index의 범위값.
+      if (array[i] == target)
+          return i
+  }
+
+  return -1
+}</pre>
+  <h4 class="mb-0">Generic과 Lambda식</h4>
+형식 매개변수로 선언된 함수의 매개변수를 연산할 때 자료형을 알 수 없으므로 오류가 난다.<br>
+<pre>
+fun &lt;T> add(a: T, b: T): T {
+  return a <strong>+</strong> b // <span class="error">Error!</span> 맞는 plus()를 선택할 수 없다.
+}</pre><br>
+이 경우 lambda식을 매개변수로 전달하면 자료형을 결정하지 않아도 <br>실행 시 lambda식 본문을 넘겨 줄 때 자료형이 결정되므로 오류를 해결할 수 있다.
+
+<pre>
+fun main() {
+  add(1, 2, <strong>{ a, b -> a + b }</strong>) // add&lt;Int>,  Int의 plus()라는 것을 알 수 있다.
+  add(1, 2) { a, b -> a + b }
+
+  val sum = { a: Int, b: Int -> a + b }
+  add(1, 2, sum)
+
+  val sum2: (Int, Int) -> Int = { a, b, -> a + b }
+  add(1, 2, sum2)
+}
+
+fun &lt;T> add(a: T, b: T, op: <strong>(T, T) -> T</strong>): T {
+  return op(a, b)
+}
+
+<strong>typealias</strong> arithmetic&lt;T> = (T, T) -> T
+fun &lt;T> add(a: T, b: T, op: <strong>arithmetic&lt;T></strong>): T {
+  return op(a, b)
+}</pre>
+  <h3 class="title">자료형 제한하기 <strong>&lt;T: 자료형></strong></h3>
   <h4>Class에서 형식 매개변수의 자료형 제한하기</h4>
+  <pre>
+class Calc<strong>&lt;T: Number></strong> {
+  fun plus(a: T, b: T): Double {
+    return a.toDouble() + b.toDouble()
+  }
+}
+
+fun main() {
+  val a = Calc&lt;<strong>Int</strong>>().plus(10, 20)
+  println(a) // 30.0
+
+  val b = Calc&lt;Double>()
+  val c = Calc&lt;Long>()
+
+  // Type argument is not within its bounds: should be subtype of 'Number'
+  val d = Calc&lt;<strong>String</strong>>() // <span class="error">Error!</span>
+}</pre>
   <h4>함수에서 형식 매개변수의 자료형 제한하기</h4>
+  <pre>
+fun <strong>&lt;T: Number></strong> add(a: T, b: T, op: (T, T) -> T): T = op(a, b)        
+add(1, 2, {a, b -> a + b })
+
+add("abc", "cde", {a, b -> a + b }) // <span class="error">Error!</span></pre>
   <h4>다수 조건의 형식 매개변수 제한하기</h4>
+  
   <h3 class="title">상•하위 형식의 가변성</h3>
   <h4>Class와 자료형</h4>
   <h4>가변성의 3가지 유형</h4>
