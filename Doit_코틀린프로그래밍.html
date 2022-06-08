@@ -31,6 +31,14 @@
       color: red;
     }
 
+    .ok {
+      color: #0f0;
+    }
+
+    .c-c {
+      color: #f5f;
+    }
+
     .no-bgc {
       background-color: transparent;
     }
@@ -245,6 +253,7 @@
       padding: 0rem .25rem;
       background-color: lightgray;
       box-shadow: .05rem .05rem black;
+      color: black;
     }
 
     img {
@@ -1328,7 +1337,6 @@ val y = a && b </pre>
   <pre>
 val x = 4.shl(1)  // 함수 호출 형식
 val y = 4 shl 1   // 중위 표현식. infix</pre>
-  <code>
   <table>
     <caption>class Int의 Bit 연산자</caption>
     <tr>
@@ -1337,45 +1345,45 @@ val y = 4 shl 1   // 중위 표현식. infix</pre>
     </tr>
     <tr>
       <td><code>shl(bits)</code></td>
-  <td>shift left. 왼쪽으로 bits 만큼 이동. 부호 있음</td>
-  <td rowspan="2">사라진 bit는 0으로 채우고 부호 bit는 그대로 둔다.</td>
-  </tr>
-  <tr>
-    <td><code>shr(bits)</code></td>
-    <td>shift right. 오른쪽으로 bits 만큼 이동. 부호 있음</td>
-  </tr>
-  <tr>
-    <td><code>ushr(bits)</code></td>
-    <td>unsigned shift right. 오른쪽으로 bits 만큼 이동. 부호 없음</td>
-    <td>제일 왼쪽 bit에 0을 채운다.</td>
-  </tr>
-  <tr>
-    <td><code>and(bits)</code></td>
-    <td>bits와 논리곱 연산</td>
-    <td>0b1100 and<br>0b1010
-      <hr>0b1000
-    </td>
-  </tr>
-  <tr>
-    <td><code>or(bits)</code></td>
-    <td>bits와 논리합 연산</td>
-    <td>0b1100 or<br>0b1010
-      <hr>0b1110
-    </td>
-  </tr>
-  <tr>
-    <td><code>xor(bits)</code></td>
-    <td>bits와 배타적 연산</td>
-    <td>0b1100 xor<br>0b1010
-      <hr>0b0110
-    </td>
-  </tr>
-  <tr>
-    <td><code>inv()</code></td>
-    <td>모든 bit를 반대로 한다. invert</td>
-    <td>1.inv() == -2</td>
-  </tr>
-  </table></code>
+      <td>shift left. 왼쪽으로 bits 만큼 이동. 부호 있음</td>
+      <td rowspan="2">사라진 bit는 0으로 채우고 부호 bit는 그대로 둔다.</td>
+    </tr>
+    <tr>
+      <td><code>shr(bits)</code></td>
+      <td>shift right. 오른쪽으로 bits 만큼 이동. 부호 있음</td>
+    </tr>
+    <tr>
+      <td><code>ushr(bits)</code></td>
+      <td>unsigned shift right. 오른쪽으로 bits 만큼 이동. 부호 없음</td>
+      <td>제일 왼쪽 bit에 0을 채운다.</td>
+    </tr>
+    <tr>
+      <td><code>and(bits)</code></td>
+      <td>bits와 논리곱 연산</td>
+      <td>0b1100 and<br>0b1010
+        <hr>0b1000
+      </td>
+    </tr>
+    <tr>
+      <td><code>or(bits)</code></td>
+      <td>bits와 논리합 연산</td>
+      <td>0b1100 or<br>0b1010
+        <hr>0b1110
+      </td>
+    </tr>
+    <tr>
+      <td><code>xor(bits)</code></td>
+      <td>bits와 배타적 연산</td>
+      <td>0b1100 xor<br>0b1010
+        <hr>0b0110
+      </td>
+    </tr>
+    <tr>
+      <td><code>inv()</code></td>
+      <td>모든 bit를 반대로 한다. invert</td>
+      <td>1.inv() == -2</td>
+    </tr>
+  </table>
   <span class="material-icons red">info</span>IntelliJ Debug 관련 단축키
   <ul style="line-height: 1.5rem;margin-top:0rem;">
     <li><kbd>Ctrl </kbd>+<kbd>F8</kbd> : Break Point Toggle 설정</li>
@@ -5716,7 +5724,7 @@ for (i in 1..4) print(i) // 1234</pre>
   <h4 class="mb-0">대입 연산자 <sub>Augmented Assignment</sub></h4>
   연산의 결과를 할당한다.<br>
   <p><span class="material-icons info" style="float:left;">info</span>&nbsp;+ 에 대응하는 <code>plus()</code>를 overloading하면 += 는 자동으로 구현된다.<br>
-  만일 <code>plusAssign()</code>을 또 overloading하면 모호성때문에 <span class="error">오류</span>가 발생한다.</p>
+    만일 <code>plusAssign()</code>을 또 overloading하면 모호성때문에 <span class="error">오류</span>가 발생한다.</p>
   <table>
     <thead>
       <tr>
@@ -5833,44 +5841,44 @@ fun main() {
 Box(name=1)
 Box(name=Hello)
 class chap08.section1.Box</pre>
-형식 매개변수 이름은 보통 Type을 뜻하는 T를 사용하지만 다른 문자를 사용해도 된다.<br>
-<table>
-  <caption>일반적인 약속</caption>
-  <thead>
-    <tr>
-      <th scope="col">형식 매개변수 이름</th>
-      <th scope="col">의미</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>E</td>
-      <td>Element</td>
-    </tr>
-    <tr>
-      <td>K</td>
-      <td>Key</td>
-    </tr>
-    <tr>
-      <td>N</td>
-      <td>Number</td>
-    </tr>
-    <tr>
-      <td>T</td>
-      <td>Type</td>
-    </tr>
-    <tr>
-      <td>V</td>
-      <td>Value</td>
-    </tr>
-    <tr>
-      <td>S, U, V 등.</td>
-      <td>2, 3, 4번째 형식</td>
-    </tr>
-  </tbody>
-</table>
-생성자에 유추할 수 있는 자료형이 있다면 명시적인 형 선언을 생략할 수 있다.
-<pre>
+  형식 매개변수 이름은 보통 Type을 뜻하는 T를 사용하지만 다른 문자를 사용해도 된다.<br>
+  <table>
+    <caption>일반적인 약속</caption>
+    <thead>
+      <tr>
+        <th scope="col">형식 매개변수 이름</th>
+        <th scope="col">의미</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>E</td>
+        <td>Element</td>
+      </tr>
+      <tr>
+        <td>K</td>
+        <td>Key</td>
+      </tr>
+      <tr>
+        <td>N</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>T</td>
+        <td>Type</td>
+      </tr>
+      <tr>
+        <td>V</td>
+        <td>Value</td>
+      </tr>
+      <tr>
+        <td>S, U, V 등.</td>
+        <td>2, 3, 4번째 형식</td>
+      </tr>
+    </tbody>
+  </table>
+  생성자에 유추할 수 있는 자료형이 있다면 명시적인 형 선언을 생략할 수 있다.
+  <pre>
 val box1 = Box(1) // 1은 Int형이므로 Box&lt;Int>로 추론.
 val box2 = Box("Hello") // "Hello"는 String형이므로 Box&lt;String>로 추론. 
 </pre>
@@ -5883,14 +5891,14 @@ val box2 = Box("Hello") // "Hello"는 String형이므로 Box&lt;String>로 추�
 class MyClass&lt;<strong>T</strong>> {
   fun myMethod(a: <strong>T</strong>) {}
 }</pre><br>
-형식 매개변수를 class의 property에 사용하는 경우 class 내부에서는 사용할 수 없다.<br>
-자료형이 특정되지 못하므로 instance를 생성하지 못하기 때문이다.<br>
-<pre>
+  형식 매개변수를 class의 property에 사용하는 경우 class 내부에서는 사용할 수 없다.<br>
+  자료형이 특정되지 못하므로 instance를 생성하지 못하기 때문이다.<br>
+  <pre>
 class MyClass&lt;<strong>T</strong>> {
   var myProp: <strong>T</strong> // <span class="error">Error!</span> Property는 초기화 되거나 abstract로 선언되어야 한다.
 }</pre><br>
-대신, 주 생성자나 부 생성자에 형식 매개변수를 지정해 사용할 수 있다.<br>
-<pre>
+  대신, 주 생성자나 부 생성자에 형식 매개변수를 지정해 사용할 수 있다.<br>
+  <pre>
 class MyClass&lt;T>(val myProp: <strong>T</strong>)
 // or
 class MyClass&lt;T> {
@@ -5900,7 +5908,7 @@ class MyClass&lt;T> {
     this.myProp = myProp
   }
 }</pre>
-<pre>
+  <pre>
 val a = MyClass&lt;Int>(12)
 println(a.myProp)     // 12
 println(a.javaClass)  // MyClass
@@ -5943,8 +5951,8 @@ fun main() {
   val obj2 = GenericNull&lt;<strong>Int?</strong>>() // nullable Int로 선언
   obj2.equalityFunc(<strong>null</strong>, 1) // null
 }</pre><br>
-null을 허용하지 않으려면,
-<pre>
+  null을 허용하지 않으려면,
+  <pre>
 // 자료형을 Any로 제한. null을 허용하지 않는다.
 class GenericNull&lt;<strong>T: Any</strong>> {
   fun equalityFunc(a: T, b: T) {
@@ -5967,7 +5975,7 @@ fun main() {
 fun <strong>&lt;T></strong> genericFunc(a: <strong>T</strong>): <strong>T?</strong> {}
 
 fun <strong>&lt;K, V></strong> put(key: <strong>K</strong>, value: <strong>V</strong>): Unit {}</pre>
-<pre>
+  <pre>
 // 자료형을 추론할 수 있다면 생략할 수 있다.
 fun main() {
   val array1: Array&lt;String> = arrayOf("a", "b", "c", "d")
@@ -5989,14 +5997,14 @@ fun <strong>&lt;T></strong> find(array: <strong>Array&lt;T></strong>, target: T)
   return -1
 }</pre>
   <h4 class="mb-0">Generic과 Lambda식</h4>
-형식 매개변수로 선언된 함수의 매개변수를 연산할 때 자료형을 알 수 없으므로 오류가 난다.<br>
-<pre>
+  형식 매개변수로 선언된 함수의 매개변수를 연산할 때 자료형을 알 수 없으므로 오류가 난다.<br>
+  <pre>
 fun &lt;T> add(a: T, b: T): T {
   return a <strong>+</strong> b // <span class="error">Error!</span> 맞는 plus()를 선택할 수 없다.
 }</pre><br>
-이 경우 lambda식을 매개변수로 전달하면 자료형을 결정하지 않아도 <br>실행 시 lambda식 본문을 넘겨 줄 때 자료형이 결정되므로 오류를 해결할 수 있다.
+  이 경우 lambda식을 매개변수로 전달하면 자료형을 결정하지 않아도 <br>실행 시 lambda식 본문을 넘겨 줄 때 자료형이 결정되므로 오류를 해결할 수 있다.
 
-<pre>
+  <pre>
 fun main() {
   add(1, 2, <strong>{ a, b -> a + b }</strong>) // add&lt;Int>,  Int의 plus()라는 것을 알 수 있다.
   add(1, 2) { a, b -> a + b }
@@ -6042,19 +6050,470 @@ add(1, 2, {a, b -> a + b })
 
 add("abc", "cde", {a, b -> a + b }) // <span class="error">Error!</span></pre>
   <h4>다수 조건의 형식 매개변수 제한하기</h4>
-  
-  <h3 class="title">상•하위 형식의 가변성</h3>
-  <h4>Class와 자료형</h4>
+  <pre>
+interface IA
+interface IB
+
+class AB : IA, IB
+
+class B : IB
+
+// 2개의 interface를 구현한 class로 제한.
+class MyClass&lt;T> <strong>where T: IA, T: IB</strong>
+
+fun main() {
+    val a = MyClass&lt;AB>()
+    val b = MyClass&lt;B>() // <span class="error">Error!</span>
+}</pre>
+  <pre>
+fun <T> myMax(a: T, b: T): T <strong>where T: Number, T: Comparable&lt;T></strong> {
+  return if (a > b) a else b
+}</pre>
+  <h3 class="title mb-0">상•하위 형식의 가변성 <sub>Variance</sub></h3>
+  가변성이란 형식 매개변수가 class 계층에 영향을 주는 것을 말한다.<br>
+  형식 A의 값이 필요한 모든 class에 형식 B의 값을 넣어도 아무 문제가 없다면 B는 A의 하위형식<sub>Subtype</sub>이 된다.<br>
+  <h4 class="mb-0">Class와 자료형</h4>
+  모든 class는 자료형이다.
+  <table class="center">
+    <thead>
+      <tr>
+        <th>형태</th>
+        <th>Class인가?</th>
+        <th>자료형인가?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>String</td>
+        <td>Yes</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>String?</td>
+        <td>No</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>List</td>
+        <td>Yes</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>List&lt;String></td>
+        <td>No</td>
+        <td>Yes</td>
+      </tr>
+    </tbody>
+  </table><br>
+  <table class="no-border center">
+    <tr>
+      <td class="border">Number</td>
+      <td>상위 class</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="border">Int</td>
+      <td>하위 class</td>
+    </tr>
+  </table>
+  <pre>
+val i: <span class="c-c">Int</span> = 1
+val n: <span class="c-c">Number</span> = i // 하위 class는 상위 class에 할당할 수 있다.
+</pre><br>
+  <table class="no-border center">
+    <tr>
+      <td class="border">Int?</td>
+      <td>상위 자료형</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="border">Int</td>
+      <td>하위 자료형</td>
+    </tr>
+  </table>
+  <pre>
+val i: Int = 1
+val ni: <span class="c-c">Int?</span> = i // 하위 자료형은 상위 자료형에 할당할 수 있다.
+</pre>
   <h4>가변성의 3가지 유형</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>용어</th>
+        <th>의미</th>
+        <th>상•하관계</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>공변성 <sub>Covariance</sub></td>
+        <td>
+          <table class="no-border center">
+            <tr>
+              <td class="border">C&lt;T></td>
+              <td>상위 자료형</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="border">C&lt;T`></td>
+              <td>하위 자료형</td>
+            </tr>
+            <tr>
+              <td colspan="2">생산자 입장의 <strong>out</strong> 성질</td>
+            </tr>
+          </table>
+        </td>
+        <td rowspan="3" style="padding: 1rem;">
+          <table class="no-border center">
+            <tr>
+              <td class="border">T</td>
+              <td>상위 자료형</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="border">T`</td>
+              <td>하위 자료형</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>반공변성 <sub>Contravariance</sub></td>
+        <td>
+          <table class="no-border center">
+            <tr>
+              <td class="border">C&lt;T`></td>
+              <td>상위 자료형</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;"><span class="material-icons" style="line-height: .9rem;">change_history<br>|<br> <br></span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="border">C&lt;T></td>
+              <td>하위 자료형</td>
+            </tr>
+            <tr>
+              <td colspan="2">소비자 입장의 <strong>in</strong> 성질</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>무변성 <sub>Invariance</sub></td>
+        <td>C&lt;T>와 C&lt;T`>는 아무 관계가 없다. (기본값)<br>생산자 + 소비자</td>
+      </tr>
+    </tbody>
+  </table><br>
+  <table>
+    <thead></thead>
+    <tbody>
+      <tr>
+        <th></th>
+        <th>공변성</th>
+        <th>반공변성</th>
+        <th>무변성</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td>class Box&lt;<span class="c-c">out</span> T></td>
+        <td>class Box&lt;<span class="c-c">in</span> T></td>
+        <td>class Box&lt;T></td>
+      </tr>
+      <tr>
+        <td>
+          <table class="no-border center">
+            <tr>
+              <td class="border">Number</td>
+            </tr>
+            <tr>
+              <td style="line-height: .8rem;">△<br>|</td>
+            </tr>
+            <tr>
+              <td class="border">Int</td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table class="no-border center">
+            <tr>
+              <td class="border">Box&lt;Number></td>
+            </tr>
+            <tr>
+              <td style="line-height: .8rem;">▲<br>|</td>
+            </tr>
+            <tr>
+              <td class="border">Box&lt;Int></td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table class="no-border center">
+            <tr>
+              <td class="border">Box&lt;Number></td>
+            </tr>
+            <tr>
+              <td style="line-height: .8rem;">|<br>▼</td>
+            </tr>
+            <tr>
+              <td class="border">Box&lt;Int></td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table class="no-border center">
+            <tr>
+              <td class="border">Box&lt;Number></td>
+            </tr>
+            <tr>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td class="border">Box&lt;Int></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <h4>무변성</h4>
-  <h4>공변성</h4>
-  <h4>반공병성</h4>
-  <h4>공병성에 따른 자료형 제한하기</h4>
+  <table class="no-border center" style="width:10%;">
+    <caption>각 class의 관계</caption>
+    <thead></thead>
+    <tbody>
+      <tr>
+        <td class="border">Any</td>
+      </tr>
+      <tr>
+        <td style="line-height: .8rem;">△<br>|</td>
+      </tr>
+      <tr>
+        <td class="border">Int</td>
+      </tr>
+      <tr>
+        <td style="line-height: .8rem;">△<br>|</td>
+      </tr>
+      <tr>
+        <td class="border">Nothing</td>
+      </tr>
+    </tbody>
+  </table>
+  <pre>
+// 무변성 선언
+class Box&lt;T>(val size: Int)
+
+val any: Box&lt;<span class="c-c">Any</span>> = Box&lt;<span class="c-c">Int</span>>(1) // <span class="error">Error!</span> 자료형 불일치
+val nothing: Box&lt;<span class="c-c">Nothing</span>> = Box&lt;<span class="c-c">Int</span>>(1) // <span class="error">Error!</span> 자료형 불일치
+</pre>
+  <h4 class="mb-0">공변성</h4>
+  형식 매개변수의 상하 관계가 성립하고, 그 관계가 그대로 instance 자료형 관계로 이어진다.<br>
+  <pre>
+class Box&lt;<span class="c-c">out</span> T>(val size: Int)
+
+val any: Box&lt;<span class="c-c">Any</span>> = Box&lt;<span class="c-c">Int</span>>(1) // OK
+val nothing: Box&lt;<span class="c-c">Nothing</span>> = Box&lt;<span class="c-c">Int</span>>(1) // <span class="error">Error!</span> 자료형 불일치
+</pre>
+  <h4 class="mb-0">반공변성</h4>
+  자료형의 상하관계가 반대가 된다.<br>
+  <pre>
+class Box&lt;<span class="c-c">in</span> T>(val size: Int)
+
+val any: Box&lt;<span class="c-c">Any</span>> = Box&lt;<span class="c-c">Int</span>>(1) // <span class="error">Error!</span> 자료형 불일치
+val nothing: Box&lt;<span class="c-c">Nothing</span>> = Box&lt;<span class="c-c">Int</span>>(1) // OK
+</pre>
+  <h4>공변성에 따른 자료형 제한하기</h4>
+  <table class="no-border center" style="width:10%;">
+    <tbody>
+      <tr>
+        <td colspan="3" class="border">Animal</td>
+      </tr>
+      <tr>
+        <td colspan="3" style="line-height: .8rem;">△<br>┏━┻━┓</td>
+      </tr>
+      <tr>
+        <td class="border">Cat</td>
+        <td></td>
+        <td class="border">Spider</td>
+      </tr>
+    </tbody>
+  </table>
+  <pre>
+open class Animal(val size: Int) {
+  fun feed() = println("Feeding...")
+
+  override fun toString(): String {
+    return "Animal(size=$size)"
+  }
+}
+
+data class Cat(val jump: Int) : Animal(50) {
+  override fun toString(): String {
+    return "Cat(jump=$jump) : " + super.toString()
+  }
+}
+
+data class Spider(val poison: Boolean) : Animal(1)
+
+class Box&lt;<span class="c-c">out T: Animal</span>>(<span class="c-c">val</span> element: T) { // 주 생성자에서는 val만 허용
+  fun getAnimal(): <span class="c-c">T</span> = element // out 형식은 반환 자료형에서만 사용할 수 있다.
+
+//  fun set(value: T) { // <span class="error">Error!</span> out 형식은 method의 매개변수로 사용할 수 없다. (<span class="c-c">in</span> 위치)
+//    element = value
+//  }
+}
+
+fun main() {
+  val cat = Cat(10)
+  val spider = Spider(true)
+
+  var animal = Animal(0)
+  println(animal.javaClass)
+
+  animal = cat
+  println(animal.javaClass)
+
+  animal = spider
+  println(animal.javaClass)
+
+  val animalBox: Box&lt;<span class="c-c">Animal</span>> = Box&lt;<span class="c-c">Cat</span>>(Cat(10)) // <span class="ok">OK</span>. 공변성
+  println(animalBox.javaClass)
+  println(animalBox.element)
+
+// val catBox: Box&lt;Cat> = Box&lt;Animal>(Animal(10)) // <span class="error">Error!</span> 공변성에 안맞다.
+// val anyBox: Box&lt;Any> = Box&lt;Int>(10) // <span class="error">Error!</span> Animal 자료형이 아니다. (자료형 제한)
+}</pre>
+  주 생성자의 경우는 위치를 제한할 필요가 없으므로 in, out 모두 사용할 수 있다.<br>
+  단, 생성자에서 var, val로 지정하는 경우에는 getter/setter가 같이 생성되므로 class의 상하관계를 고려해서 in 또는 out을 사용해야 한다.<br>
+  위 예제에는 val만 허용했다.<br><br>
+  <code>out</code>을 사용하는 경우 형식 매개변수를 갖는 property는 <code>val</code>만 허용한다.<br>
+  <code>var</code>를 사용하려면 <code>private</code>으로 지정해야 한다.
+  <pre>class Box&lt;out T: Animal>(<strong>private</strong> var element: T)</pre>
   <h3 class="title">자료형 Projection</h3>
   <h4>가변성의 2가지 방법</h4>
+  <ul class="mt-0">
+    <li>선언 지점 변성 <sub>Declaration-site variance</sub><br>
+      Class를 선언하면서 class 자체에 가변성을 지정하는 방식으로 class에 in, out을 지정할 수 있다.<br>
+      이 방법은 class의 공변성을 전체적으로 지정하는 것이므로 사용하는 장소에서는 따로 자료형을 지정할 필요가 없다.<br>
+      <pre>class Box&lt;<span class="c-c">in T: Animal</span>>(var item: T)</pre>
+    </li>
+    <li>사용 지점 변성 <sub>Use-site variance</sub><br>
+      Method 매개변수 또는 generic class를 생성할 때와 같이 사용 위치에서 가변성을 지정하는 방식.<br>
+      형식 매개변수가 있는 자료형을 사용할 때마다 해당 형식 매개변수를 하위 자료형이나 상위 자료형 중 어떤 자료형으로 대체할 수 있는지를 명시해야 한다.<br>
+    </li>
+  </ul>
   <h4>사용 지점 변성과 자료형 Projection</h4>
+  <pre>class Box&lt;T>(var item: T) // 무변성</pre><br>
+  item을 get하려면 out을, set하려면 in을 지정해야 한다.
+  <pre>
+fun printItem(box: Box&lt;<span class="c-c">out Animal</span>>) {
+  val item: Animal = box.item // item 값을 구한다. (get)
+  println(item)
+}</pre>
+  사용할 요소의 특정 자료형에 in, out을 지정해 제한하는 것을 자료형 projection이라고 한다.<br>
+  이 경우 box는 형식 매개변수 T를 in 위치에 사용하는 경우를 제한한다.<br>
+  <pre>
+fun printItem(box: Box&lt;<span class="c-c">out</span> Animal>) {
+  box.item = Animal() // <span class="error">Error!</span> set하려면 in이 지정되어야 한다.
+  println(item)
+}</pre>
+  이렇게 사용할 수 있는 위치를 제한하는 이유는 자료형 안정성을 보장하기 위해서이다.<br>
+  이 함수에서는 out에 의한 getter만 허용하고 in에 의한 setter는 금지하겠다는 것이다.<br>
   <h4>Star Projection</h4>
+  <ul class="mt-0">
+    <li>Box&lt;Any?><br>
+      모든 자료형의 요소를 담을 수 있다.
+    </li>
+    <li>Box&lt;*><br>
+      어떤 자료형이라도 들어올 수 있으나 구체적으로 자료형이 결정되고 난 후에는 그 자료형과 하위 자료형의 요소만 담을 수 있도록 제한한다.<br>
+      이렇게 in, out을 지정하지 않고 *로 지정하는 방법을 Star Projection이라고 한다.<br>
+    </li>
+  </ul>
+  <pre>
+class InOutTest&lt;in T, out U>(t: T, u: U) {
+  val propT: T = t // <span class="error">Error!</span> T는 in 위치이기 때문에 out 위치에 사용 불가.
+  val propU: U = u // U는 out 위치로 가능.
+
+  fun func1(u: U) {} // <span class="error">Error!</span> U는 out 위치이기 때문에 in 위치에 사용 불가
+
+  fun func2(t: T) {} // T는 in 위치에 사용됨.
+}</pre><br>
+  in으로 정의되어 있는 형식 매개변수를 *로 받으면 <strong>in Nothing</strong>인 것으로 간주하고, <br>
+  out으로 정의된 형식 매개변수를 *로 받으면 <strong>out Any?</strong>인 것으로 간주한다.<br>
+  따라서 *를 사용할 때 그 위치에 따라 method 호출이 제한될 수 있다.
+  <pre>
+// &lt;*,*> is &lt;in Nothing, out Any?>
+fun startTestFunc(v: InOutTest&lt;*, *>) {
+  v.func2(1) // <span class="error">Error!</span> Int는 Nothing이 아니다.
+  print(v.propU)
+}</pre><br>
+  <pre>public class <span class="c-c">Nothing</span> <strong>private</strong> constructor()</pre>
+  <ul class="mt-0">
+    <li><strong>Nothing</strong>은 Kotlin의 최하위 자료형으로 모든 class의 하위 class이며 아무것도 가지고 있지 않는 자료형이다.</li>
+    <li>최상위 Any와는 정반대이다.</li>
+    <li>보통 아무것도 존재하지 않는 값을 표현할 때 사용한다.</li>
+    <li>함수의 반환 자료형이 Nothing이면 그 함수는 절대 아무것도 반환하지 않거나 예외를 던진다.</li>
+  </ul>
+  <pre>
+fun infiniteLoop(): <span class="c-c">Nothing</span> {
+  while (true) {
+    // ...
+  }
+}
+
+fun throwException(): <span class="c-c">Nothing</span> {
+  throw Exception()
+}
+
+fun mayThrowException(throwException: Boolean): <span class="c-c">Nothing?</span> {
+  return if (throwException)
+    throw Exception()
+  else
+    null
+}</pre>
   <h4>자료형 Projection의 정리</h4>
+  <table>
+    <caption></caption>
+    <thead>
+      <tr>
+        <th>종류</th>
+        <th>예</th>
+        <th>가변성</th>
+        <th>제한</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>out projection</td>
+        <td>Box&lt;out Cat></td>
+        <td>공변성</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>in projection</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>* projection</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 class="title">reified 자료형</h3>
   <h4>reified의 사용 사례</h4>
   <hr>
@@ -6088,7 +6547,7 @@ add("abc", "cde", {a, b -> a + b }) // <span class="error">Error!</span></pre>
   <h3 class="title">Literal 문자열</h3>
   <h4>형식 문자 사용하기</h4>
   <h3 class="title">서점 만들기</h3>
-  <hr>  
+  <hr>
   <h1><span class="titleNumber">09</span>Collection</h1>
   <hr>
   <h1><span class="titleNumber">10</span>표준 함수와 File 입출력</h1>
